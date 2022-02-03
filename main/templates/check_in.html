@@ -1,0 +1,22 @@
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+<body>
+
+<form method="post">
+    {% csrf_token %}
+    <p>{{ form | crispy }}</p>
+    <button type="submit" class="btn btn-dark">Войти</button>
+</form>
+
+{% if er_message %}
+	<p>{{ er_message }}</p>
+{% endif %}
+
+</body>
+</html>

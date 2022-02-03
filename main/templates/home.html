@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>home</title>
+	<meta charset="UTF-8">
+	<title>home</title>
 </head>
 <body>
-<h1>Home page</h1>
+	<a class="nav-link" href="{% url 'logout' %}">logout</a>
+	<h1>Home page</h1>
+	<p>Your nickname: {{ request.user.username }}</p>
 </body>
 </html>
