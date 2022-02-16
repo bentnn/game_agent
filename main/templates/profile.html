@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ user.username }}</title>
+</head>
+<body>
+<p>username - {{ user.username }}</p>
+{% if user == request.user %}
+	<p>Это твой аккаунт</p>
+{% endif %}
+</body>
+</html>

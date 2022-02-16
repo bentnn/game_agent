@@ -4,7 +4,12 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
-import re
+
+
+def about_us(request):
+	if request.user.is_authenticated:
+		return redirect('home')
+	return render(request, "about_us.html")
 
 
 @login_required(login_url='login')
@@ -46,7 +51,7 @@ def check_in_view(request):
 				return redirect('home')
 			else:
 				er_message = "Имя пользователя может состоять только из латинских букв," \
-							 " цифр и специальных символов"
+								" цифр и специальных символов"
 		else:
 			er_message = "Форма невалидна"
 	else:
@@ -58,3 +63,15 @@ def check_in_view(request):
 def logout_view(request):
 	logout(request)
 	return redirect('login')
+
+
+def error_404(request, exception):
+	return render(request, '404.html', status=404)
+
+
+@login_required(login_url='login')
+def profile(request, username):
+	user = User.objects.get(username=username)
+	if user is None:
+		return error_404(request, 404)
+	return render(request, 'profile.html', {'user': user})
