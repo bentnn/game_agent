@@ -7,13 +7,12 @@ from django.contrib.auth.decorators import login_required
 
 
 def about_us(request):
-	if request.user.is_authenticated:
-		return redirect('home')
 	return render(request, "about_us.html")
 
 
-@login_required(login_url='login')
 def home(request):
+	if not request.user.is_authenticated:
+		return redirect('about_us')
 	return render(request, 'home.html')
 
 
