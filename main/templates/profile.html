@@ -5,7 +5,8 @@
 	<title>{{ user.username }}</title>
 </head>
 <body>
-<p>username - {{ user.username }}</p>
+<h3>username - {{ user.username }}</h3>
+<img src="{{ about_user.avatar.url }}" style="max-width: 800px; max-height: 500px border">
 {% if user == request.user %}
 	<p>Это твой аккаунт</p>
 {% endif %}

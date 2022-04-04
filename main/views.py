@@ -4,6 +4,8 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
+from .models import *
+from .useful_func import get_basic_avatar
 
 
 def about_us(request):
@@ -46,6 +48,8 @@ def check_in_view(request):
 				password = request.POST['password1']
 				form.save()
 				user = authenticate(username=username, password=password)
+				get_basic_avatar(username).save(f"media/Avatars/{username}.jpg")
+				AboutUser.objects.create(user=user, avatar=f"Avatars/{username}.jpg")
 				login(request, user)
 				return redirect('home')
 			else:
@@ -73,4 +77,12 @@ def profile(request, username):
 	user = User.objects.get(username=username)
 	if user is None:
 		return error_404(request, 404)
-	return render(request, 'profile.html', {'user': user})
+	about_user = AboutUser.objects.get(user=user)
+	print(about_user.avatar.url)
+	return render(
+		request, 'profile.html',
+		{
+			'user': user,
+			"about_user": about_user
+		}
+	)
