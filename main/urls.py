@@ -8,6 +8,7 @@ urlpatterns = [
     path('logout', views.logout_view, name='logout'),
     path('check_in', views.check_in_view, name='check_in'),
     path('profile/<str:username>', views.profile, name='profile'),
+    path('profile/<str:username>/<str:action>', views.profile, name='profile'),
 ]
 
 handler404 = "main.views.error_404"

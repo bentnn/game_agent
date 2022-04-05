@@ -5,10 +5,25 @@
 	<title>{{ user.username }}</title>
 </head>
 <body>
+<a class="nav-link" href="{% url 'home' %}">home</a>
 <h3>username - {{ user.username }}</h3>
 <img src="{{ about_user.avatar.url }}" style="max-width: 800px; max-height: 500px border">
+<h5>level: {{ about_user.level }}, to_next_level: {{ to_next_level }}</h5>
 {% if user == request.user %}
-	<p>Это твой аккаунт</p>
+	<p>Это твой аккаунт!!!</p>
+{% elif user in req_subs %}
+	<a class="nav-link" href="{% url 'profile' user.username 'unsub' %}">Отписаться</a>
+{% else %}
+	<a class="nav-link" href="{% url 'profile' user.username 'sub' %}">Подписаться</a>
+{% endif %}
+
+<h4>Подписки</h4>
+{% if subs|length != 0 %}
+	{% for i in subs %}
+	<p><a class="nav-link" href="{% url 'profile' i.username  %}">{{ i.username }}</a></p>
+	{% endfor %}
+{% else %}
+	<p>Подписок нет</p>
 {% endif %}
 </body>
 </html>

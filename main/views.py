@@ -4,17 +4,20 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.core.validators import validate_email
 from .models import *
+from .level_exp import *
 from .useful_func import get_basic_avatar
+import logging
 
+# set logger level
+logging.basicConfig(level=logging.DEBUG)
 
 def about_us(request):
 	return render(request, "about_us.html")
 
-
+@login_required(login_url='about_us')
 def home(request):
-	if not request.user.is_authenticated:
-		return redirect('about_us')
 	return render(request, 'home.html')
 
 
@@ -73,16 +76,30 @@ def error_404(request, exception):
 
 
 @login_required(login_url='login')
-def profile(request, username):
+def profile(request, username, action=None):
 	user = User.objects.get(username=username)
-	if user is None:
+	if user is None or user.is_superuser:
+		logging.info(f"404: User <{username}> was not founded")
 		return error_404(request, 404)
+	logging.info(f"User <{username}> was found")
 	about_user = AboutUser.objects.get(user=user)
-	print(about_user.avatar.url)
+	about_request = about_user if request.user == user else AboutUser.objects.get(user=request.user)
+
+	if request.user != user and action is not None:
+		if action == "sub":
+			about_request.subs.add(user)
+			about_request.save()
+		elif action == "unsub":
+			about_request.subs.remove(user)
+			about_request.save()
+
 	return render(
 		request, 'profile.html',
 		{
-			'user': user,
-			"about_user": about_user
+			"user": user,
+			"about_user": about_user,
+			"to_next_level": round(about_user.exp_to_level / levels.get(about_user.level + 1), 2),
+			"subs": list(about_user.subs.all()),
+			"req_subs": list(about_request.subs.all())
 		}
 	)
