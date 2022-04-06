@@ -1,10 +1,8 @@
-from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import Group, User
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.core.validators import validate_email
 from .models import *
 from .level_exp import *
 from .useful_func import get_basic_avatar
@@ -13,8 +11,10 @@ import logging
 # set logger level
 logging.basicConfig(level=logging.DEBUG)
 
+
 def about_us(request):
 	return render(request, "about_us.html")
+
 
 @login_required(login_url='about_us')
 def home(request):
@@ -77,14 +77,15 @@ def error_404(request, exception):
 
 @login_required(login_url='login')
 def profile(request, username, action=None):
-	user = User.objects.get(username=username)
+	# user = User.objects.get(username=username)
+	user = get_object_or_404(User, username=username)
 	if user is None or user.is_superuser:
 		logging.info(f"404: User <{username}> was not founded")
 		return error_404(request, 404)
 	logging.info(f"User <{username}> was found")
 	about_user = AboutUser.objects.get(user=user)
 	about_request = about_user if request.user == user else AboutUser.objects.get(user=request.user)
-
+	# print([i.user.username for i in request.user.subs_to.all()])
 	if request.user != user and action is not None:
 		if action == "sub":
 			about_request.subs.add(user)
@@ -100,6 +101,7 @@ def profile(request, username, action=None):
 			"about_user": about_user,
 			"to_next_level": round(about_user.exp_to_level / levels.get(about_user.level + 1), 2),
 			"subs": list(about_user.subs.all()),
+			"subs_to": list(user.subs_to.all()),
 			"req_subs": list(about_request.subs.all())
 		}
 	)

@@ -8,4 +8,4 @@ class AboutUser(models.Model):
 	exp_to_level = models.SmallIntegerField(default=0)
 	money = models.IntegerField(default=0)
 	avatar = models.ImageField(upload_to="Avatars", blank=True)
-	subs = models.ManyToManyField(User, default=[], related_name="subs")
+	subs = models.ManyToManyField(User, default=[], related_name="subs_to")

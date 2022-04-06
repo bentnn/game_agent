@@ -25,5 +25,14 @@
 {% else %}
 	<p>Подписок нет</p>
 {% endif %}
+
+<h4>Подписчики</h4>
+{% if subs_to|length != 0 %}
+	{% for i in subs_to %}
+		<p><a class="nav-link" href="{% url 'profile' i.user.username  %}">{{ i.user.username }}</a></p>
+	{% endfor %}
+{% else %}
+	<p>Подписчиков нет</p>
+{% endif %}
 </body>
 </html>
