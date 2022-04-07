@@ -17,6 +17,16 @@
 	<a class="nav-link" href="{% url 'profile' user.username 'sub' %}">Подписаться</a>
 {% endif %}
 
+<h4>Достижения</h4>
+{% if achievements|length != 0 %}
+	{% for i in achievements %}
+		<img src="{{ i.icon.url }}" style="max-width: 100px; max-height: 100px">
+		<p style="color: darkgreen">{{ i.name }}</p>
+	{% endfor %}
+{% else %}
+	<p>Пусто</p>
+{% endif %}
+
 <h4>Подписки</h4>
 {% if subs|length != 0 %}
 	{% for i in subs %}

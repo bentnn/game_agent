@@ -85,6 +85,9 @@ def profile(request, username, action=None):
 	logging.info(f"User <{username}> was found")
 	about_user = AboutUser.objects.get(user=user)
 	about_request = about_user if request.user == user else AboutUser.objects.get(user=request.user)
+	about_user.achievements.add(Achievement.objects.all()[0])
+	# print(list(about_user.achievements.all()))
+	# about_user.save()
 	# print([i.user.username for i in request.user.subs_to.all()])
 	if request.user != user and action is not None:
 		if action == "sub":
@@ -102,6 +105,7 @@ def profile(request, username, action=None):
 			"to_next_level": round(about_user.exp_to_level / levels.get(about_user.level + 1), 2),
 			"subs": list(about_user.subs.all()),
 			"subs_to": list(user.subs_to.all()),
-			"req_subs": list(about_request.subs.all())
+			"req_subs": list(about_request.subs.all()),
+			"achievements": list(about_user.achievements.all())
 		}
 	)

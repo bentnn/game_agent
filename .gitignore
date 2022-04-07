@@ -1,4 +1,4 @@
 venv
 .idea
 .idea/*
-main/__pycache__
+main/__pycache__/
