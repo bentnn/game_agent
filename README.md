@@ -3,4 +3,7 @@
 
 Для запуска необходимо:
 
+    pip install django
     pip install django-crispy-forms
+    pip install matplotlib
+    pip install pillow
