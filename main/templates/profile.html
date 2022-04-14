@@ -7,7 +7,7 @@
 <body>
 <a class="nav-link" href="{% url 'home' %}">home</a>
 <h3>username - {{ user.username }}</h3>
-<img src="{{ about_user.avatar.url }}" style="max-width: 800px; max-height: 500px border">
+<img src="{{ about_user.avatar.url }}" style="max-width: 800px; max-height: 500px">
 <h5>level: {{ about_user.level }}, to_next_level: {{ to_next_level }}</h5>
 {% if user == request.user %}
 	<p>Это твой аккаунт!!!</p>

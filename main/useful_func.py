@@ -1,4 +1,5 @@
 from PIL import ImageDraw, Image
+from .const import first_level
 import numpy as np
 import hashlib
 
@@ -27,3 +28,11 @@ def get_basic_avatar(username):
 				draw.point((x, y), main_color)
 
 	return img
+
+
+def get_needed_exp(level):
+	if level < 1 or not isinstance(level, int):
+		raise ValueError("Неверный формат уровня")
+	if level == 1:
+		return first_level
+	return round(first_level * 1.15**(level - 1))

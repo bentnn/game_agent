@@ -4,8 +4,7 @@ from django.contrib.auth import login, authenticate, logout, update_session_auth
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import *
-from .level_exp import *
-from .useful_func import get_basic_avatar
+from .useful_func import get_basic_avatar, get_needed_exp
 import logging
 
 # set logger level
@@ -16,9 +15,9 @@ def about_us(request):
 	return render(request, "about_us.html")
 
 
-@login_required(login_url='about_us')
+@login_required(login_url='login')
 def home(request):
-	return render(request, 'home.html')
+	return render(request, 'home.html', {"posts": Post.objects.all()[:5]})
 
 
 def login_view(request):
@@ -102,7 +101,7 @@ def profile(request, username, action=None):
 		{
 			"user": user,
 			"about_user": about_user,
-			"to_next_level": round(about_user.exp_to_level / levels.get(about_user.level + 1), 2),
+			"to_next_level": round(about_user.exp_to_level / get_needed_exp(about_user.level + 1), 2),
 			"subs": list(about_user.subs.all()),
 			"subs_to": list(user.subs_to.all()),
 			"req_subs": list(about_request.subs.all()),
