@@ -29,3 +29,18 @@ class AboutUser(models.Model):
 
 	def __str__(self):
 		return self.user.username
+
+
+class Post(models.Model):
+	title = models.CharField(max_length=100)
+	image = models.ImageField(upload_to='Post', blank=True)
+	date = models.DateTimeField(auto_now_add=True)
+	text = models.TextField(max_length=350, blank=True)
+
+	class Meta:
+		ordering = ('-date', )
+		verbose_name = 'пост'
+		verbose_name_plural = 'посты'
+
+	def __str__(self):
+		return self.title

@@ -7,7 +7,23 @@
 <body>
 	<a class="nav-link" href="{% url 'logout' %}">logout</a>
 	<a class="nav-link" href="{% url 'profile' request.user.username %}">my profile</a>
-	<h1>Home page</h1>
-	<p>Your nickname: {{ request.user.username }}</p>
+	<h1>Последние новости</h1>
+	<br>
+	{% if posts|length != 0 %}
+		{% for i in posts %}
+			<div style="border: 1px solid black">
+				<h3>{{ i.title }}</h3>
+				{% if i.image %}
+					<img src="{{ i.image.url }}" style="max-width: 200px; max-height: 200px">
+				{% endif %}
+				<p>{{ i.text }}</p>
+				<p style="font-weight: bold">{{ i.date }}</p>
+			</div>
+			<br>
+		{% endfor %}
+	{% else %}
+		<p>Новостей нет, извини</p>
+	{% endif %}
+
 </body>
 </html>
