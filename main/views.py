@@ -108,3 +108,21 @@ def profile(request, username, action=None):
 			"achievements": list(about_user.achievements.all())
 		}
 	)
+
+
+@login_required(login_url='login')
+def change_profile(request):
+	er_msg = None
+	if request.method == "POST":
+		data = list()
+		# about_user = AboutUser.objects.get(user=request.user)
+		for i in ["username", "email"]:
+			data.append(request.POST[i])
+		# avatar = request.POST['username']
+		if all(i for i in data) and data[0].isascii():
+			request.user.username = data[0]
+			request.user.email = data[1]
+			request.user.save()
+		else:
+			er_msg = "Некорректные данные"
+	return render(request, "change_profile.html", {"er_msg": er_msg})
