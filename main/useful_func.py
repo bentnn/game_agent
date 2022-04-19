@@ -2,6 +2,7 @@ from PIL import ImageDraw, Image
 from .const import first_level
 import numpy as np
 import hashlib
+import re
 
 
 def get_basic_avatar(username):
@@ -36,3 +37,9 @@ def get_needed_exp(level):
 	if level == 1:
 		return first_level
 	return round(first_level * 1.15**(level - 1))
+
+
+def email_is_valid(email: str):
+	# regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+	regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+	return re.fullmatch(regex, email)

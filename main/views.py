@@ -4,7 +4,7 @@ from django.contrib.auth import login, authenticate, logout, update_session_auth
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import *
-from .useful_func import get_basic_avatar, get_needed_exp
+from .useful_func import get_basic_avatar, get_needed_exp, email_is_valid
 import logging
 
 # set logger level
@@ -114,15 +114,35 @@ def profile(request, username, action=None):
 def change_profile(request):
 	er_msg = None
 	if request.method == "POST":
-		data = list()
-		# about_user = AboutUser.objects.get(user=request.user)
-		for i in ["username", "email"]:
-			data.append(request.POST[i])
-		# avatar = request.POST['username']
-		if all(i for i in data) and data[0].isascii():
-			request.user.username = data[0]
-			request.user.email = data[1]
+		try:
+			data = request.POST.get("username")
+			if data is not None and data.isascii():
+				request.user.username = data
+			else:
+				raise ValueError("username")
+
+			data = request.POST.get("first_name")
+			if data is not None:
+				if data.isalpha() or data == '':
+					request.user.first_name = data
+				else:
+					raise ValueError("first_name")
+
+			data = request.POST.get("last_name")
+			if data is not None:
+				if data.isalpha() or data == '':
+					request.user.last_name = data
+				else:
+					raise ValueError("last_name")
+
+			data = request.POST.get("email")
+			if data is not None:
+				if email_is_valid(data) or data == '':
+					request.user.email = data
+				else:
+					raise ValueError("email")
+
 			request.user.save()
-		else:
-			er_msg = "Некорректные данные"
+		except ValueError as e:
+			er_msg = f"Невалидные данные в графе {e}: '{data}'"
 	return render(request, "change_profile.html", {"er_msg": er_msg})

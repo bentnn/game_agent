@@ -7,16 +7,31 @@
 	<title>Регистрация</title>
 </head>
 <body>
+<a class="nav-link" href="{% url 'profile' request.user.username %}">my profile</a>
+	<form method="post" style="max-width: 300px">
+		{% csrf_token %}
+		<div class="mb-3">
+			<label for="exampleFormControlInput1"  class="form-label">Username</label>
+			<input name="username" class="form-control" id="exampleFormControlInput1" value="{{ request.user.username }}">
+		</div>
+		<div class="mb-3">
+			<label for="exampleFormControlInput1"  class="form-label">Имя</label>
+			<input name="first_name" class="form-control" id="exampleFormControlInput1" value="{{ request.user.first_name }}">
+		</div>
+		<div class="mb-3">
+			<label for="exampleFormControlInput1"  class="form-label">Фамилия</label>
+			<input name="last_name" class="form-control" id="exampleFormControlInput1" value="{{ request.user.last_name }}">
+		</div>
+		<div class="mb-3">
+			<label for="exampleFormControlInput1" class="form-label">Адрес электронной почты</label>
+			<input type="email" class="form-control" name="email" id="exampleFormControlInput1" value="{{ request.user.email }}">
+		</div>
+		<button type="submit" class="btn btn-dark">Сохранить</button>
+	</form>
 
-<form method="post">
-	{% csrf_token %}
 
-	<button type="submit" class="btn btn-dark">Зарегистрироваться</button>
-</form>
-
-
-{% if er_message %}
-	<p style="color: red">{{ er_message }}</p>
+{% if er_msg %}
+	<p style="color: red">{{ er_msg }}</p>
 {% endif %}
 
 <a class="nav-link" href="{% url 'login' %}">login</a>

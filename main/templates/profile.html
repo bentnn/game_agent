@@ -11,6 +11,7 @@
 <h5>level: {{ about_user.level }}, to_next_level: {{ to_next_level }}</h5>
 {% if user == request.user %}
 	<p>Это твой аккаунт!!!</p>
+	<a class="nav-link" href="{% url 'change_profile' %}">Изменить данные</a>
 {% elif user in req_subs %}
 	<a class="nav-link" href="{% url 'profile' user.username 'unsub' %}">Отписаться</a>
 {% else %}
