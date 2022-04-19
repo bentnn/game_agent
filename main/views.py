@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .useful_func import get_basic_avatar, get_needed_exp, email_is_valid
 import logging
+from PIL import Image
 
 # set logger level
 logging.basicConfig(level=logging.DEBUG)
@@ -84,7 +85,6 @@ def profile(request, username, action=None):
 	logging.info(f"User <{username}> was found")
 	about_user = AboutUser.objects.get(user=user)
 	about_request = about_user if request.user == user else AboutUser.objects.get(user=request.user)
-	about_user.achievements.add(Achievement.objects.all()[0])
 	# print(list(about_user.achievements.all()))
 	# about_user.save()
 	# print([i.user.username for i in request.user.subs_to.all()])
@@ -113,6 +113,7 @@ def profile(request, username, action=None):
 @login_required(login_url='login')
 def change_profile(request):
 	er_msg = None
+	about_user = AboutUser.objects.get(user=request.user)
 	if request.method == "POST":
 		try:
 			data = request.POST.get("username")
@@ -142,7 +143,17 @@ def change_profile(request):
 				else:
 					raise ValueError("email")
 
+			# data = request.POST.get("avatar")
+			# with open("test.png", 'wb') as f:
+			# 	f.write(request.FILES['avatar'].read())
+			if data is not None:
+				pass
+				# about_user.avatar.delete(save=True)
+				# img = Image.open(data)
+				#
+				# data.save(f"media/Avatars/{request.user.username}.jpg")
+				# about_user.avatar = f"Avatars/{request.user.username}.jpg"
 			request.user.save()
 		except ValueError as e:
 			er_msg = f"Невалидные данные в графе {e}: '{data}'"
-	return render(request, "change_profile.html", {"er_msg": er_msg})
+	return render(request, "change_profile.html", {"er_msg": er_msg, "about_user": about_user})

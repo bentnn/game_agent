@@ -8,8 +8,12 @@
 </head>
 <body>
 <a class="nav-link" href="{% url 'profile' request.user.username %}">my profile</a>
-	<form method="post" style="max-width: 300px">
+	<form method="post" style="max-width: 300px" enctype='multipart/form-data'>
 		{% csrf_token %}
+		<div>
+			<img src="{{ about_user.avatar.url }}" style="max-width: 300px; max-height: 300px">
+			<input type="file" name="avatar" accept=".jpg, .jpeg, .png">
+		</div>
 		<div class="mb-3">
 			<label for="exampleFormControlInput1"  class="form-label">Username</label>
 			<input name="username" class="form-control" id="exampleFormControlInput1" value="{{ request.user.username }}">
@@ -34,6 +38,5 @@
 	<p style="color: red">{{ er_msg }}</p>
 {% endif %}
 
-<a class="nav-link" href="{% url 'login' %}">login</a>
 </body>
 </html>
