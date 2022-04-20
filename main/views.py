@@ -4,12 +4,12 @@ from django.contrib.auth import login, authenticate, logout, update_session_auth
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import *
-from .useful_func import get_basic_avatar, get_needed_exp, email_is_valid
+from .useful_func import *
 import logging
 from PIL import Image
 
-# set logger level
-logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger("Agent")
+logger.setLevel(logging.DEBUG)
 
 
 def about_us(request):
@@ -80,14 +80,26 @@ def profile(request, username, action=None):
 	# user = User.objects.get(username=username)
 	user = get_object_or_404(User, username=username)
 	if user is None or user.is_superuser:
-		logging.info(f"404: User <{username}> was not founded")
+		logger.info(f"404: User <{username}> was not founded")
 		return error_404(request, 404)
-	logging.info(f"User <{username}> was found")
+	logger.info(f"User <{username}> was found")
 	about_user = AboutUser.objects.get(user=user)
 	about_request = about_user if request.user == user else AboutUser.objects.get(user=request.user)
-	# print(list(about_user.achievements.all()))
-	# about_user.save()
-	# print([i.user.username for i in request.user.subs_to.all()])
+
+	# рисуем активность
+	#TODO: переделать, сделано тупо
+	data = norm_activity(about_user.activity)
+	about_user.activity = json.dumps(data)
+	about_user.save()
+	graph = None
+	if user == request.user:
+		graph = show_activity(data, user.username)
+	else:
+		data2 = norm_activity(about_request.activity)
+		about_request.activity = json.dumps(data)
+		about_request.save()
+		graph = show_activity(data2, request.user.username, data, user.username)
+
 	if request.user != user and action is not None:
 		if action == "sub":
 			about_request.subs.add(user)
@@ -105,7 +117,8 @@ def profile(request, username, action=None):
 			"subs": list(about_user.subs.all()),
 			"subs_to": list(user.subs_to.all()),
 			"req_subs": list(about_request.subs.all()),
-			"achievements": list(about_user.achievements.all())
+			"achievements": list(about_user.achievements.all()),
+			"activity": graph
 		}
 	)
 

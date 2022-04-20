@@ -1,8 +1,12 @@
 from PIL import ImageDraw, Image
 from .const import first_level
 import numpy as np
+import matplotlib.pyplot as plt
+from io import StringIO
 import hashlib
 import re
+import json
+import datetime
 
 
 def get_basic_avatar(username):
@@ -43,3 +47,64 @@ def email_is_valid(email: str):
 	# regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 	regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 	return re.fullmatch(regex, email)
+
+
+def create_activity():
+	data = {}
+	minimum = datetime.date.today() - datetime.timedelta(9)
+	for i in range(10):
+		data[str(minimum + datetime.timedelta(i))] = []
+	return data
+
+
+def norm_activity(data):
+	if isinstance(data, str):
+		data = json.loads(data)
+	today = datetime.date.today()
+	minimum = today - datetime.timedelta(9)
+	for i in list(data.items()):
+		if datetime.date.fromisoformat(i[0]) < minimum:
+			data.pop(i[0])
+	for i in range(10 - len(data)):
+		data[str(today - datetime.timedelta(i))] = []
+	return dict(sorted(data.items()))
+
+
+def add_activity(data: dict, activity):
+	last = data.popitem()
+	last[1].append(activity[:2])
+	data[last[0]] = last[1]
+	return data
+
+
+def show_activity(data, name, data2=None, name2=None):
+	if isinstance(data, str):
+		data = json.loads(data)
+
+	x = []
+	y = []
+	fig, ax = plt.subplots()
+	for i in data.items():
+		x.append(str(i[0])[5:])
+		y.append(0)
+		for j in i[1]:
+			y[-1] += j[1]
+
+	ax.plot(x, y, label=name)
+
+	if data2 is not None:
+		if isinstance(data2, str):
+			data2 = json.loads(data2)
+		y2 = []
+		for i in data2.values():
+			y2.append(0)
+			for j in i:
+				y2[-1] += j[1]
+		ax.plot(x, y2, label=name2)
+
+	ax.legend(loc='upper left')
+	plt.grid()
+	imgdata = StringIO()
+	plt.savefig(imgdata, format='svg', transparent=True)
+	imgdata.seek(0)
+	return imgdata.getvalue()

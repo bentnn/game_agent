@@ -22,6 +22,7 @@ class AboutUser(models.Model):
 	avatar = models.ImageField(upload_to="Avatars", blank=True)
 	subs = models.ManyToManyField(User, default=[], related_name="subs_to")
 	achievements = models.ManyToManyField(Achievement, default=[], related_name="achieve_owner")
+	activity = models.TextField(default='{}')
 
 	class Meta:
 		verbose_name = 'данные пользователя'
