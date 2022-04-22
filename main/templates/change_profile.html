@@ -11,7 +11,7 @@
 	<form method="post" style="max-width: 300px" enctype='multipart/form-data'>
 		{% csrf_token %}
 		<div>
-			<img src="{{ about_user.avatar.url }}" style="max-width: 300px; max-height: 300px">
+			<img src="{{ about_user.avatar.url }}" style="width: 200px">
 			<input type="file" name="avatar" accept=".jpg, .jpeg, .png">
 		</div>
 		<div class="mb-3">

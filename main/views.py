@@ -87,18 +87,17 @@ def profile(request, username, action=None):
 	about_request = about_user if request.user == user else AboutUser.objects.get(user=request.user)
 
 	# рисуем активность
-	#TODO: переделать, сделано тупо
+
 	data = norm_activity(about_user.activity)
 	about_user.activity = json.dumps(data)
 	about_user.save()
-	graph = None
-	if user == request.user:
-		graph = show_activity(data, user.username)
-	else:
-		data2 = norm_activity(about_request.activity)
-		about_request.activity = json.dumps(data)
+	activity_data = [data, user.username]
+	if user != request.user:
+		req_data = norm_activity(about_request.activity)
+		about_request.activity = json.dumps(req_data)
 		about_request.save()
-		graph = show_activity(data2, request.user.username, data, user.username)
+		activity_data = [req_data, request.user.username, *activity_data]
+	graph = show_activity(*activity_data)
 
 	if request.user != user and action is not None:
 		if action == "sub":
@@ -131,7 +130,10 @@ def change_profile(request):
 		try:
 			data = request.POST.get("username")
 			if data is not None and data.isascii():
-				request.user.username = data
+				if request.user.username == data or not User.objects.get(username=data):
+					request.user.username = data
+				else:
+					raise ValueError("username уже существует")
 			else:
 				raise ValueError("username")
 
@@ -156,17 +158,20 @@ def change_profile(request):
 				else:
 					raise ValueError("email")
 
-			# data = request.POST.get("avatar")
-			# with open("test.png", 'wb') as f:
-			# 	f.write(request.FILES['avatar'].read())
+			data = request.FILES.get("avatar")
 			if data is not None:
-				pass
-				# about_user.avatar.delete(save=True)
-				# img = Image.open(data)
-				#
-				# data.save(f"media/Avatars/{request.user.username}.jpg")
-				# about_user.avatar = f"Avatars/{request.user.username}.jpg"
+				about_user.avatar.delete(save=False)
+				filename = f"Avatars/{request.user.username}.png"
+				full_filename = "media/" + filename
+				with open(full_filename, 'wb') as f:
+					f.write(data.read())
+				im = Image.open(full_filename)
+				im = crop_max_square(im)
+				im.save(full_filename, quality=95)
+				about_user.avatar = filename
+				about_user.save()
+
 			request.user.save()
 		except ValueError as e:
-			er_msg = f"Невалидные данные в графе {e}: '{data}'"
+			er_msg = f"Невалидные данные. {e}: '{data}'"
 	return render(request, "change_profile.html", {"er_msg": er_msg, "about_user": about_user})
