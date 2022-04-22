@@ -7,10 +7,11 @@
 <body>
 <a class="nav-link" href="{% url 'home' %}">home</a>
 <h3>username - {{ user.username }}</h3>
-<img src="{{ about_user.avatar.url }}" style="max-width: 800px; max-height: 500px">
+<img src="{{ about_user.avatar.url }}" style="width: 250px">
 <h5>level: {{ about_user.level }}, to_next_level: {{ to_next_level }}</h5>
 {% if user == request.user %}
 	<p>Это твой аккаунт!!!</p>
+	<a class="nav-link" href="{% url 'change_profile' %}">Изменить данные</a>
 {% elif user in req_subs %}
 	<a class="nav-link" href="{% url 'profile' user.username 'unsub' %}">Отписаться</a>
 {% else %}
@@ -20,7 +21,7 @@
 <h4>Достижения</h4>
 {% if achievements|length != 0 %}
 	{% for i in achievements %}
-		<img src="{{ i.icon.url }}" style="max-width: 100px; max-height: 100px">
+		<img src="{{ i.icon.url }}" style="width: 100px">
 		<p style="color: darkgreen">{{ i.name }}</p>
 	{% endfor %}
 {% else %}
@@ -44,5 +45,8 @@
 {% else %}
 	<p>Подписчиков нет</p>
 {% endif %}
+
+<h4>Активность</h4>
+{{ activity|safe }}
 </body>
 </html>
