@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Регистрация</title>
+	<title>Настройка профиля</title>
 </head>
 <body>
 <a class="nav-link" href="{% url 'profile' request.user.username %}">my profile</a>
@@ -32,6 +32,8 @@
 		</div>
 		<button type="submit" class="btn btn-dark">Сохранить</button>
 	</form>
+
+<a class="nav-link" href="{% url 'change_password' %}">Сменить пароль</a>
 
 
 {% if er_msg %}

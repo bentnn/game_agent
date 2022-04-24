@@ -1,12 +1,20 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import Group, User
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, UserCreationForm
+from django.contrib.auth.forms import (
+	AuthenticationForm,
+	PasswordChangeForm,
+	UserCreationForm,
+	PasswordResetForm
+)
 from django.contrib.auth.decorators import login_required
+import logging
+
 from .models import *
 from .useful_func import *
-import logging
-from PIL import Image
+from .avatars_func import *
+from .activity_func import *
+
 
 logger = logging.getLogger("Agent")
 logger.setLevel(logging.DEBUG)
@@ -63,6 +71,19 @@ def check_in_view(request):
 	else:
 		form = UserCreationForm()
 	return render(request, 'check_in.html', {'form': form, 'er_message': er_message})
+
+
+# def reset_password(request):
+# 	er_message = None
+# 	if request.method == 'POST':
+# 		form = PasswordResetForm(data=request.POST)
+# 		if form.is_valid():
+# 			form.send_mail("a", "b", "v", "programming.agent@yandex.ru", request.POST["email"])
+# 		else:
+# 			er_message = "Форма невалидна"
+# 	else:
+# 		form = PasswordResetForm()
+# 	return render(request, 'reset_password.html', {'form': form, 'er_message': er_message})
 
 
 @login_required(login_url='login')
@@ -175,3 +196,19 @@ def change_profile(request):
 		except ValueError as e:
 			er_msg = f"Невалидные данные. {e}: '{data}'"
 	return render(request, "change_profile.html", {"er_msg": er_msg, "about_user": about_user})
+
+
+@login_required(login_url='login')
+def change_password(request):
+	message = None
+	if request.method == 'POST':
+		form = PasswordChangeForm(request.user, request.POST)
+		if form.is_valid():
+			user = form.save()
+			update_session_auth_hash(request, user)  # Important!
+			message = "Ваш пароль был успешно изменен"
+		else:
+			message = "Форма смены пароля невалидна"
+	else:
+		form = PasswordChangeForm(request.user)
+	return render(request, 'change_password.html', {'form': form, 'message': message})
