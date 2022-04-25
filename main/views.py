@@ -60,7 +60,12 @@ def check_in_view(request):
 				form.save()
 				user = authenticate(username=username, password=password)
 				get_basic_avatar(username).save(f"media/Avatars/{username}.jpg")
-				AboutUser.objects.create(user=user, avatar=f"Avatars/{username}.jpg")
+				AboutUser.objects.create(
+					user=user,
+					avatar=f"Avatars/{username}.jpg",
+					activity=json.dumps(create_activity()),
+					skills=json.dumps(create_skills())
+				)
 				login(request, user)
 				return redirect('home')
 			else:
@@ -138,7 +143,8 @@ def profile(request, username, action=None):
 			"subs_to": list(user.subs_to.all()),
 			"req_subs": list(about_request.subs.all()),
 			"achievements": list(about_user.achievements.all()),
-			"activity": graph
+			"activity": graph,
+			"skills": show_skills(about_user.skills)
 		}
 	)
 

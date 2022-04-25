@@ -4,6 +4,8 @@ import re
 import json
 import datetime
 import json
+import numpy as np
+from .const import skills
 
 
 def create_activity():
@@ -39,7 +41,7 @@ def show_activity(*args):
 	args_len = len(args)
 	if args_len < 2:
 		raise ValueError(f"Количество аргументов для графика активности "
-		                 f"{args_len}, а должно быть 2 или 4")
+						 f"{args_len}, а должно быть 2 или 4")
 	data, name = args[0], args[1]
 	data2, name2 = None, None
 	if args_len == 4:
@@ -66,6 +68,36 @@ def show_activity(*args):
 
 	ax.legend(loc='upper left')
 	plt.grid()
+	imgdata = StringIO()
+	plt.savefig(imgdata, format='svg', transparent=True)
+	imgdata.seek(0)
+	return imgdata.getvalue()
+
+
+def create_skills():
+	return dict.fromkeys(skills, 0)
+
+
+def show_skills(data):
+	if isinstance(data, str):
+		data = json.loads(data)
+	categories = list(data.keys())
+	categories = [*categories, categories[0]]
+
+	values = list(data.values())
+	values = [*values, values[0]]
+
+	label_loc = np.linspace(start=0, stop=2 * np.pi, num=len(values))
+
+	plt.figure(figsize=(8, 8))
+	ax = plt.subplot(polar=True)
+	plt.plot(label_loc, values)
+	plt.title('skills', size=20, y=1.05)
+	plt.ylim(0, 40)
+	plt.yticks(color='gray')
+	plt.fill(color='b')
+	lines, labels = plt.thetagrids(np.degrees(label_loc), labels=categories)
+	# plt.legend()
 	imgdata = StringIO()
 	plt.savefig(imgdata, format='svg', transparent=True)
 	imgdata.seek(0)
