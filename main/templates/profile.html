@@ -47,9 +47,11 @@
 {% endif %}
 
 <h4>Активность</h4>
-{{ activity|safe }}
+{#{{ activity|safe }}#}
+<img src="data:image/png;base64,{{ activity }}" alt="" style="max-width: 500px; max-height: 500px">
 
 <h4>Скилы</h4>
-{{ skills|safe }}
+{#{{ skills|safe }}#}
+<img src="data:image/png;base64,{{ skills }}" alt="" style="max-width: 500px; max-height: 500px">
 </body>
 </html>

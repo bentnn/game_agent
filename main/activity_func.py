@@ -1,11 +1,14 @@
 import matplotlib.pyplot as plt
-from io import StringIO
+from io import StringIO, BytesIO
 import re
+import base64
 import json
+import urllib
 import datetime
 import json
 import numpy as np
 from .const import skills
+from .useful_func import convert_fig_to_img
 
 
 def create_activity():
@@ -68,10 +71,11 @@ def show_activity(*args):
 
 	ax.legend(loc='upper left')
 	plt.grid()
-	imgdata = StringIO()
-	plt.savefig(imgdata, format='svg', transparent=True)
-	imgdata.seek(0)
-	return imgdata.getvalue()
+	# imgdata = StringIO()
+	# plt.savefig(imgdata, format='svg', transparent=True)
+	# imgdata.seek(0)
+	# return imgdata.getvalue()
+	return convert_fig_to_img(plt.gcf())
 
 
 def create_skills():
@@ -97,8 +101,20 @@ def show_skills(data):
 	plt.yticks(color='gray')
 	plt.fill(color='b')
 	lines, labels = plt.thetagrids(np.degrees(label_loc), labels=categories)
-	# plt.legend()
-	imgdata = StringIO()
-	plt.savefig(imgdata, format='svg', transparent=True)
-	imgdata.seek(0)
-	return imgdata.getvalue()
+
+	# imgdata = BytesIO()
+	# plt.savefig(imgdata, format='svg', transparent=True)
+	# imgdata.seek(0)
+	# string = base64.b64encode(imgdata.read())
+	# uri = urllib.parse.quote(string)
+	# return uri
+
+	# fig = plt.gcf()
+	# #convert graph into dtring buffer and then we convert 64 bit code into image
+	# buf = BytesIO()
+	# fig.savefig(buf, format='png')
+	# buf.seek(0)
+	# string = base64.b64encode(buf.read())
+	# uri = urllib.parse.quote(string)
+	# return uri
+	return convert_fig_to_img(plt.gcf())

@@ -1,6 +1,8 @@
 from .const import first_level
 import re
-
+from io import BytesIO
+import urllib
+import base64
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -39,3 +41,12 @@ def send_mail(mail, text):
 		return None
 	except Exception as e:
 		return f"error: {e}"
+
+
+def convert_fig_to_img(fig):
+	buf = BytesIO()
+	fig.savefig(buf, format='png')
+	buf.seek(0)
+	string = base64.b64encode(buf.read())
+	uri = urllib.parse.quote(string)
+	return uri
