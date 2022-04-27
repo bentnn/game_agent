@@ -1,5 +1,6 @@
 from .const import first_level
 import re
+from PIL import Image
 from io import BytesIO
 import urllib
 import base64
@@ -43,10 +44,21 @@ def send_mail(mail, text):
 		return f"error: {e}"
 
 
-def convert_fig_to_img(fig):
+def convert_fig_or_pil_to_img(fig):
 	buf = BytesIO()
-	fig.savefig(buf, format='png')
+	try:
+		fig.savefig(buf, format='png')
+	except Exception:
+		fig.save(buf, "PNG")
 	buf.seek(0)
 	string = base64.b64encode(buf.read())
 	uri = urllib.parse.quote(string)
 	return uri
+
+
+def frame_layering(avatar, frame):
+	background = Image.open(avatar)
+	foreground = Image.open(frame.image)
+	foreground = foreground.resize(background.size)
+	background.paste(foreground, (0, 0), foreground)
+	return convert_fig_or_pil_to_img(background)

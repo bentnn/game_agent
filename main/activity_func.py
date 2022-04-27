@@ -8,7 +8,7 @@ import datetime
 import json
 import numpy as np
 from .const import skills
-from .useful_func import convert_fig_to_img
+from .useful_func import convert_fig_or_pil_to_img
 
 
 def create_activity():
@@ -75,7 +75,7 @@ def show_activity(*args):
 	# plt.savefig(imgdata, format='svg', transparent=True)
 	# imgdata.seek(0)
 	# return imgdata.getvalue()
-	return convert_fig_to_img(plt.gcf())
+	return convert_fig_or_pil_to_img(plt.gcf())
 
 
 def create_skills():
@@ -117,4 +117,4 @@ def show_skills(data):
 	# string = base64.b64encode(buf.read())
 	# uri = urllib.parse.quote(string)
 	# return uri
-	return convert_fig_to_img(plt.gcf())
+	return convert_fig_or_pil_to_img(plt.gcf())

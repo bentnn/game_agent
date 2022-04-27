@@ -4,3 +4,4 @@ from .models import *
 admin.site.register(Achievement)
 admin.site.register(AboutUser)
 admin.site.register(Post)
+admin.site.register(GameItems)

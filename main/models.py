@@ -46,3 +46,16 @@ class Post(models.Model):
 
 	def __str__(self):
 		return self.title
+
+
+class GameItems(models.Model):
+	name = models.CharField(max_length=100)
+	image = models.ImageField(upload_to='Items', blank=True)
+
+	class Meta:
+		# ordering = ('-date', )
+		verbose_name = 'Игровой товар'
+		verbose_name_plural = 'Игровые товары'
+
+	def __str__(self):
+		return self.name
