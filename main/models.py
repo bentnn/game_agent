@@ -22,6 +22,7 @@ class GameItems(models.Model):
 	name = models.CharField(max_length=100)
 	image = models.ImageField(upload_to='Items', blank=True)
 	type = models.CharField(max_length=30, choices=TYPES, default='fr')
+	price = models.SmallIntegerField(default=0)
 
 	class Meta:
 		# ordering = ('-date', )

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Shop</title>
+</head>
+<body>
+
+<p>Ваш баланс: {{ about_user.money }}</p>
+<br>
+
+<h3>Frames</h3>
+{% for i in frames %}
+	<div style="border: 1px solid black">
+		<p>{{ i.name }}</p>
+		<img src="{{ i.image.url }}" style="width: 250px">
+		<p>Price: {{ i.price }}</p>
+		<a href="{% url 'buy_item' i.id %}">Buy</a>
+	</div>
+{% endfor %}
+
+<h3>Backs</h3>
+{% for i in backs %}
+	<div style="border: 1px solid black">
+		<p>{{ i.name }}</p>
+		<img src="{{ i.image.url }}" style="width: 250px">
+		<p>Price: {{ i.price }}</p>
+		<a href="{% url 'buy_item' i.id %}">Buy</a>
+	</div>
+{% endfor %}
+
+<h3>In inventory</h3>
+{% for i in inventory %}
+	<div style="border: 1px solid black">
+		<p>{{ i.name }}</p>
+		<img src="{{ i.image.url }}" style="width: 250px">
+	</div>
+{% endfor %}
+
+</body>
+</html>

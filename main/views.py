@@ -205,6 +205,38 @@ def set_item(request, id):
 
 
 @login_required(login_url='login')
+def game_shop(request):
+	about_request = AboutUser.objects.get(user=request.user)
+	inventory = list(about_request.inventory.all())
+	frames = filter(lambda x: x not in inventory, GameItems.objects.filter(type='fr'))
+	backs = filter(lambda x: x not in inventory, GameItems.objects.filter(type='bg'))
+	return render(
+		request, 'shop.html',
+		{
+			'about_user': about_request,
+			'inventory': inventory,
+			'frames': frames,
+			'backs': backs
+		}
+	)
+
+
+@login_required(login_url='login')
+def buy_item(request, id):
+	er_msg = None
+	about_request = AboutUser.objects.get(user=request.user)
+	item = get_object_or_404(GameItems, id=id)
+	if len(about_request.inventory.filter(id=item.id)) != 0:
+		er_msg = "У вас уже есть данный айтем"
+	elif item.price > about_request.money:
+		er_msg = "У вас недостаточно игровой валюты"
+	else:
+		about_request.money -= item.price
+		about_request.inventory.add(item)
+		about_request.save()
+	return game_shop(request)
+
+@login_required(login_url='login')
 def change_profile(request):
 	er_msg = None
 	about_user = AboutUser.objects.get(user=request.user)
