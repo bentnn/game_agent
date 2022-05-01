@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Inventory</title>
+</head>
+<body>
+<a href="{% url 'profile' about_user.user.username %}">to_profile</a>
+
+<h3>Frames</h3>
+
+{% if request.user == about_user.user %}
+	<div style="border: 1px solid black">
+		<h3>Nothing</h3>
+		{% if about_user.active_frame is not None %}
+			<a href="{% url 'set_item' 100000 %}">choose</a>
+		{% endif %}
+	</div>
+	<br>
+{% endif %}
+
+{% for i in frames %}
+	<div style="border: 1px solid black">
+		<h3>{{ i.name }}</h3>
+		<img src="{{ i.image.url }}" width="250px">
+		{% if request.user == about_user.user and about_user.active_frame != i  %}
+			<a  href="{% url 'set_item' i.id %}">choose</a>
+		{% endif %}
+	</div>
+	<br>
+{% endfor %}
+
+</body>
+</html>

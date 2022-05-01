@@ -6,3 +6,7 @@ from django.contrib.auth.decorators import login_required
 @login_required(login_url='login')
 def test(request):
     return HttpResponse("<h1>Test course</h1>")
+
+
+def home(request):
+    return HttpResponse("<h1>Root of course app</h1>")

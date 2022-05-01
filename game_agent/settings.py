@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'main',
     'course',
     'crispy_forms',
+    'matplotlib'
 ]
 
 MIDDLEWARE = [
