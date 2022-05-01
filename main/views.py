@@ -192,10 +192,14 @@ def set_item(request, id):
 		about_request.active_back = None
 	else:
 		item = get_object_or_404(GameItems, id=id)
-		if item not in about_request.inventory:
+		if len(about_request.inventory.filter(id=item.id)) == 0:
 			return error_404(request, None)
+
 		if item.type == 'fr':
 			about_request.active_frame = item
+		elif item.type == 'bg':
+			about_request.active_back = item
+
 	about_request.save()
 	return redirect("inventory", request.user.username)
 

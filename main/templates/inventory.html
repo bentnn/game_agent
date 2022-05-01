@@ -30,5 +30,29 @@
 	<br>
 {% endfor %}
 
+
+<h3>Backs</h3>
+
+{% if request.user == about_user.user %}
+	<div style="border: 1px solid black">
+		<h3>Nothing</h3>
+		{% if about_user.active_back is not None %}
+			<a href="{% url 'set_item' 200000 %}">choose</a>
+		{% endif %}
+	</div>
+	<br>
+{% endif %}
+
+{% for i in backs %}
+	<div style="border: 1px solid black">
+		<h3>{{ i.name }}</h3>
+		<img src="{{ i.image.url }}" width="250px">
+		{% if request.user == about_user.user and about_user.active_back != i  %}
+			<a  href="{% url 'set_item' i.id %}">choose</a>
+		{% endif %}
+	</div>
+	<br>
+{% endfor %}
+
 </body>
 </html>
