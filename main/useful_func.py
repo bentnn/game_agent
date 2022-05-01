@@ -58,7 +58,8 @@ def convert_fig_or_pil_to_img(fig):
 
 def frame_layering(avatar, frame):
 	background = Image.open(avatar)
-	foreground = Image.open(frame.image)
-	foreground = foreground.resize(background.size)
-	background.paste(foreground, (0, 0), foreground)
+	if frame is not None:
+		foreground = Image.open(frame.image)
+		foreground = foreground.resize(background.size)
+		background.paste(foreground, (0, 0), foreground)
 	return convert_fig_or_pil_to_img(background)

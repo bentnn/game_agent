@@ -102,7 +102,22 @@ def error_404(request, exception):
 
 
 @login_required(login_url='login')
-def profile(request, username, action=None):
+def users_action(request, username, action=None):
+	user = get_object_or_404(User, username=username)
+	about_request = AboutUser.objects.get(user=request.user)
+
+	if request.user != user and action is not None:
+		if action == "sub":
+			about_request.subs.add(user)
+			about_request.save()
+		elif action == "unsub":
+			about_request.subs.remove(user)
+			about_request.save()
+	return redirect('profile', username)
+
+
+@login_required(login_url='login')
+def profile(request, username):
 	# user = User.objects.get(username=username)
 	user = get_object_or_404(User, username=username)
 	if user is None or user.is_superuser:
@@ -125,13 +140,13 @@ def profile(request, username, action=None):
 		activity_data = [req_data, request.user.username, *activity_data]
 	graph = show_activity(*activity_data)
 
-	if request.user != user and action is not None:
-		if action == "sub":
-			about_request.subs.add(user)
-			about_request.save()
-		elif action == "unsub":
-			about_request.subs.remove(user)
-			about_request.save()
+	# if request.user != user and action is not None:
+	# 	if action == "sub":
+	# 		about_request.subs.add(user)
+	# 		about_request.save()
+	# 	elif action == "unsub":
+	# 		about_request.subs.remove(user)
+	# 		about_request.save()
 
 	return render(
 		request, 'profile.html',
@@ -144,9 +159,45 @@ def profile(request, username, action=None):
 			"req_subs": list(about_request.subs.all()),
 			"achievements": list(about_user.achievements.all()),
 			"activity": graph,
-			"skills": show_skills(about_user.skills)
+			"skills": show_skills(about_user.skills),
+			"avatar": frame_layering(about_user.avatar, about_user.active_frame)
 		}
 	)
+
+
+@login_required(login_url='login')
+def inventory(request, username):
+	user = get_object_or_404(User, username=username)
+	# about_request = AboutUser.objects.get(user=request.user)
+	about_user = AboutUser.objects.get(user=user)
+	return render(
+		request, "inventory.html",
+		{
+			"about_user": about_user,
+			"frames": about_user.inventory.filter(type='fr'),
+			"backs": about_user.inventory.filter(type='bg'),
+		}
+	)
+
+
+@login_required(login_url='login')
+def set_item(request, id):
+	"""
+	:param id: 100000 -> null frame, 200000 - null back
+	"""
+	about_request = AboutUser.objects.get(user=request.user)
+	if id == 100000:
+		about_request.active_frame = None
+	elif id == 200000:
+		about_request.active_back = None
+	else:
+		item = get_object_or_404(GameItems, id=id)
+		if item not in about_request.inventory:
+			return error_404(request, None)
+		if item.type == 'fr':
+			about_request.active_frame = item
+	about_request.save()
+	return redirect("inventory", request.user.username)
 
 
 @login_required(login_url='login')

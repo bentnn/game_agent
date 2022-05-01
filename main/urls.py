@@ -11,7 +11,9 @@ urlpatterns = [
     path('check_in', views.check_in_view, name='check_in'),
     # path('reset_password', views.reset_password, name='reset_password'),
     path('profile/<str:username>', views.profile, name='profile'),
-    path('profile/<str:username>/<str:action>', views.profile, name='profile'),
+    path('profile/<str:username>/inventory', views.inventory, name='inventory'),
+    path('set_item/<int:id>', views.set_item, name='set_item'),
+    path('action/<str:username>/<str:action>', views.users_action, name='users_action'),
     path('change_profile', views.change_profile, name='change_profile'),
     path('change_profile/password', views.change_password, name='change_password'),
 ]
