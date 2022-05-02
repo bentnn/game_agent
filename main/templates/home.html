@@ -5,6 +5,7 @@
 	<title>home</title>
 </head>
 <body>
+	<a class="nav-link" href="{% url 'course' %}">course</a>
 	<a class="nav-link" href="{% url 'logout' %}">logout</a>
 	<a class="nav-link" href="{% url 'profile' request.user.username %}">my profile</a>
 	<h1>Последние новости</h1>

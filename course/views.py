@@ -4,5 +4,13 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required(login_url='login')
-def test(request):
-    return HttpResponse("<h1>Test course</h1>")
+def index(request):
+    return render(request, 'course/index.html')
+
+@login_required(login_url='login')
+def tasks(request):
+    return render(request, 'course/tasks/index.html')
+
+@login_required(login_url='login')
+def task(request):
+    return render(request, 'course/tasks/taskpage.html')
