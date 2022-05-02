@@ -18,6 +18,11 @@ urlpatterns = [
     path('action/<str:username>/<str:action>', views.users_action, name='users_action'),
     path('change_profile', views.change_profile, name='change_profile'),
     path('change_profile/password', views.change_password, name='change_password'),
+
+    path("password_reset", views.password_reset_request, name="password_reset"),
+    # path('password_reset/done/', views.password_reset_done, name='password_reset_done'),
+    # path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
+    # path('reset/done/', views.password_reset_complete, name='password_reset_complete'),
 ]
 
 handler404 = "main.views.error_404"
