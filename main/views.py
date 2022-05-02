@@ -10,7 +10,10 @@ from django.contrib.auth.forms import (
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import logging
-
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from .const import domain
 from .models import *
 from .useful_func import *
 from .avatars_func import *
@@ -31,7 +34,6 @@ def home(request):
 
 
 def login_view(request):
-	er_message = None
 	if request.method == 'POST':
 		form = AuthenticationForm(data=request.POST)
 		if form.is_valid():
@@ -78,17 +80,27 @@ def check_in_view(request):
 	return render(request, 'check_in.html', {'form': form})
 
 
-# def reset_password(request):
-# 	er_message = None
-# 	if request.method == 'POST':
-# 		form = PasswordResetForm(data=request.POST)
-# 		if form.is_valid():
-# 			form.send_mail("a", "b", "v", "programming.agent@yandex.ru", request.POST["email"])
-# 		else:
-# 			er_message = "Форма невалидна"
-# 	else:
-# 		form = PasswordResetForm()
-# 	return render(request, 'reset_password.html', {'form': form, 'er_message': er_message})
+def password_reset_request(request):
+	if request.method == "POST":
+		password_reset_form = PasswordResetForm(request.POST)
+		if password_reset_form.is_valid():
+			data = password_reset_form.cleaned_data['email']
+			associated_users = User.objects.filter(email=data)
+			if associated_users.exists():
+				for user in associated_users:
+					text = f"""
+					http://{domain}/reset/{urlsafe_base64_encode(force_bytes(user.pk))}/{default_token_generator.make_token(user)}/
+					"""
+					send_mail(data, text)
+					return redirect("/password_reset/done/")
+			else:
+				messages.error(request, "Мы не нашли подходящего пользователя")
+		else:
+			messages.error(request, "Форма невалидна")
+	password_reset_form = PasswordResetForm()
+	return render(request, "reset_pswrd/password_reset.html",
+					{"password_reset_form": password_reset_form}
+	)
 
 
 @login_required(login_url='login')
@@ -230,6 +242,7 @@ def buy_item(request, id):
 @login_required(login_url='login')
 def change_profile(request):
 	about_user = AboutUser.objects.get(user=request.user)
+	data = None
 	if request.method == "POST":
 		try:
 			data = request.POST.get("username")
@@ -276,6 +289,7 @@ def change_profile(request):
 				about_user.save()
 
 			request.user.save()
+			messages.success(request, "Изменения успешно внесены")
 		except ValueError as e:
 			messages.error(request, f"Невалидные данные. {e}: '{data}'")
 	return render(request, "change_profile.html", {"about_user": about_user})
