@@ -5,6 +5,7 @@
 	<title>{{ user.username }}</title>
 </head>
 <body>
+{% include 'messages.html' %}
 
 <a class="nav-link" href="{% url 'home' %}">home</a>
 <a class="nav-link" href="{% url 'inventory' user.username %}">inventory</a>

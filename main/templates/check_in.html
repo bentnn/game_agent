@@ -7,17 +7,13 @@
     <title>Регистрация</title>
 </head>
 <body>
+{% include 'messages.html' %}
 
 <form method="post">
     {% csrf_token %}
     <p>{{ form | crispy }}</p>
     <button type="submit" class="btn btn-dark">Зарегистрироваться</button>
 </form>
-
-
-{% if er_message %}
-	<p style="color: red">{{ er_message }}</p>
-{% endif %}
 
 <a class="nav-link" href="{% url 'login' %}">login</a>
 </body>

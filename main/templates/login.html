@@ -8,16 +8,13 @@
 </head>
 <body>
 <h1>login</h1>
+{% include 'messages.html' %}
 
 <form method="post">
     {% csrf_token %}
     <p>{{ form | crispy }}</p>
     <button type="submit" class="btn btn-dark">Войти</button>
 </form>
-{% if er_message %}
-	<p style="color: red">{{ er_message }}</p>
-{% endif %}
-
 
 <a class="nav-link" href="{% url 'check_in' %}">Регистрация</a>
 

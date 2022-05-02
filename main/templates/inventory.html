@@ -5,7 +5,15 @@
 	<title>Inventory</title>
 </head>
 <body>
+{% include 'messages.html' %}
+
 <a href="{% url 'profile' about_user.user.username %}">to_profile</a>
+
+<h3>Now you look like</h3>
+<div style="background-image: url({{ about_user.active_back.image.url }});">
+	<img src="data:image/png;base64,{{ avatar }}" alt="" style="max-width: 250px; max-height: 250px">
+</div>
+
 
 <h3>Frames</h3>
 
