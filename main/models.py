@@ -22,6 +22,7 @@ class GameItems(models.Model):
 	name = models.CharField(max_length=100)
 	image = models.ImageField(upload_to='Items', blank=True)
 	type = models.CharField(max_length=30, choices=TYPES, default='fr')
+	price = models.SmallIntegerField(default=0)
 
 	class Meta:
 		# ordering = ('-date', )
@@ -43,8 +44,10 @@ class AboutUser(models.Model):
 	activity = models.TextField(default='{}')
 	skills = models.TextField(default='{}')
 	inventory = models.ManyToManyField(GameItems, default=[], related_name="item_owner", blank=True)
-	active_frame = models.OneToOneField(GameItems, on_delete=models.SET_NULL, null=True, related_name="set_frames", blank=True)
-	active_back = models.OneToOneField(GameItems, on_delete=models.SET_NULL, null=True, related_name="set_backs", blank=True)
+	active_frame = models.ForeignKey(GameItems, on_delete=models.SET_NULL, related_name="set_frame",
+										blank=True, null=True, default=None)
+	active_back = models.ForeignKey(GameItems, on_delete=models.SET_NULL, related_name="set_backs",
+										blank=True, null=True, default=None)
 
 	class Meta:
 		verbose_name = 'данные пользователя'

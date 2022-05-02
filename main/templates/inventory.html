@@ -5,7 +5,15 @@
 	<title>Inventory</title>
 </head>
 <body>
+{% include 'messages.html' %}
+
 <a href="{% url 'profile' about_user.user.username %}">to_profile</a>
+
+<h3>Now you look like</h3>
+<div style="background-image: url({{ about_user.active_back.image.url }});">
+	<img src="data:image/png;base64,{{ avatar }}" alt="" style="max-width: 250px; max-height: 250px">
+</div>
+
 
 <h3>Frames</h3>
 
@@ -24,6 +32,30 @@
 		<h3>{{ i.name }}</h3>
 		<img src="{{ i.image.url }}" width="250px">
 		{% if request.user == about_user.user and about_user.active_frame != i  %}
+			<a  href="{% url 'set_item' i.id %}">choose</a>
+		{% endif %}
+	</div>
+	<br>
+{% endfor %}
+
+
+<h3>Backs</h3>
+
+{% if request.user == about_user.user %}
+	<div style="border: 1px solid black">
+		<h3>Nothing</h3>
+		{% if about_user.active_back is not None %}
+			<a href="{% url 'set_item' 200000 %}">choose</a>
+		{% endif %}
+	</div>
+	<br>
+{% endif %}
+
+{% for i in backs %}
+	<div style="border: 1px solid black">
+		<h3>{{ i.name }}</h3>
+		<img src="{{ i.image.url }}" width="250px">
+		{% if request.user == about_user.user and about_user.active_back != i  %}
 			<a  href="{% url 'set_item' i.id %}">choose</a>
 		{% endif %}
 	</div>

@@ -8,6 +8,7 @@ from django.contrib.auth.forms import (
 	PasswordResetForm
 )
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 import logging
 
 from .models import *
@@ -41,16 +42,15 @@ def login_view(request):
 				login(request, user)
 				return redirect('home')
 			else:
-				er_message = "Пользователь не найден"
+				messages.error(request, "Пользователь не найден")
 		else:
-			er_message = "Форма невалидна"
+			messages.error(request, "Форма невалидна")
 	else:
 		form = AuthenticationForm()
-	return render(request, 'login.html', {'form': form, 'er_message': er_message})
+	return render(request, 'login.html', {'form': form})
 
 
 def check_in_view(request):
-	er_message = None
 	if request.method == 'POST':
 		form = UserCreationForm(data=request.POST)
 		if form.is_valid():
@@ -69,13 +69,13 @@ def check_in_view(request):
 				login(request, user)
 				return redirect('home')
 			else:
-				er_message = "Имя пользователя может состоять только из латинских букв," \
-								" цифр и специальных символов"
+				messages.error(request, "Имя пользователя может состоять "
+										"только из латинских букв, цифр и специальных символов")
 		else:
-			er_message = "Форма невалидна"
+			messages.error(request, "Форма невалидна")
 	else:
 		form = UserCreationForm()
-	return render(request, 'check_in.html', {'form': form, 'er_message': er_message})
+	return render(request, 'check_in.html', {'form': form})
 
 
 # def reset_password(request):
@@ -121,9 +121,7 @@ def profile(request, username):
 	# user = User.objects.get(username=username)
 	user = get_object_or_404(User, username=username)
 	if user is None or user.is_superuser:
-		logger.info(f"404: User <{username}> was not founded")
 		return error_404(request, 404)
-	logger.info(f"User <{username}> was found")
 	about_user = AboutUser.objects.get(user=user)
 	about_request = about_user if request.user == user else AboutUser.objects.get(user=request.user)
 
@@ -139,14 +137,6 @@ def profile(request, username):
 		about_request.save()
 		activity_data = [req_data, request.user.username, *activity_data]
 	graph = show_activity(*activity_data)
-
-	# if request.user != user and action is not None:
-	# 	if action == "sub":
-	# 		about_request.subs.add(user)
-	# 		about_request.save()
-	# 	elif action == "unsub":
-	# 		about_request.subs.remove(user)
-	# 		about_request.save()
 
 	return render(
 		request, 'profile.html',
@@ -168,7 +158,6 @@ def profile(request, username):
 @login_required(login_url='login')
 def inventory(request, username):
 	user = get_object_or_404(User, username=username)
-	# about_request = AboutUser.objects.get(user=request.user)
 	about_user = AboutUser.objects.get(user=user)
 	return render(
 		request, "inventory.html",
@@ -176,6 +165,7 @@ def inventory(request, username):
 			"about_user": about_user,
 			"frames": about_user.inventory.filter(type='fr'),
 			"backs": about_user.inventory.filter(type='bg'),
+			"avatar": frame_layering(about_user.avatar, about_user.active_frame)
 		}
 	)
 
@@ -192,17 +182,53 @@ def set_item(request, id):
 		about_request.active_back = None
 	else:
 		item = get_object_or_404(GameItems, id=id)
-		if item not in about_request.inventory:
+		if len(about_request.inventory.filter(id=item.id)) == 0:
 			return error_404(request, None)
+
 		if item.type == 'fr':
 			about_request.active_frame = item
+		elif item.type == 'bg':
+			about_request.active_back = item
+
 	about_request.save()
 	return redirect("inventory", request.user.username)
 
 
 @login_required(login_url='login')
-def change_profile(request):
+def game_shop(request):
+	about_request = AboutUser.objects.get(user=request.user)
+	inventory = list(about_request.inventory.all())
+	frames = filter(lambda x: x not in inventory, GameItems.objects.filter(type='fr'))
+	backs = filter(lambda x: x not in inventory, GameItems.objects.filter(type='bg'))
+	return render(
+		request, 'shop.html',
+		{
+			'about_user': about_request,
+			'inventory': inventory,
+			'frames': frames,
+			'backs': backs,
+		}
+	)
+
+
+@login_required(login_url='login')
+def buy_item(request, id):
 	er_msg = None
+	about_request = AboutUser.objects.get(user=request.user)
+	item = get_object_or_404(GameItems, id=id)
+	if len(about_request.inventory.filter(id=item.id)) != 0:
+		messages.error(request, "У вас уже есть данный айтем")
+	elif item.price > about_request.money:
+		messages.error(request, "У вас недостаточно игровой валюты")
+	else:
+		about_request.money -= item.price
+		about_request.inventory.add(item)
+		about_request.save()
+	return game_shop(request)
+
+
+@login_required(login_url='login')
+def change_profile(request):
 	about_user = AboutUser.objects.get(user=request.user)
 	if request.method == "POST":
 		try:
@@ -251,21 +277,20 @@ def change_profile(request):
 
 			request.user.save()
 		except ValueError as e:
-			er_msg = f"Невалидные данные. {e}: '{data}'"
-	return render(request, "change_profile.html", {"er_msg": er_msg, "about_user": about_user})
+			messages.error(request, f"Невалидные данные. {e}: '{data}'")
+	return render(request, "change_profile.html", {"about_user": about_user})
 
 
 @login_required(login_url='login')
 def change_password(request):
-	message = None
 	if request.method == 'POST':
 		form = PasswordChangeForm(request.user, request.POST)
 		if form.is_valid():
 			user = form.save()
 			update_session_auth_hash(request, user)  # Important!
-			message = "Ваш пароль был успешно изменен"
+			messages.error(request, "Ваш пароль был успешно изменен")
 		else:
-			message = "Форма смены пароля невалидна"
+			messages.error(request, "Форма смены пароля невалидна")
 	else:
 		form = PasswordChangeForm(request.user)
-	return render(request, 'change_password.html', {'form': form, 'message': message})
+	return render(request, 'change_password.html', {'form': form})
