@@ -26,50 +26,50 @@
 
                 <ul class="list-unstyled components">
                     <li>
-                        <a href="#">Главная страница</a>
+                        <a href="#">Обучение</a>
                     </li>
                     <li class="active">
                         <a href="#baseSubmenu" data-toggle="collapse" aria-expanded="false">Основы</a>
                         <ul class="collapse list-unstyled" id="baseSubmenu">
-                            <li><a href="#">Типы данных</a></li>
-                            <li><a href="#">Целые числа</a></li>
-                            <li><a href="#">Вещественные числа</a></li>
-                            <li><a href="#">Строки</a></li>
-                            <li><a href="#">Функции</a></li>
+                            <li><a href="{% url 'coursepage' 'datatypes' %}">Типы данных</a></li>
+                            <li><a href="{% url 'coursepage' 'integeroper' %}">Целые числа</a></li>
+                            <li><a href="{% url 'coursepage' 'floatoper' %}">Вещественные числа</a></li>
+                            <li><a href="{% url 'coursepage' 'stringoper' %}">Строки</a></li>
+                            <li><a href="{% url 'coursepage' 'functions' %}">Функции</a></li>
                         </ul>
                     </li>
                     <li class="active">
                         <a href="#collectionSubmenu" data-toggle="collapse" aria-expanded="false">Коллекции</a>
                         <ul class="collapse list-unstyled" id="collectionSubmenu">
-                            <li><a href="#">Массивы</a></li>
-                            <li><a href="#">Списки</a></li>
-                            <li><a href="#">Очередь и стек</a></li>
-                            <li><a href="#">Бинарное дерево</a></li>
-                            <li><a href="#">Хэш-таблицы</a></li>
+                            <li><a href="{% url 'coursepage' 'arrays' %}">Массивы</a></li>
+                            <li><a href="{% url 'coursepage' 'list' %}">Списки</a></li>
+                            <li><a href="{% url 'coursepage' 'stackqueue' %}">Очередь и стек</a></li>
+                            <li><a href="{% url 'coursepage' 'binarytree' %}">Бинарное дерево</a></li>
+                            <li><a href="{% url 'coursepage' 'hashtable' %}">Хэш-таблицы</a></li>
                         </ul>
                     </li>
                     <li class="active">
                         <a href="#classSubmenu" data-toggle="collapse" aria-expanded="false">ООП</a>
                         <ul class="collapse list-unstyled" id="classSubmenu">
-                            <li><a href="#">Классы и объекты</a></li>
-                            <li><a href="#">Основные принципы ООП</a></li>
+                            <li><a href="{% url 'coursepage' 'classes' %}">Классы и объекты</a></li>
+                            <li><a href="{% url 'coursepage' 'oopprinciples' %}">Основные принципы ООП</a></li>
                         </ul>
                     </li>
                     <li class="active">
                         <a href="#algoSubmenu" data-toggle="collapse" aria-expanded="false">Алгоритмы</a>
                         <ul class="collapse list-unstyled" id="algoSubmenu">
-                            <li><a href="#">Алгоритмы сортировки</a></li>
-                            <li><a href="#">Бинарный поиск</a></li>
-                            <li><a href="#">Алгоритмы на графах</a></li>
-                            <li><a href="#">Алгоритмы хэширования</a></li>
-                            <li><a href="#">Динамическое программирование</a></li>
+                            <li><a href="{% url 'coursepage' 'sorting' %}">Алгоритмы сортировки</a></li>
+                            <li><a href="{% url 'coursepage' 'binarysearch' %}">Бинарный поиск</a></li>
+                            <li><a href="{% url 'coursepage' 'graphsalgo' %}">Алгоритмы на графах</a></li>
+                            <li><a href="{% url 'coursepage' 'hashfunctions' %}">Алгоритмы хэширования</a></li>
+                            <li><a href="{% url 'coursepage' 'dynamic' %}">Динамическое программирование</a></li>
                         </ul>
                     </li>
                 </ul>
 
                 <ul class="list-unstyled CTAs">
-                    <li><a href="https://www.hse.ru/?ysclid=l2pslkt7m0" class="download">HSE</a></li>
-                    <li><a href="https://wiki.miem.hse.ru/" class="article">MIEM Wiki</a></li>
+                    <li><a href="https://algowiki-project.org/ru" class="download">Дополнительные материалы</a></li>
+                    <li><a href="https://www.python.org/" class="article">Документация Python</a></li>
                 </ul>
             </nav>
 
@@ -90,13 +90,13 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="nav navbar-nav ml-auto">
                                 <li class="nav-item active">
-                                    <a class="nav-link" href="{% url 'course' %}">Главная страница</a>
+                                    <a class="nav-link" href="{% url 'course' %}">Курс</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'tasks' %}">Задания</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/home">Страница пользователя</a>
+                                    <a class="nav-link" href="{% url 'profile' request.user.username %}">Страница пользователя</a>
                                 </li>
                             </ul>
                         </div>
@@ -113,7 +113,7 @@
     <!-- Popper.JS -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script> -->
     <!-- Bootstrap JS -->
-    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script> --> -->
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script> -->
 
          <script type="text/javascript" src="{% static '/js/jquery.min.js' %}"></script>
          <script type="text/javascript" src="{% static '/js/popper.min.js' %}"></script>
