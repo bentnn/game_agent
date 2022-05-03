@@ -11,8 +11,8 @@
 </head>
 <body>
     <div>
-        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom course_header">
-          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <header class="d-flex flex-wrap justify-content-center py-3 course_header">
+          <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
             <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
             <span class="fs-3">Педагогический агент</span>
           </a>
@@ -24,8 +24,7 @@
           </ul>
         </header>
     </div>
-    <div>
-        {% block content %}{% endblock %}
-    </div>
 </body>
+<script type="text/javascript" src="{% static '/js/jquery.min.js' %}"></script>
+{% block scripts %}{% endblock %}
 </html>

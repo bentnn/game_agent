@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='login')
 def index(request):
-    return render(request, 'course/index.html')
+    return render(request, 'course/content/index.html')
 
 @login_required(login_url='login')
 def tasks(request):
