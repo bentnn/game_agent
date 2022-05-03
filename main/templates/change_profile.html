@@ -4,9 +4,11 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Регистрация</title>
+	<title>Настройка профиля</title>
 </head>
 <body>
+{% include 'messages.html' %}
+
 <a class="nav-link" href="{% url 'profile' request.user.username %}">my profile</a>
 	<form method="post" style="max-width: 300px" enctype='multipart/form-data'>
 		{% csrf_token %}
@@ -33,10 +35,8 @@
 		<button type="submit" class="btn btn-dark">Сохранить</button>
 	</form>
 
+<a class="nav-link" href="{% url 'change_password' %}">Сменить пароль</a>
 
-{% if er_msg %}
-	<p style="color: red">{{ er_msg }}</p>
-{% endif %}
 
 </body>
 </html>

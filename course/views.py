@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required(login_url='login')
+<<<<<<< HEAD
 def index(request):
     return render(request, 'course/content/index.html')
 
@@ -18,3 +19,11 @@ def tasks(request):
 @login_required(login_url='login')
 def task(request):
     return render(request, 'course/tasks/taskpage.html')
+=======
+def test(request):
+    return HttpResponse("<h1>Test course</h1>")
+
+
+def home(request):
+    return HttpResponse("<h1>Root of course app</h1>")
+>>>>>>> master
