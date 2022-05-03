@@ -61,7 +61,7 @@ class Post(models.Model):
 	title = models.CharField(max_length=100)
 	image = models.ImageField(upload_to='Post', blank=True)
 	date = models.DateTimeField(auto_now_add=True)
-	text = models.TextField(max_length=350, blank=True)
+	text = models.TextField()
 
 	class Meta:
 		ordering = ('-date', )
