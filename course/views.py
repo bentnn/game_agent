@@ -8,6 +8,10 @@ def index(request):
     return render(request, 'course/content/index.html')
 
 @login_required(login_url='login')
+def coursepage(request, str):
+    return render(request, 'course/content/pages/' + str + '.html')
+
+@login_required(login_url='login')
 def tasks(request):
     return render(request, 'course/tasks/index.html')
 
