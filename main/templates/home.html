@@ -16,12 +16,12 @@
 	{% if posts|length != 0 %}
 		{% for i in posts %}
 			<div style="border: 1px solid black">
-				<h3>{{ i.title }}</h3>
+				<a href="{% url 'post' i.id %}"><h3>{{ i.title }}</h3></a>
 				{% if i.image %}
 					<img src="{{ i.image.url }}" style="max-width: 200px; max-height: 200px">
 				{% endif %}
-				<p>{{ i.text }}</p>
-				<p style="font-weight: bold">{{ i.date }}</p>
+				<p>{{ i.text|truncatechars:200 }}</p>
+				<p style="font-style: italic">{{ i.date }}</p>
 			</div>
 			<br>
 		{% endfor %}

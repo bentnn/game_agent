@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ post.title }}</title>
+</head>
+<body>
+
+<a href="{% url 'home' %}">На главную</a>
+<h1>{{ post.title }}</h1>
+<img src="{{ post.image.url }}" style="max-height: 300px; max-width: 300px">
+<p>{{ post.text|linebreaksbr }}</p>
+<p style="font-style: italic">{{ post.date }}</p>
+</body>
+</html>
