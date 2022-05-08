@@ -15,6 +15,12 @@
         <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"> -->
         <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static '/css/course/sidebar.css' %}">
+        <!-- Scrollbar Custom CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+
+        <!-- Font Awesome JS -->
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
     </head>
     <body>
         <div class="wrapper">
@@ -23,46 +29,47 @@
                 <div class="sidebar-header">
                     <h3>Теоретические материалы</h3>
                 </div>
-
+                <hr/>
                 <ul class="list-unstyled components">
+                    <p>Курс</p>
                     <li>
-                        <a href="#">Обучение</a>
+                        <a href="#" id="startpage">Обучение</a>
                     </li>
                     <li class="active">
                         <a href="#baseSubmenu" data-toggle="collapse" aria-expanded="false">Основы</a>
                         <ul class="collapse list-unstyled" id="baseSubmenu">
-                            <li><a href="{% url 'coursepage' 'datatypes' %}">Типы данных</a></li>
-                            <li><a href="{% url 'coursepage' 'integeroper' %}">Целые числа</a></li>
-                            <li><a href="{% url 'coursepage' 'floatoper' %}">Вещественные числа</a></li>
-                            <li><a href="{% url 'coursepage' 'stringoper' %}">Строки</a></li>
-                            <li><a href="{% url 'coursepage' 'functions' %}">Функции</a></li>
+                            <li><a id="datatypes" href="#">Типы данных</a></li>
+                            <li><a id="integeroper" href="#">Целые числа</a></li>
+                            <li><a id="floatoper" href="#">Вещественные числа</a></li>
+                            <li><a id="stringoper" href="#">Строки</a></li>
+                            <li><a id="functions" href="#">Функции</a></li>
                         </ul>
                     </li>
                     <li class="active">
                         <a href="#collectionSubmenu" data-toggle="collapse" aria-expanded="false">Коллекции</a>
                         <ul class="collapse list-unstyled" id="collectionSubmenu">
-                            <li><a href="{% url 'coursepage' 'arrays' %}">Массивы</a></li>
-                            <li><a href="{% url 'coursepage' 'list' %}">Списки</a></li>
-                            <li><a href="{% url 'coursepage' 'stackqueue' %}">Очередь и стек</a></li>
-                            <li><a href="{% url 'coursepage' 'binarytree' %}">Бинарное дерево</a></li>
-                            <li><a href="{% url 'coursepage' 'hashtable' %}">Хэш-таблицы</a></li>
+                            <li><a id="arrays" href="#">Массивы</a></li>
+                            <li><a id="list" href="#">Списки</a></li>
+                            <li><a id="stackqueue" href="#">Очередь и стек</a></li>
+                            <li><a id="binarytree" href="#">Бинарное дерево</a></li>
+                            <li><a id="hashtable" href="#">Хэш-таблицы</a></li>
                         </ul>
                     </li>
                     <li class="active">
                         <a href="#classSubmenu" data-toggle="collapse" aria-expanded="false">ООП</a>
                         <ul class="collapse list-unstyled" id="classSubmenu">
-                            <li><a href="{% url 'coursepage' 'classes' %}">Классы и объекты</a></li>
-                            <li><a href="{% url 'coursepage' 'oopprinciples' %}">Основные принципы ООП</a></li>
+                            <li><a id="classes" href="#">Классы и объекты</a></li>
+                            <li><a id="oopprinciples" href="#">Основные принципы ООП</a></li>
                         </ul>
                     </li>
                     <li class="active">
                         <a href="#algoSubmenu" data-toggle="collapse" aria-expanded="false">Алгоритмы</a>
                         <ul class="collapse list-unstyled" id="algoSubmenu">
-                            <li><a href="{% url 'coursepage' 'sorting' %}">Алгоритмы сортировки</a></li>
-                            <li><a href="{% url 'coursepage' 'binarysearch' %}">Бинарный поиск</a></li>
-                            <li><a href="{% url 'coursepage' 'graphsalgo' %}">Алгоритмы на графах</a></li>
-                            <li><a href="{% url 'coursepage' 'hashfunctions' %}">Алгоритмы хэширования</a></li>
-                            <li><a href="{% url 'coursepage' 'dynamic' %}">Динамическое программирование</a></li>
+                            <li><a id="sorting" href="#">Алгоритмы сортировки</a></li>
+                            <li><a id="binarysearch" href="#">Бинарный поиск</a></li>
+                            <li><a id="graphsalgo" href="#">Алгоритмы на графах</a></li>
+                            <li><a id="hashfunctions" href="#">Алгоритмы хэширования</a></li>
+                            <li><a id="dynamic" href="#">Динамическое программирование</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -102,8 +109,7 @@
                         </div>
                     </div>
                 </nav>
-                <article>
-                    {% block content %}{% endblock %}
+                <article id="main-text">
                 </article>
             </div>
         </div>
@@ -118,19 +124,6 @@
          <script type="text/javascript" src="{% static '/js/jquery.min.js' %}"></script>
          <script type="text/javascript" src="{% static '/js/popper.min.js' %}"></script>
          <script type="text/javascript" src="{% static '/bootstrap/js/bootstrap.min.js' %}"></script>
-         <script type="text/javascript">
-             $(document).ready(function () {
-                 $('#sidebarCollapse').on('click', function () {
-                     $('#sidebar').toggleClass('active');
-                     let text = $('#toggleMenu').text();
-                     if (text[0] == 'С'){
-                        $('#toggleMenu').text('Показать меню');
-                     }
-                     else{
-                        $('#toggleMenu').text('Скрыть меню');
-                     }
-                 });
-             });
-         </script>
+         <script type="text/javascript" src="{% static '/js/sidebar.js' %}"></script>
     </body>
 </html>

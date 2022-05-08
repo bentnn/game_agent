@@ -5,11 +5,11 @@ from course import urls
 urlpatterns = [
     path('course/', include('course.urls')),
     path('home', views.home, name='home'),
+    path('post/<int:id>', views.post_view, name='post'),
     path('', views.about_us, name='about_us'),
     path('login', views.login_view, name='login'),
     path('logout', views.logout_view, name='logout'),
     path('check_in', views.check_in_view, name='check_in'),
-    # path('reset_password', views.reset_password, name='reset_password'),
     path('profile/<str:username>', views.profile, name='profile'),
     path('profile/<str:username>/inventory', views.inventory, name='inventory'),
     path('set_item/<int:id>', views.set_item, name='set_item'),
@@ -20,9 +20,6 @@ urlpatterns = [
     path('change_profile/password', views.change_password, name='change_password'),
 
     path("password_reset", views.password_reset_request, name="password_reset"),
-    # path('password_reset/done/', views.password_reset_done, name='password_reset_done'),
-    # path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
-    # path('reset/done/', views.password_reset_complete, name='password_reset_complete'),
 ]
 
 handler404 = "main.views.error_404"

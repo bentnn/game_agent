@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.forms import (
 	AuthenticationForm,
@@ -31,6 +31,12 @@ def about_us(request):
 @login_required(login_url='login')
 def home(request):
 	return render(request, 'home.html', {"posts": Post.objects.all()[:5]})
+
+
+@login_required(login_url='login')
+def post_view(request, id):
+	post = get_object_or_404(Post, id=id)
+	return render(request, 'post_page.html', {'post': post})
 
 
 def login_view(request):
@@ -130,7 +136,6 @@ def users_action(request, username, action=None):
 
 @login_required(login_url='login')
 def profile(request, username):
-	# user = User.objects.get(username=username)
 	user = get_object_or_404(User, username=username)
 	if user is None or user.is_superuser:
 		return error_404(request, 404)
@@ -209,14 +214,16 @@ def set_item(request, id):
 @login_required(login_url='login')
 def game_shop(request):
 	about_request = AboutUser.objects.get(user=request.user)
-	inventory = list(about_request.inventory.all())
-	frames = filter(lambda x: x not in inventory, GameItems.objects.filter(type='fr'))
-	backs = filter(lambda x: x not in inventory, GameItems.objects.filter(type='bg'))
+	invent = list(about_request.inventory.all())
+	frames = filter(lambda x: x not in invent,
+					GameItems.objects.filter(type='fr'))
+	backs = filter(lambda x: x not in invent,
+					GameItems.objects.filter(type='bg'))
 	return render(
 		request, 'shop.html',
 		{
 			'about_user': about_request,
-			'inventory': inventory,
+			'inventory': invent,
 			'frames': frames,
 			'backs': backs,
 		}
@@ -225,7 +232,6 @@ def game_shop(request):
 
 @login_required(login_url='login')
 def buy_item(request, id):
-	er_msg = None
 	about_request = AboutUser.objects.get(user=request.user)
 	item = get_object_or_404(GameItems, id=id)
 	if len(about_request.inventory.filter(id=item.id)) != 0:
@@ -242,38 +248,10 @@ def buy_item(request, id):
 @login_required(login_url='login')
 def change_profile(request):
 	about_user = AboutUser.objects.get(user=request.user)
-	data = None
 	if request.method == "POST":
 		try:
-			data = request.POST.get("username")
-			if data is not None and data.isascii():
-				if request.user.username == data or not User.objects.get(username=data):
-					request.user.username = data
-				else:
-					raise ValueError("username уже существует")
-			else:
-				raise ValueError("username")
-
-			data = request.POST.get("first_name")
-			if data is not None:
-				if data.isalpha() or data == '':
-					request.user.first_name = data
-				else:
-					raise ValueError("first_name")
-
-			data = request.POST.get("last_name")
-			if data is not None:
-				if data.isalpha() or data == '':
-					request.user.last_name = data
-				else:
-					raise ValueError("last_name")
-
-			data = request.POST.get("email")
-			if data is not None:
-				if email_is_valid(data) or data == '':
-					request.user.email = data
-				else:
-					raise ValueError("email")
+			for i in ['username', 'first_name', 'last_name', 'email']:
+				set_change(request, i)
 
 			data = request.FILES.get("avatar")
 			if data is not None:
@@ -291,7 +269,7 @@ def change_profile(request):
 			request.user.save()
 			messages.success(request, "Изменения успешно внесены")
 		except ValueError as e:
-			messages.error(request, f"Невалидные данные. {e}: '{data}'")
+			messages.error(request, f"{e}")
 	return render(request, "change_profile.html", {"about_user": about_user})
 
 

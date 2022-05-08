@@ -7,7 +7,7 @@ import base64
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
+from django.contrib.auth.models import User
 
 
 def get_needed_exp(level):
@@ -63,3 +63,25 @@ def frame_layering(avatar, frame):
 		foreground = foreground.resize(background.size)
 		background.paste(foreground, (0, 0), foreground)
 	return convert_fig_or_pil_to_img(background)
+
+
+def set_change(request, atr: str):
+	data = request.POST.get(atr)
+	if getattr(request.user, atr) == data:
+		return
+	if data is not None:
+		if atr == 'username':
+			if User.objects.filter(username=data).first():
+				raise ValueError(f"Username '{data}' уже занят")
+			valid = data.isascii()
+		elif atr.endswith('_name'):
+			valid = any([data.isalpha(), data == ''])
+		else:
+			valid = any([email_is_valid(data), data == ''])
+
+		if valid:
+			request.user.__setattr__(atr, data)
+		else:
+			raise ValueError(f"{atr} - {data}")
+	elif atr == 'username':
+		raise ValueError("Username является обязательным полем")
