@@ -25,7 +25,6 @@ class GameItems(models.Model):
 	price = models.SmallIntegerField(default=0)
 
 	class Meta:
-		# ordering = ('-date', )
 		verbose_name = 'Игровой товар'
 		verbose_name_plural = 'Игровые товары'
 
@@ -71,4 +70,3 @@ class Post(models.Model):
 
 	def __str__(self):
 		return self.title
-

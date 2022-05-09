@@ -4,4 +4,3 @@ from .models import Articles, Categories
 
 admin.site.register(Categories)
 admin.site.register(Articles)
-# Register your models here.
