@@ -12,6 +12,7 @@
     pip install matplotlib
     pip install pillow
     pip install djangorestframework
+    pip install fuzzywazzy
     
 Или можно проще:
 

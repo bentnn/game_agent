@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.forms import (
 	AuthenticationForm,
@@ -7,6 +6,8 @@ from django.contrib.auth.forms import (
 	UserCreationForm,
 	PasswordResetForm
 )
+from fuzzywuzzy import fuzz
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import logging
@@ -63,11 +64,11 @@ def check_in_view(request):
 		form = UserCreationForm(data=request.POST)
 		if form.is_valid():
 			username = request.POST['username']
-			if username.isascii():
+			if is_ascii(username):
 				password = request.POST['password1']
 				form.save()
 				user = authenticate(username=username, password=password)
-				get_basic_avatar(username).save(f"media/Avatars/{username}.jpg")
+				get_basic_avatar(username).save(f"{settings.MEDIA_ROOT}/Avatars/{username}.jpg")
 				AboutUser.objects.create(
 					user=user,
 					avatar=f"Avatars/{username}.jpg",
@@ -75,10 +76,16 @@ def check_in_view(request):
 					skills=json.dumps(create_skills())
 				)
 				login(request, user)
+				messages.success(request,
+								 "Ваш аккаунт успешно создан. Перейдите в "
+								 "профиль->настройки, чтобы ввести электронную "
+								 "почту. Она понадобится, "
+								 "если вы вдруг забудете пароль.")
 				return redirect('home')
 			else:
 				messages.error(request, "Имя пользователя может состоять "
-										"только из латинских букв, цифр и специальных символов")
+										"только из латинских букв, "
+										"цифр и специальных символов")
 		else:
 			messages.error(request, "Форма невалидна")
 	else:
@@ -255,9 +262,9 @@ def change_profile(request):
 
 			data = request.FILES.get("avatar")
 			if data is not None:
-				about_user.avatar.delete(save=False)
+				#about_user.avatar.delete(save=False)
 				filename = f"Avatars/{request.user.username}.png"
-				full_filename = "media/" + filename
+				full_filename = str(settings.MEDIA_ROOT) + '/' + filename
 				with open(full_filename, 'wb') as f:
 					f.write(data.read())
 				im = Image.open(full_filename)
@@ -286,3 +293,14 @@ def change_password(request):
 	else:
 		form = PasswordChangeForm(request.user)
 	return render(request, 'change_password.html', {'form': form})
+
+
+def search_user(request):
+	res = None
+	if request.method == 'POST':
+		username = request.POST.get('username')
+		users = User.objects.all()
+		res = [i for i in users if fuzz.ratio(i.username, username) > 70]
+		if len(res) == 0:
+			messages.warning(request, f"Пользователь '{username}' не найден")
+	return render(request, 'search_user.html', {'users': res})

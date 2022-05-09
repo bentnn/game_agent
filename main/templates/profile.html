@@ -10,11 +10,18 @@
 <a class="nav-link" href="{% url 'home' %}">home</a>
 <a class="nav-link" href="{% url 'inventory' user.username %}">inventory</a>
 <a class="nav-link" href="{% url 'game_shop' %}">Shop</a>
+<a class="nav-link" href="{% url 'search_user' %}">search</a>
+{% if user != request.user %}
+	<a class="nav-link" href="{% url 'profile' request.user.username %}">Мой профиль</a>
+{% endif %}
+
 <div style="background-image: url({{ about_user.active_back.image.url }});">
 	<h3>username - {{ user.username }}</h3>
 	{#<img src="{{ about_user.avatar.url }}" style="width: 250px">#}
 	<img src="data:image/png;base64,{{ avatar }}" alt="" style="max-width: 250px; max-height: 250px">
 	<h5>level: {{ about_user.level }}, to_next_level: {{ to_next_level }}%</h5>
+	<h5>money: {{ about_user.money }}</h5>
+
 	{% if user == request.user %}
 		<a class="nav-link" href="{% url 'change_profile' %}">Изменить данные</a>
 	{% elif user in req_subs %}

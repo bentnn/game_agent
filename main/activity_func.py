@@ -25,7 +25,7 @@ def norm_activity(data):
 	today = datetime.date.today()
 	minimum = today - datetime.timedelta(9)
 	for i in list(data.items()):
-		if datetime.date.fromisoformat(i[0]) < minimum:
+		if datetime.datetime.strptime(i[0], '%Y-%m-%d').date() < minimum:
 			data.pop(i[0])
 	for i in range(10 - len(data)):
 		data[str(today - datetime.timedelta(i))] = 0
