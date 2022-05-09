@@ -7,7 +7,7 @@
 <body>
 {% include 'messages.html' %}
 
-	<a class="nav-link" href="{% url 'course_home' %}">курс</a>
+	<a class="nav-link" href="{% url 'course' %}">курс</a>
 	<a class="nav-link" href="{% url 'profile' request.user.username %}">my profile</a>
 	<a class="nav-link" href="{% url 'logout' %}">logout</a>
 

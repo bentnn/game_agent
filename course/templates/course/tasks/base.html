@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/course/main.css' %}">
+</head>
+<body>
+    <div>
+        <header class="d-flex flex-wrap justify-content-center py-3 course_header">
+          <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            <span class="fs-3">Педагогический агент</span>
+          </a>
+    
+          <ul class="nav nav-pills">
+            <li class="fs-4 nav-item"><a href="{% url 'course' %}" class="nav-link link-dark header-link font-weight-bold">Главная страница</a></li>
+            <li class="fs-4 nav-item"><a href="{% url 'tasks' %}" class="nav-link font-weight-bold link-dark header-link">Задания</a></li>
+            <li class="fs-4 nav-item"><a href="/home" class="nav-link font-weight-bold link-dark header-link">Страница пользователя</a></li>
+          </ul>
+        </header>
+    </div>
+</body>
+<script type="text/javascript" src="{% static '/js/jquery.min.js' %}"></script>
+{% block scripts %}{% endblock %}
+</html>

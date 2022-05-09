@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Search</title>
+</head>
+<body>
+{% include 'messages.html' %}
+<a class="nav-link" href="{% url 'profile' request.user.username %}">Профиль</a>
+
+<h1>Поиск пользователей</h1>
+
+<form method="post" style="max-width: 300px" enctype='multipart/form-data'>
+	{% csrf_token %}
+	<div class="mb-3">
+		<label for="exampleFormControlInput1"  class="form-label">Username</label>
+		<input name="username" class="form-control" id="exampleFormControlInput1" value="{{ request.POST.username }}">
+	</div>
+	<button type="submit" class="btn btn-dark">Найти</button>
+</form>
+<br>
+
+{% for user in users %}
+	<a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+{% endfor %}
+
+</body>
+</html>
