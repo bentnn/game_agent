@@ -2,3 +2,4 @@ django==4.0.1
 django-crispy-forms==1.14.0
 matplotlib==3.5.1
 pillow==9.1.0
+djangorestframework==3.13.1

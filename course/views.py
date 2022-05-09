@@ -3,9 +3,10 @@ from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Articles
+from .models import Articles, Categories
+from main.models import AboutUser
 from .serializers import ArticlesSerializer
-from course import serializers
+from course import course_manager, serializers
 
 class ArticleAPIView(APIView):
     serializer_class = ArticlesSerializer
@@ -28,7 +29,12 @@ class ArticleAPIView(APIView):
 
 @login_required(login_url='login')
 def index(request):
-    return render(request, 'course/content/index.html')
+    categories = Categories.objects.all().order_by('priority').values_list()
+    values = {}
+    user = request.user
+    for category in categories:
+        values.update({(category[1], category[2]): [(elem, course_manager.check_user(elem, request.user, request.user.is_superuser)) for elem in Articles.objects.filter(category = category[0])]})
+    return render(request, 'course/content/index.html', {'categories': values})
 
 @login_required(login_url='login')
 def coursepage(request, name):

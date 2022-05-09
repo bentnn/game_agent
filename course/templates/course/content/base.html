@@ -32,46 +32,30 @@
                 <hr/>
                 <ul class="list-unstyled components">
                     <p>Курс</p>
-                    <li>
-                        <a href="#" id="startpage">Обучение</a>
-                    </li>
-                    <li class="active">
-                        <a href="#baseSubmenu" data-toggle="collapse" aria-expanded="false">Основы</a>
-                        <ul class="collapse list-unstyled" id="baseSubmenu">
-                            <li><a id="datatypes" href="#">Типы данных</a></li>
-                            <li><a id="integeroper" href="#">Целые числа</a></li>
-                            <li><a id="floatoper" href="#">Вещественные числа</a></li>
-                            <li><a id="stringoper" href="#">Строки</a></li>
-                            <li><a id="functions" href="#">Функции</a></li>
-                        </ul>
-                    </li>
-                    <li class="active">
-                        <a href="#collectionSubmenu" data-toggle="collapse" aria-expanded="false">Коллекции</a>
-                        <ul class="collapse list-unstyled" id="collectionSubmenu">
-                            <li><a id="arrays" href="#">Массивы</a></li>
-                            <li><a id="list" href="#">Списки</a></li>
-                            <li><a id="stackqueue" href="#">Очередь и стек</a></li>
-                            <li><a id="binarytree" href="#">Бинарное дерево</a></li>
-                            <li><a id="hashtable" href="#">Хэш-таблицы</a></li>
-                        </ul>
-                    </li>
-                    <li class="active">
-                        <a href="#classSubmenu" data-toggle="collapse" aria-expanded="false">ООП</a>
-                        <ul class="collapse list-unstyled" id="classSubmenu">
-                            <li><a id="classes" href="#">Классы и объекты</a></li>
-                            <li><a id="oopprinciples" href="#">Основные принципы ООП</a></li>
-                        </ul>
-                    </li>
-                    <li class="active">
-                        <a href="#algoSubmenu" data-toggle="collapse" aria-expanded="false">Алгоритмы</a>
-                        <ul class="collapse list-unstyled" id="algoSubmenu">
-                            <li><a id="sorting" href="#">Алгоритмы сортировки</a></li>
-                            <li><a id="binarysearch" href="#">Бинарный поиск</a></li>
-                            <li><a id="graphsalgo" href="#">Алгоритмы на графах</a></li>
-                            <li><a id="hashfunctions" href="#">Алгоритмы хэширования</a></li>
-                            <li><a id="dynamic" href="#">Динамическое программирование</a></li>
-                        </ul>
-                    </li>
+                    {% for key, category in categories.items %}
+                        {% if key.1 == "Нет категории" %}
+                                {% for elem in category %}
+                                    {% if elem.1 %}
+                                        <li><a id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
+                                    {% else %}
+                                        <li><a disabled id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                        {% else %}
+                        <li class="active">
+                            <a href="#{{key.0}}" data-toggle="collapse" aria-expanded="false">{{key.1}}</a>
+                            <ul class="collapse list-unstyled" id="{{key.0}}">
+                                {% for elem in category %}
+                                    {% if elem.1 %}
+                                        <li><a id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
+                                    {% else %}
+                                        <li><a disabled id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
                 </ul>
 
                 <ul class="list-unstyled CTAs">
@@ -110,6 +94,7 @@
                     </div>
                 </nav>
                 <article id="main-text">
+                    <h1>Главная страница</h1>
                 </article>
             </div>
         </div>

@@ -20,6 +20,10 @@ $(document).ready(function () {
         let themes = res.map(x => x.title);
         for (let theme of themes){
             $('#' + theme).on('click', function () {
+                let prop = $('#' + theme).attr('disabled');
+                if (prop === "disabled"){
+                    return;
+                }
                 let url = `http://127.0.0.1:8000/course/api/pages/${'?title=' + theme}`;
                 fetch(url).
                 then(function(article){
