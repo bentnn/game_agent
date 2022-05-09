@@ -11,7 +11,8 @@
     pip install django-crispy-forms
     pip install matplotlib
     pip install pillow
-
+    pip install djangorestframework
+    
 Или можно проще:
 
     pip install -r packages_list.txt
