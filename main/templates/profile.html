@@ -10,6 +10,10 @@
 <a class="nav-link" href="{% url 'home' %}">home</a>
 <a class="nav-link" href="{% url 'inventory' user.username %}">inventory</a>
 <a class="nav-link" href="{% url 'game_shop' %}">Shop</a>
+{% if user != request.user %}
+	<a class="nav-link" href="{% url 'profile' request.user.username %}">Мой профиль</a>
+{% endif %}
+
 <div style="background-image: url({{ about_user.active_back.image.url }});">
 	<h3>username - {{ user.username }}</h3>
 	{#<img src="{{ about_user.avatar.url }}" style="width: 250px">#}

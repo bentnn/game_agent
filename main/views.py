@@ -7,6 +7,8 @@ from django.contrib.auth.forms import (
 	UserCreationForm,
 	PasswordResetForm
 )
+import os
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import logging
@@ -63,11 +65,11 @@ def check_in_view(request):
 		form = UserCreationForm(data=request.POST)
 		if form.is_valid():
 			username = request.POST['username']
-			if username.isascii():
+			if is_ascii(username):
 				password = request.POST['password1']
 				form.save()
 				user = authenticate(username=username, password=password)
-				get_basic_avatar(username).save(f"media/Avatars/{username}.jpg")
+				get_basic_avatar(username).save(f"{settings.MEDIA_ROOT}/Avatars/{username}.jpg")
 				AboutUser.objects.create(
 					user=user,
 					avatar=f"Avatars/{username}.jpg",
@@ -255,9 +257,9 @@ def change_profile(request):
 
 			data = request.FILES.get("avatar")
 			if data is not None:
-				about_user.avatar.delete(save=False)
+				#about_user.avatar.delete(save=False)
 				filename = f"Avatars/{request.user.username}.png"
-				full_filename = "media/" + filename
+				full_filename = str(settings.MEDIA_ROOT) + '/' + filename
 				with open(full_filename, 'wb') as f:
 					f.write(data.read())
 				im = Image.open(full_filename)

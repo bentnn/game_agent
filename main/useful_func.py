@@ -10,6 +10,10 @@ from email.mime.text import MIMEText
 from django.contrib.auth.models import User
 
 
+def is_ascii(s):
+	return all(ord(c) < 128 for c in s)
+
+
 def get_needed_exp(level):
 	if level < 1 or not isinstance(level, int):
 		raise ValueError("Неверный формат уровня")
@@ -73,7 +77,7 @@ def set_change(request, atr: str):
 		if atr == 'username':
 			if User.objects.filter(username=data).first():
 				raise ValueError(f"Username '{data}' уже занят")
-			valid = data.isascii()
+			valid = is_ascii(data)
 		elif atr.endswith('_name'):
 			valid = any([data.isalpha(), data == ''])
 		else:
