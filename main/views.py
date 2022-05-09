@@ -138,6 +138,10 @@ def users_action(request, username, action=None):
 		elif action == "unsub":
 			about_request.subs.remove(user)
 			about_request.save()
+
+		if len(about_request.achievements.filter(name='socialization')) == 0:
+			get_achieve(request, 'socialization')
+
 	return redirect('profile', username)
 
 

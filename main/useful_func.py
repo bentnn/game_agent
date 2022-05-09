@@ -8,6 +8,8 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from django.contrib.auth.models import User
+from .models import AboutUser, Achievement
+from django.contrib import messages
 
 
 def is_ascii(s):
@@ -89,3 +91,13 @@ def set_change(request, atr: str):
 			raise ValueError(f"{atr} - {data}")
 	elif atr == 'username':
 		raise ValueError("Username является обязательным полем")
+
+
+def get_achieve(request, achieve_name):
+	about_user = AboutUser.objects.get(user=request.user)
+	if len(about_user.achievements.filter(name=achieve_name)) == 0:
+		achievement = Achievement.objects.filter(name=achieve_name)
+		if len(achievement) != 0:
+			about_user.achievements.add(achievement.first())
+			messages.success(request,
+							 f"вы заработали достижение '{achieve_name}'")

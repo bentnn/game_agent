@@ -2,9 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from course.models import Articles
 
+
 class Achievement(models.Model):
 	name = models.CharField(max_length=70)
 	icon = models.ImageField(upload_to="Achievements")
+	info = models.TextField(max_length=200, default='')
 
 	class Meta:
 		verbose_name = 'достижение'
