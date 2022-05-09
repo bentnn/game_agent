@@ -150,7 +150,6 @@ def profile(request, username):
 	about_request = about_user if request.user == user else AboutUser.objects.get(user=request.user)
 
 	# рисуем активность
-
 	data = norm_activity(about_user.activity)
 	about_user.activity = json.dumps(data)
 	about_user.save()
@@ -262,7 +261,6 @@ def change_profile(request):
 
 			data = request.FILES.get("avatar")
 			if data is not None:
-				#about_user.avatar.delete(save=False)
 				filename = f"Avatars/{request.user.username}.png"
 				full_filename = str(settings.MEDIA_ROOT) + '/' + filename
 				with open(full_filename, 'wb') as f:
