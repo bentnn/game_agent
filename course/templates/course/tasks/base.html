@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <title>Задания</title>
     {% load static %}
     <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static '/css/course/main.css' %}">
@@ -42,15 +42,17 @@
     <div class="row">
       <div class="col-sm-4 left-block">
         <div class="side-menu">
-          <div class="input-group md-form form-sm form-1 pl-0">
-            <div class="input-group-prepend">
-              <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
-                  aria-hidden="true"></i></span>
-            </div>
-            <input class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search">
-          </div>
-          <div>
+          <div class="container">
             <form class="form-inline">
+              <div class="row">
+                <div class="input-group md-form form-sm form-1 pl-0">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+                        aria-hidden="true"></i></span>
+                    <input class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search">
+                  </div>
+                </div>
+              </div>
               <div class="row">
                 <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Сортировать по: </label>
                 <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
@@ -62,176 +64,52 @@
                 </select>
               </div>
               <div class="row">
-                <label class="my-1 mr-2" for="inlineFormCustomSelectPref2">Темы заданий: </label>
+                <label class="my-1 mr-2" for="inlineFormCustomSelectPref2">Сложность заданий: </label>
                 <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref2">
-                  <option selected>Рекомендуемые</option>
-                  <option value="1">Новые</option>
-                  <option value="2">Старые</option>
-                  <option value="3">Сложные</option>
-                  <option value="3">Простые</option>
+                  <option selected>Все</option>
+                  {% for level in difficulties %}
+                  <option value="{{level.0}}">{{level.0}}</option>
+                  {% endfor %}
                 </select>
               </div>
             </form>
-          </div>    
+          </div>
+          <hr>
+          <div>
+            <p>Темы</p>
+            <ul id="themes" class="is-unstyled max-h-64 overflow-auto">
+              {% for article in articles %}
+              <li value="{{article.title}}">{{article.name}}</li>
+              {% endfor %}
+            </ul>
+          </div>   
         </div>
       </div>
       <div class="col-sm-8 scrollable-list">
         <section class="light">
           <div class="container py-2">
+            {% for task in tasks %}
             <article class="postcard light blue">
               <a class="postcard__img_link" href="#">
                 <img class="postcard__img" src="https://overfleek.com/wp-content/uploads/2019/07/Best-programming-language1.jpg" alt="Image Title" />
               </a>
               <div class="postcard__text t-dark">
-                <h1 class="postcard__title blue"><a href="#">Podcast Title</a></h1>
+                <h1 class="postcard__title blue"><a href="#">{{task.title}}</a></h1>
                 <div class="postcard__subtitle small">
                   <time datetime="2020-05-25 12:00:00">
-                    <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
+                    <i class="fas fa-calendar-alt mr-2"></i>{{task.created_at|date:'l, M j Y'}}
                   </time>
                 </div>
                 <div class="postcard__bar"></div>
-                <div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
+                <div class="postcard__preview-txt">{{task.shortDescr|safe}}</div>
                 <ul class="postcard__tagbox">
-                  <li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-                  <li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-                  <li class="tag__item play blue">
-                    <a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-                  </li>
+                  {% for article in task.neededThemes %}
+                  <li class="tag__item"><i class="fas fa-tag mr-2"></i>{{article.name}}</li>
+                  {% endfor %}
                 </ul>
               </div>
             </article>
-            <article class="postcard light red">
-              <a class="postcard__img_link" href="#">
-                <img class="postcard__img" src="https://overfleek.com/wp-content/uploads/2019/07/Best-programming-language1.jpg" alt="Image Title" />	
-              </a>
-              <div class="postcard__text t-dark">
-                <h1 class="postcard__title red"><a href="#">Podcast Title</a></h1>
-                <div class="postcard__subtitle small">
-                  <time datetime="2020-05-25 12:00:00">
-                    <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-                  </time>
-                </div>
-                <div class="postcard__bar"></div>
-                <div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-                <ul class="postcard__tagbox">
-                  <li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-                  <li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-                  <li class="tag__item play red">
-                    <a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-                  </li>
-                </ul>
-              </div>
-            </article>
-            <article class="postcard light green">
-              <a class="postcard__img_link" href="#">
-                <img class="postcard__img" src="https://overfleek.com/wp-content/uploads/2019/07/Best-programming-language1.jpg" alt="Image Title" />
-              </a>
-              <div class="postcard__text t-dark">
-                <h1 class="postcard__title green"><a href="#">Podcast Title</a></h1>
-                <div class="postcard__subtitle small">
-                  <time datetime="2020-05-25 12:00:00">
-                    <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-                  </time>
-                </div>
-                <div class="postcard__bar"></div>
-                <div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-                <ul class="postcard__tagbox">
-                  <li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-                  <li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-                  <li class="tag__item play green">
-                    <a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-                  </li>
-                </ul>
-              </div>
-            </article>
-            <article class="postcard light yellow">
-              <a class="postcard__img_link" href="#">
-                <img class="postcard__img" src="https://overfleek.com/wp-content/uploads/2019/07/Best-programming-language1.jpg" alt="Image Title" />
-              </a>
-              <div class="postcard__text t-dark">
-                <h1 class="postcard__title yellow"><a href="#">Podcast Title</a></h1>
-                <div class="postcard__subtitle small">
-                  <time datetime="2020-05-25 12:00:00">
-                    <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-                  </time>
-                </div>
-                <div class="postcard__bar"></div>
-                <div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-                <ul class="postcard__tagbox">
-                  <li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-                  <li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-                  <li class="tag__item play yellow">
-                    <a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-                  </li>
-                </ul>
-              </div>
-            </article>
-            <article class="postcard light yellow">
-              <a class="postcard__img_link" href="#">
-                <img class="postcard__img" src="https://overfleek.com/wp-content/uploads/2019/07/Best-programming-language1.jpg" alt="Image Title" />
-              </a>
-              <div class="postcard__text t-dark">
-                <h1 class="postcard__title yellow"><a href="#">Podcast Title</a></h1>
-                <div class="postcard__subtitle small">
-                  <time datetime="2020-05-25 12:00:00">
-                    <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-                  </time>
-                </div>
-                <div class="postcard__bar"></div>
-                <div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-                <ul class="postcard__tagbox">
-                  <li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-                  <li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-                  <li class="tag__item play yellow">
-                    <a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-                  </li>
-                </ul>
-              </div>
-            </article>
-            <article class="postcard light yellow">
-              <a class="postcard__img_link" href="#">
-                <img class="postcard__img" src="https://overfleek.com/wp-content/uploads/2019/07/Best-programming-language1.jpg" alt="Image Title" />
-              </a>
-              <div class="postcard__text t-dark">
-                <h1 class="postcard__title yellow"><a href="#">Podcast Title</a></h1>
-                <div class="postcard__subtitle small">
-                  <time datetime="2020-05-25 12:00:00">
-                    <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-                  </time>
-                </div>
-                <div class="postcard__bar"></div>
-                <div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-                <ul class="postcard__tagbox">
-                  <li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-                  <li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-                  <li class="tag__item play yellow">
-                    <a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-                  </li>
-                </ul>
-              </div>
-            </article>
-            <article class="postcard light yellow">
-              <a class="postcard__img_link" href="#">
-                <img class="postcard__img" src="https://overfleek.com/wp-content/uploads/2019/07/Best-programming-language1.jpg" alt="Image Title" />
-              </a>
-              <div class="postcard__text t-dark">
-                <h1 class="postcard__title yellow"><a href="#">Podcast Title</a></h1>
-                <div class="postcard__subtitle small">
-                  <time datetime="2020-05-25 12:00:00">
-                    <i class="fas fa-calendar-alt mr-2"></i>Mon, May 25th 2020
-                  </time>
-                </div>
-                <div class="postcard__bar"></div>
-                <div class="postcard__preview-txt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, fugiat asperiores inventore beatae accusamus odit minima enim, commodi quia, doloribus eius! Ducimus nemo accusantium maiores velit corrupti tempora reiciendis molestiae repellat vero. Eveniet ipsam adipisci illo iusto quibusdam, sunt neque nulla unde ipsum dolores nobis enim quidem excepturi, illum quos!</div>
-                <ul class="postcard__tagbox">
-                  <li class="tag__item"><i class="fas fa-tag mr-2"></i>Podcast</li>
-                  <li class="tag__item"><i class="fas fa-clock mr-2"></i>55 mins.</li>
-                  <li class="tag__item play yellow">
-                    <a href="#"><i class="fas fa-play mr-2"></i>Play Episode</a>
-                  </li>
-                </ul>
-              </div>
-            </article>
+            {% endfor %}
           </div>
         </section>
       </div>

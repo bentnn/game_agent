@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Articles, Categories
+from .models import Articles, Categories, Tasks
 from main.models import AboutUser
 from .serializers import ArticlesSerializer
 from course import course_manager, serializers
@@ -42,8 +42,14 @@ def coursepage(request, name):
 
 @login_required(login_url='login')
 def tasks(request):
-    return render(request, 'course/tasks/index.html')
+    tasks = list(Tasks.objects.all().order_by('created_at').values())
+    for elem in tasks:
+        elem['neededThemes'] = list(Tasks.objects.get(id = elem['id']).neededThemes.all().values('name'))
+    themes = list(Articles.objects.all().order_by('title').values('title', 'name'))
+    difficulty = Tasks.LEVEL
+    return render(request, 'course/tasks/index.html', {'tasks': tasks, 'difficulties': difficulty, 'articles': themes})
 
 @login_required(login_url='login')
-def task(request):
-    return render(request, 'course/tasks/taskpage.html')
+def task(request, task_id = 0):
+    task = Tasks.objects.get(id = task_id)
+    return render(request, 'course/tasks/taskpage.html', {'task': task})

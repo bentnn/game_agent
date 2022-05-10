@@ -15,6 +15,47 @@ body {
 	text-rendering: optimizeLegibility;
 	font-weight: initial;
     overflow-x: hidden;
+	overflow-y: hidden;
+}
+
+#editor {
+	height: calc(100vh - 150px);
+}
+
+.nopadding {
+	padding: 0 !important;
+	margin: 0 !important;
+ }
+
+.max-h-64 {
+    max-height: 25rem!important;
+}
+
+.overflow-auto {
+    overflow: auto!important;
+}
+
+ul.is-unstyled {
+    list-style: none;
+}
+
+#themes::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 5px;
+	background-color: #cbb5ff;
+}
+
+#themes::-webkit-scrollbar
+{
+	width: 8px;
+}
+
+#themes::-webkit-scrollbar-thumb
+{
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0, 19, 104, 0.3);
+	background-color: #303e77;
 }
 
 .scrollable-list {

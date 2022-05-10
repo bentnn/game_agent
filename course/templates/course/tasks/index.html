@@ -1,10 +1,123 @@
-{% extends 'course/tasks/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задания</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/course/card.css' %}">
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Page Content Holder -->
+    <div id="content">
 
-{% block title %}
-Задания
-{% endblock %}
-
-{% block content %}
-<h1>Главная страница</h1>
-<p>Страница с задачами</p>
-{% endblock %}
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+              <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <i class="fas fa-align-justify"></i>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="nav navbar-nav ml-auto">
+                      <li class="nav-item active">
+                          <a class="nav-link" href="{% url 'course' %}">Курс</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'tasks' %}">Задания</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="{% url 'profile' request.user.username %}">Страница пользователя</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </nav>
+  </div>
+  <div class="light">
+    <div class="row">
+      <div class="col-sm-4 left-block">
+        <div class="side-menu">
+          <div class="container">
+            <form class="form-inline">
+              <div class="row">
+                <div class="input-group md-form form-sm form-1 pl-0">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text purple lighten-3" id="basic-text1"><i class="fas fa-search text-white"
+                        aria-hidden="true"></i></span>
+                    <input class="form-control my-0 py-1" type="text" placeholder="Search" aria-label="Search">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Сортировать по: </label>
+                <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                  <option selected>Рекомендуемые</option>
+                  <option value="1">Новые</option>
+                  <option value="2">Старые</option>
+                  <option value="3">Сложные</option>
+                  <option value="3">Простые</option>
+                </select>
+              </div>
+              <div class="row">
+                <label class="my-1 mr-2" for="inlineFormCustomSelectPref2">Сложность заданий: </label>
+                <select class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref2">
+                  <option selected>Все</option>
+                  {% for level in difficulties %}
+                  <option value="{{level.0}}">{{level.0}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </form>
+          </div>
+          <hr>
+          <div>
+            <p>Темы</p>
+            <ul id="themes" class="is-unstyled max-h-64 overflow-auto">
+              {% for article in articles %}
+              <li value="{{article.title}}">{{article.name}}</li>
+              {% endfor %}
+            </ul>
+          </div>   
+        </div>
+      </div>
+      <div class="col-sm-8 scrollable-list">
+        <section class="light">
+          <div class="container py-2">
+            {% for task in tasks %}
+            <article class="postcard light blue">
+              <a class="postcard__img_link" href="#">
+                <img class="postcard__img" src="https://overfleek.com/wp-content/uploads/2019/07/Best-programming-language1.jpg" alt="Image Title" />
+              </a>
+              <div class="postcard__text t-dark">
+                <h1 class="postcard__title blue"><a href="{% url 'taskpage' task.id %}">{{task.title}}</a></h1>
+                <div class="postcard__subtitle small">
+                  <time datetime="2020-05-25 12:00:00">
+                    <i class="fas fa-calendar-alt mr-2"></i>{{task.created_at|date:'l, M j Y'}}
+                  </time>
+                </div>
+                <div class="postcard__bar"></div>
+                <div class="postcard__preview-txt">{{task.shortDescr|safe}}</div>
+                <ul class="postcard__tagbox">
+                  {% for article in task.neededThemes %}
+                  <li class="tag__item"><i class="fas fa-tag mr-2"></i>{{article.name}}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+  <script src="https://pingendo.com/assets/bootstrap/bootstrap-4.0.0-alpha.6.min.js"></script>
+</body>
+<script type="text/javascript" src="{% static '/js/jquery.min.js' %}"></script>
+{% block scripts %}{% endblock %}
+</html>
