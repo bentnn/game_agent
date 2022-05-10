@@ -34,7 +34,7 @@ def index(request):
     user = request.user
     for category in categories:
         values.update({(category[1], category[2]): [(elem, course_manager.check_user(elem, request.user, request.user.is_superuser)) for elem in Articles.objects.filter(category = category[0])]})
-    return render(request, 'course/content/index.html', {'categories': values})
+    return render(request, 'course/index.html', {'categories': values})
 
 @login_required(login_url='login')
 def coursepage(request, name):
@@ -42,7 +42,7 @@ def coursepage(request, name):
 
 @login_required(login_url='login')
 def tasks(request):
-    return render(request, 'course/tasks/index.html')
+    return render(request, 'course/tasks/task_all.html')
 
 @login_required(login_url='login')
 def task(request):

@@ -1,0 +1,219 @@
+{% load static %}
+<style>
+    a{
+        text-decoration: none;
+    }
+    .window-bot{
+        display: flex;
+        position: fixed;
+        top: 10%;
+        background-color: white;
+        border-radius: 1em;
+        left: 48%;
+        width: 50%;
+        box-shadow: -1px 5px 5px 6px rgb(228, 228, 228);
+        padding: 0.5em;
+    }
+    .bot-container{
+        width: 70%;
+    }
+    .bot-container__chat{
+        padding: 1em;
+        position: relative;
+        background-color: #d2dde3;
+        top: 4em;
+    }
+    .bot-container__chat::after {
+        content: '';
+        position: absolute;
+        right: -28px;
+        top: 5%;
+        border: 10px solid transparent;
+        border-left: 20px solid #d2dde3;
+    }
+    form .items{
+        margin-top: 1.5em;
+    }
+    form .items .btn{
+        color: #222;
+        padding: 0.5em;
+        background-color: #fff;
+        margin-top: 1em;
+    }
+    form textarea{
+        width: 80%;
+        display: block;
+        margin-bottom: 1em;
+    }
+    .mb-7{
+        margin-bottom: 9em;
+    }
+    button.btn{
+        padding: 0.6em;
+    }
+    .bot{
+        width: 4.7%;
+    /* height: 30%; */
+    background: #4ca1e9;
+    text-align: center;
+    padding: 1em;
+    border-radius: 2em;
+    cursor: pointer;
+    position: fixed;
+    top: 60%;
+    left: 94%;
+    }
+    .bot i.bx{
+        font-size: 2em;
+        color: #222;
+    }
+    .bot-container__header i.bx{
+        position: absolute;
+        font-size: 1.5em;
+        right: 0.5em;
+        top: 0.5em;
+        cursor: pointer;
+    }
+    #window-dialog, #window-dialog-request, 
+    #window-dialog-not_request, #window-dialog-error{
+        display: none;
+    }
+</style>
+
+<div id="open-chat" class="bot">
+    <i class='bx bxs-message-rounded-detail'></i>
+</div>
+
+<div id="window-dialog" class="window-bot">
+    <div id="close-chat" class="bot-container__header">
+        <i class='bx bxs-x-circle'></i>
+    </div>
+    <div class="bot-container">
+        <div class="bot-container__chat mb-7">
+            <p>Задайте мне вопрос.</p>
+        </div>
+        
+        <div class="bot-container__dialog">
+            <form>
+                {% csrf_token %}
+                <textarea id="text_user" rows="3"></textarea>
+                <button type="button" onclick="window_dialog()" class="btn">Отправить</button>
+            </form>
+        </div>
+    </div>
+    <div class="bot-container" style="width: 29%!important;">
+        <img src="{% static 'img/photo_2022-05-05_14-03-31.jpg' %}" alt="bot">
+    </div>
+</div>
+
+<div id="window-dialog-not_request" class="window-bot">
+    <div id="close-chat" class="bot-container__header">
+        <i class='bx bxs-x-circle'></i>
+    </div>
+    <div class="bot-container">
+        <div class="bot-container__chat">
+            <p>Вот что нашёл по вашему вопросу:</p>
+            <div id="elements"></div>
+        </div>
+    </div>
+    <div class="bot-container" style="width: 29%!important;">
+        <img src="{% static 'img/photo_2022-05-05_14-03-25.jpg' %}" alt="bot">
+    </div>
+</div>
+
+<div id="window-dialog-request" class="window-bot">
+    <div id="close-chat" class="bot-container__header">
+        <i class='bx bxs-x-circle'></i>
+    </div>
+    <div class="bot-container">
+        <div class="bot-container__chat mb-7">
+            <p id="bot_message-text"></p>
+        </div>
+    </div>
+    <div class="bot-container" style="width: 29%!important;">
+        <img src="{% static 'img/photo_2022-05-05_14-03-32.jpg' %}" alt="bot">
+    </div>
+</div>
+
+<div id="window-dialog-error" class="window-bot">
+    <div id="close-chat" class="bot-container__header">
+        <i class='bx bxs-x-circle'></i>
+    </div>
+    <div class="bot-container">
+        <div class="bot-container__chat mb-7">
+            <p>Ваш вопрос не понял, попробуйте переформулировать вопрос.</p>
+        </div>
+    </div>
+    <div class="bot-container" style="width: 29%!important;">
+        <img src="{% static 'img/photo_2022-05-05_14-03-36.jpg' %}" alt="bot">
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous">
+</script>
+  
+<script>
+    // Если бот что то нашёл
+    function window_dialog_request(param){
+        $("#bot_message-text").append(param);
+        document.getElementById('window-dialog-request').style.display = "flex";
+        document.getElementById('window-dialog').style.display = "none";
+    }
+
+    //  Бот ничего не нашёл
+    function window_dialog_not_request(param){
+        for (var i = 0; param.length > i; i++){
+            $("#elements").append('<div class="items"> \
+                            <a href="#" class="btn">'+ param[i] +'</a> \
+                        </div>');
+        }
+        document.getElementById('window-dialog-not_request').style.display = "flex";
+        document.getElementById('window-dialog').style.display = "none";
+    }
+
+    //
+    function error_dialog(){
+        document.getElementById('window-dialog-not_request').style.display = "none";
+        document.getElementById('window-dialog-request').style.display = "none";
+        document.getElementById('window-dialog').style.display = "none";
+        document.getElementById('window-dialog-error').style.display = "flex";
+    }
+
+    // Отправка вопроса на сервер
+    function window_dialog(){
+        var text = $('textarea#text_user').val();
+        // Запрос на сервер
+        $.ajax({
+            url: "{% url 'bot' %}",
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            method: 'post',
+            // contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            data: { 
+                message: text
+            },
+            success: function(response){
+                if ('is_data' in response){
+                    return window_dialog_request(response['is_data']);
+                } else {
+                    if (response['not_data'].length > 0){
+                        return window_dialog_not_request(response['not_data']);
+                    } else {
+                        return error_dialog();
+                    }
+                    
+                }
+            }
+        });
+    }
+
+    document.getElementById('open-chat').onclick = function(){
+        document.getElementById('window-dialog').style.display = "flex";
+    }
+
+    document.getElementById('close-chat').onclick = function(){
+        document.querySelector('.window-bot').style.display = "none";
+    }
+</script>
