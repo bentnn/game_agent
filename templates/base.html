@@ -118,7 +118,58 @@
          <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
          <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
          <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-         <script type="text/javascript" src="{% static 'js/sidebar.js' %}"></script>
+         <script>
+            $(document).ready(function () {
+                $('#sidebarCollapse').on('click', function () {
+                    $('#sidebar').toggleClass('active');
+                    let text = $('#toggleMenu').text();
+                    if (text[0] == 'С'){
+                    $('#toggleMenu').text('Показать меню');
+                    }
+                    else{
+                    $('#toggleMenu').text('Скрыть меню');
+                    }
+                });
+
+                let articlePage = document.getElementById('main-text');
+                
+                let pagesUrl = 'http://127.0.0.1:8000/course/api/pages/';
+                
+                fetch(pagesUrl).then(function(elem){
+                    return elem.json();
+                }).then(function(res){
+                    let themes = res.map(x => x.title);
+                    for (let theme of themes){
+                        $('#' + theme).on('click', function () {
+                            let prop = $('#' + theme).attr('disabled');
+                            if (prop === "disabled"){
+                                return;
+                            }
+                            let url = `http://127.0.0.1:8000/course/api/pages/${'?title=' + theme}`;
+                            fetch(url).
+                            then(function(article){
+                                return article.json();
+                            }).then(function(json){
+                                articlePage.innerHTML = json.text;
+                                console.log(json);
+                            });
+                        });
+                    }
+                });
+
+                let courseName = '{{ coursename|safe }}';
+                if (courseName != ''){
+                    let url = `http://127.0.0.1:8000/course/api/pages/${'?title=' + courseName}`;
+                    fetch(url).
+                        then(function(article){
+                            return article.json();
+                        }).then(function(json){
+                            articlePage.innerHTML = json.text;
+                            console.log(json);
+                    });
+                }
+            });
+         </script>
         {% if request.get_full_path != '/password_reset/done/' and request.get_full_path != '/login' and request.get_full_path != '/password_reset' and request.get_full_path != '/check_in' %}
 
             {% include 'bot/index.html' %}
