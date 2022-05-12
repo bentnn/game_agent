@@ -136,9 +136,14 @@
          <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
          <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
          <script type="text/javascript" src="{% static 'js/sidebar.js' %}"></script>
+        
+        <!-- Бот на низких уровнях - только чат -->
+        <!-- Бот на средних уровнях, только чат и задачи -->
+        <!-- Бот на максимальных настройках чаи, задачи, проверка -->
         {% if request.get_full_path != '/profile/'|add:user.username|add:'/inventory' and request.get_full_path != '/game_shop' and request.get_full_path != '/search_user' and request.get_full_path != '/settings/change_password' and request.get_full_path != '/settings' and request.get_full_path != '/profile/'|add:user.username and request.get_full_path != '/home' and request.get_full_path != '/' and request.get_full_path != '/password_reset/done/' and request.get_full_path != '/login' and request.get_full_path != '/password_reset' and request.get_full_path != '/check_in' %}
             {% include 'bot/index.html' %}
         {% endif %}
+        
         {% if request.get_full_path == '/home' %}
             {% include 'bot/settings_bot.html' %}
         {% endif %}
