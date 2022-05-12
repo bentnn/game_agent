@@ -2,9 +2,10 @@ import json
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.contrib.auth.models import User
 from fuzzywuzzy import fuzz
 
-from .models import Questions, Keywords
+from .models import Questions, Keywords, SettingsBot
 
 
 def bot(request):
@@ -27,3 +28,22 @@ def bot(request):
                     lists.append(i.keyword)
         
         return HttpResponse(json.dumps({"not_data": lists}), content_type='application/json')
+
+
+def settings_bot(request):
+    if request.method == "POST":
+        user = User.objects.get(id=request.user.pk)
+
+        query = SettingsBot()
+        query.user_id=user
+        query.level=request.POST.get('level')
+        query.save()
+        
+        return HttpResponse(json.dumps({"message": 'Success'}), content_type='application/json')
+
+
+def get_settings_bot(request):
+    if request.method == "GET":
+        return HttpResponse(json.dumps({
+            "data": str(SettingsBot.objects.get(user_id=request.user.pk))
+        }), content_type='application/json')

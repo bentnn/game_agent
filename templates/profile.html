@@ -1,69 +1,139 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>{{ user.username }}</title>
-</head>
-<body>
-{% include 'messages.html' %}
+{% extends 'base.html' %}
 
-<a class="nav-link" href="{% url 'home' %}">home</a>
-<a class="nav-link" href="{% url 'inventory' user.username %}">inventory</a>
-<a class="nav-link" href="{% url 'game_shop' %}">Shop</a>
-<a class="nav-link" href="{% url 'search_user' %}">search</a>
-{% if user != request.user %}
-	<a class="nav-link" href="{% url 'profile' request.user.username %}">Мой профиль</a>
-{% endif %}
+{% block title %}
+	{{ user.username }}
+{% endblock %}
 
-<div style="background-image: url({{ about_user.active_back.image.url }});">
-	<h3>username - {{ user.username }}</h3>
-	{#<img src="{{ about_user.avatar.url }}" style="width: 250px">#}
-	<img src="data:image/png;base64,{{ avatar }}" alt="" style="max-width: 250px; max-height: 250px">
-	<h5>level: {{ about_user.level }}, to_next_level: {{ to_next_level }}%</h5>
-	<h5>money: {{ about_user.money }}</h5>
-
-	{% if user == request.user %}
-		<a class="nav-link" href="{% url 'change_profile' %}">Изменить данные</a>
-	{% elif user in req_subs %}
-		<a class="nav-link" href="{% url 'users_action' user.username 'unsub' %}">Отписаться</a>
-	{% else %}
-		<a class="nav-link" href="{% url 'users_action' user.username 'sub' %}">Подписаться</a>
+{% block main %}
+	{% include 'messages.html' %}
+	
+	<!-- <a class="nav-link" href="{% url 'home' %}">home</a>
+	<a class="nav-link" href="{% url 'inventory' user.username %}">inventory</a>
+	<a class="nav-link" href="{% url 'game_shop' %}">Shop</a>
+	<a class="nav-link" href="{% url 'search_user' %}">search</a> -->
+	{% if user != request.user %}
+		<a class="nav-link" href="{% url 'profile' request.user.username %}">Мой профиль</a>
 	{% endif %}
-</div>
-<h4>Достижения</h4>
-{% if achievements|length != 0 %}
-	{% for i in achievements %}
-		<img src="{{ i.icon.url }}" style="width: 100px">
-		<p style="color: darkgreen">{{ i.name }}</p>
-	{% endfor %}
-{% else %}
-	<p>Пусто</p>
-{% endif %}
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-5">
+				
+				<div class="col-6">
+					<!-- {#<img src="{{ about_user.avatar.url }}"  class="img-fluid" alt="{{ user.username }}">#} -->
+					<img src="data:image/png;base64,{{ avatar }}" class="img-fluid" alt="{{ user.username }}">
+				</div>
+				
+				<h3>{{ user.username }}</h3>
 
-<h4>Подписки</h4>
-{% if subs|length != 0 %}
-	{% for i in subs %}
-	<p><a class="nav-link" href="{% url 'profile' i.username  %}">{{ i.username }}</a></p>
-	{% endfor %}
-{% else %}
-	<p>Подписок нет</p>
-{% endif %}
+				<h5><i class='bx bxs-credit-card'></i> Ваш баланс: <b>{{ about_user.money }}</b></h5>
+				<br>
 
-<h4>Подписчики</h4>
-{% if subs_to|length != 0 %}
-	{% for i in subs_to %}
-		<p><a class="nav-link" href="{% url 'profile' i.user.username  %}">{{ i.user.username }}</a></p>
-	{% endfor %}
-{% else %}
-	<p>Подписчиков нет</p>
-{% endif %}
+				<div class="card p-3 bg-dark mb-4">
+					<div class="progress" style="
+						height: 2em;background-color: #565c62c4;
 
-<h4>Активность</h4>
-{#{{ activity|safe }}#}
-<img src="data:image/png;base64,{{ activity }}" alt="" style="max-width: 500px; max-height: 500px">
+					">
+						<div id="progress" class="progress-bar text-center" role="progressbar" style="width: {{ about_user.level }}%; height: 2em;" aria-valuenow="{{ about_user.level }}" aria-valuemin="0" aria-valuemax="100">
+							<b><p style="width: 37em; font-weight: bold;" class="text-light mt-3">
+								Level {{ about_user.level }} - {{ to_next_level }}%
+							</p></b>
+						</div>
+					</div>
+				</div>
 
-<h4>Скилы</h4>
-{#{{ skills|safe }}#}
-<img src="data:image/png;base64,{{ skills }}" alt="" style="max-width: 500px; max-height: 500px">
-</body>
-</html>
+				
+				<div class="row mb-4">
+					<a class="nav-link btn-dark col-4" href="{% url 'inventory' user.username %}">Инвентарь</a>
+					<a class="nav-link btn-dark col-4" href="{% url 'game_shop' %}">Магазин</a>
+					<a class="nav-link btn-dark col-4" href="{% url 'search_user' %}">Поиск пользователей</a>
+				</div>
+				
+				
+				<div style="background-image: url({{ about_user.active_back.image.url }});">
+					<div class="col-6 mb-5">
+						{% if user == request.user %}
+							<a class="nav-link btn btn-dark" href="{% url 'change_profile' %}">Изменить данные</a>
+						{% elif user in req_subs %}
+							<a class="nav-link" href="{% url 'users_action' user.username 'unsub' %}">Отписаться</a>
+						{% else %}
+							<a class="nav-link" href="{% url 'users_action' user.username 'sub' %}">Подписаться</a>
+						{% endif %}
+					</div>
+				</div>
+				<hr>
+				<div class="mb-3">
+					<div class="col-4">
+						<h4>Достижения</h4>
+						{% if achievements|length != 0 %}
+							{% for i in achievements %}
+								<img src="{{ i.icon.url }}" style="width: 100px">
+								<p style="color: darkgreen">{{ i.name }}</p>
+							{% endfor %}
+						{% else %}
+							<p>Пусто</p>
+						{% endif %}
+					</div>
+					<div class="col-4">
+						<h4>Подписки</h4>
+						{% if subs|length != 0 %}
+							{% for i in subs %}
+							<p><a class="nav-link" href="{% url 'profile' i.username  %}">{{ i.username }}</a></p>
+							{% endfor %}
+						{% else %}
+							<p>Подписок нет</p>
+						{% endif %}
+					</div>
+					<div class="col-4">
+						<h4>Подписчики</h4>
+						{% if subs_to|length != 0 %}
+							{% for i in subs_to %}
+								<p><a class="nav-link" href="{% url 'profile' i.user.username  %}">{{ i.user.username }}</a></p>
+							{% endfor %}
+						{% else %}
+							<p>Подписчиков нет</p>
+						{% endif %}
+					</div>
+				</div>
+
+			</div>
+			<div class="col-7">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							<div class="card col-12 p-3 mb-3">
+								<h4>Активность</h4>
+								{#{{ activity|safe }}#}
+								<img src="data:image/png;base64,{{ activity }}" alt="" style="max-width: 500px; max-height: 500px">
+							</div>
+							<br>
+							<div class="card col-12  p-3 mb-3">
+								<h4>Скилы</h4>
+								{#{{ skills|safe }}#}
+								<img src="data:image/png;base64,{{ skills }}" alt="" style="max-width: 500px; max-height: 500px">
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Смена цвета прогресс-бара, цвет меняет по соотношению баллов пользователя -->
+	<script>
+		if ({{ to_next_level|safe }} < 30){
+			console.log(1)
+			document.getElementById("progress").style.background = "#ff00c8";
+		}
+		if ({{ to_next_level|safe }} > 30 && {{ to_next_level|safe }} < 70){
+			console.log(2)
+			document.getElementById("progress").style.background = "#1ea1c9";
+		}
+		if ({{ to_next_level|safe }} > 70){
+			console.log(3)
+			document.getElementById("progress").style.background = "#2ce53b";
+		} 
+	</script>
+	
+{% endblock %}

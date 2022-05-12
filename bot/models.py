@@ -1,6 +1,7 @@
 from operator import mod
 from tabnanny import verbose
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Questions(models.Model):
@@ -41,3 +42,29 @@ class Keywords(models.Model):
     class Meta:
         verbose_name = 'Ключевое слово'
         verbose_name_plural = 'Ключевые слова'
+
+
+class SettingsBot(models.Model):
+    LEVEL_CHOICES = (
+        ('short', "Низкий"),
+        ('average', "Средний"),
+        ('tall', "Высокий"),
+    )
+    user_id = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE, 
+        name='user_id',  
+        verbose_name='Пользователь', 
+        unique=True)
+    level = models.CharField(
+        name='level', 
+        verbose_name='Уровень настройки',
+        max_length=10,
+        choices=LEVEL_CHOICES)
+
+    def __str__(self):
+        return self.level
+
+    class Meta:
+        verbose_name = 'Настройка'
+        verbose_name_plural = 'Настройки'
