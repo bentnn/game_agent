@@ -55,7 +55,7 @@
             <hr>
             <p>Результаты тестирования: </p>
             <div class="form-outline">
-              <textarea class="form-control test-window" id="textAreaExample2" readonly></textarea>
+              <textarea class="form-control test-window" id="output-text" readonly></textarea>
             </div>
           </div>
         </div>
@@ -65,13 +65,13 @@
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <div class="row align-items-center w-100">
               <span class="col-sm-2 badge p-2 badge-light"><p class="nopadding h6">Выбрать язык: </p></span>
-              <select class="custom-select my-1 mr-sm-2 col-sm-2" id="inlineFormCustomSelectPref3">
-                <option value="Pyton">Python</option>
+              <select class="custom-select my-1 mr-sm-2 col-sm-2" id="select-laguage">
+                <option value="Python">Python</option>
                 <option value="Go">Go</option>
-                <option value="JavScript">JavaScript</option>
+                <option value="JavaScript">JavaScript</option>
               </select>
               <span class="col-sm-4"></span>
-              <button type="button" class="btn btn-light col-sm-3 float-right">Отправить код на проверку</button>
+              <button id="submit-code" type="button" class="btn btn-light col-sm-3 float-right">Отправить код на проверку</button>
             </div>
           </div>
         </div>

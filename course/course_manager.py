@@ -8,6 +8,4 @@ def check_user(article, user, is_superuser):
     userInfo = AboutUser.objects.get(user = user)
     userCoursesSet = set([elem for elem in userInfo.passed_courses.all()])
     neededCourses = set([elem for elem in article.required.all()])
-    if (article.title == 'array'):
-        raise ValueError('A very specific bad thing happened.')
     return neededCourses.issubset(userCoursesSet)

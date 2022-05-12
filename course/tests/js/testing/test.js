@@ -1,8 +1,7 @@
-var assert = require("assert");
 
-console.log()
+console.log(1 / 0);
+console.log('Hello World');
 function helloWorld(){
-    throw "Wrong solution";
     return "hello world!";
 }
 
