@@ -52,11 +52,10 @@ class RequiredCoursesAPIView(APIView):
         tasks = Tasks.objects.all()
         return tasks
 
-    def get(self, request):
+    def get(self, request, task_id = ''):
         try:
-            id = request.query_params["id"]
-            if (id is not None):
-                task = Tasks.objects.get(taskId = id)
+            if (task_id is not None):
+                task = Tasks.objects.get(taskId = task_id)
                 tasks_data = TasksSerializer(task)
         except:
             tasks = self.get_queryset()
@@ -65,13 +64,14 @@ class RequiredCoursesAPIView(APIView):
         return Response(tasks_data.data)
 
 @login_required(login_url='login')
-def index(request):
+def index(request, title = ''):
+    print(title)
     categories = Categories.objects.all().order_by('priority').values_list()
     values = {}
     user = request.user
     for category in categories:
         values.update({(category[1], category[2]): [(elem, course_manager.check_user(elem, request.user, request.user.is_superuser)) for elem in Articles.objects.filter(category = category[0])]})
-    return render(request, 'course/index.html', {'categories': values})
+    return render(request, 'course/index.html', {'categories': values, 'coursename': title})
 
 @login_required(login_url='login')
 def coursepage(request, name):
@@ -89,5 +89,4 @@ def tasks(request):
 @login_required(login_url='login')
 def task(request, task_id = 0):
     task = Tasks.objects.get(id = task_id)
-    task['neededThemes'] = list(Tasks.objects.get(id = elem['id']).neededThemes.all().values('name'))
     return render(request, 'course/tasks/taskpage.html', {'task': task})
