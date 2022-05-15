@@ -13,7 +13,7 @@ def get_basic_avatar(username):
 
 	# получаем матрицу 12 на 12 сконкатенировав оригинальную и отраженную матрицу
 	need_color = np.concatenate((need_color, need_color[::-1]), axis=0)
-	avatar_size = 120
+	avatar_size = 1200
 	img_size = (avatar_size, avatar_size)
 	block_size = avatar_size // 12 # размер квадрата
 

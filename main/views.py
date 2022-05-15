@@ -68,10 +68,11 @@ def check_in_view(request):
 				password = request.POST['password1']
 				form.save()
 				user = authenticate(username=username, password=password)
-				get_basic_avatar(username).save(f"{settings.MEDIA_ROOT}/Avatars/{username}.jpg")
+				avatar_root = f"Avatars/{username}.png"
+				get_basic_avatar(username).save(f"{settings.MEDIA_ROOT}/{avatar_root}")
 				AboutUser.objects.create(
 					user=user,
-					avatar=f"Avatars/{username}.jpg",
+					avatar=avatar_root,
 					activity=json.dumps(create_activity()),
 					skills=json.dumps(create_skills())
 				)
@@ -140,7 +141,7 @@ def users_action(request, username, action=None):
 			about_request.save()
 
 		if len(about_request.achievements.filter(name='socialization')) == 0:
-			get_achieve(request, 'socialization')
+			give_achieve(request, achieve_name='socialization')
 
 	return redirect('profile', username)
 
@@ -214,7 +215,7 @@ def set_item(request, id):
 		item = item.first()
 		if item.type == 'fr':
 			about_request.active_frame = item
-		elif item.type == 'bg':
+		else:
 			about_request.active_back = item
 
 	about_request.save()
@@ -225,10 +226,9 @@ def set_item(request, id):
 def game_shop(request):
 	about_request = AboutUser.objects.get(user=request.user)
 	invent = list(about_request.inventory.all())
-	frames = filter(lambda x: x not in invent,
-					GameItems.objects.filter(type='fr'))
-	backs = filter(lambda x: x not in invent,
-					GameItems.objects.filter(type='bg'))
+	sort_func = lambda x: x not in invent
+	frames = filter(sort_func, GameItems.objects.filter(type='fr'))
+	backs = filter(sort_func, GameItems.objects.filter(type='bg'))
 	return render(
 		request, 'shop.html',
 		{
@@ -265,6 +265,7 @@ def change_profile(request):
 
 			data = request.FILES.get("avatar")
 			if data is not None:
+				about_user.avatar.delete(save=True)
 				filename = f"Avatars/{request.user.username}.png"
 				full_filename = str(settings.MEDIA_ROOT) + '/' + filename
 				with open(full_filename, 'wb') as f:
@@ -299,11 +300,15 @@ def change_password(request):
 
 @login_required(login_url='login')
 def search_user(request):
-	res = None
+	res = list()
 	if request.method == 'POST':
 		username = request.POST.get('username')
-		users = User.objects.all()
-		res = [i for i in users if fuzz.ratio(i.username, username) > 70]
+		for i in User.objects.all().filter(is_superuser=False):
+			ratio = fuzz.ratio(i.username, username)
+			if ratio > 70:
+				res.append([ratio, i])
 		if len(res) == 0:
 			messages.warning(request, f"Пользователь '{username}' не найден")
+		else:
+			res = [i[1] for i in sorted(res, key=lambda x: x[0], reverse=True)]
 	return render(request, 'search_user.html', {'users': res})

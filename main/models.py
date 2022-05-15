@@ -7,6 +7,8 @@ class Achievement(models.Model):
 	name = models.CharField(max_length=70)
 	icon = models.ImageField(upload_to="Achievements")
 	info = models.TextField(max_length=200, default='')
+	money = models.SmallIntegerField(default=0)
+	condition = models.TextField(default='')
 
 	class Meta:
 		verbose_name = 'достижение'

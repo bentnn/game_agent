@@ -22,6 +22,7 @@
 
 {% for user in users %}
 	<a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+	<br>
 {% endfor %}
 
 </body>

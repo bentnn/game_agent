@@ -1,5 +1,6 @@
 from .const import first_level
 import re
+import json
 from PIL import Image
 from io import BytesIO
 import urllib
@@ -96,11 +97,27 @@ def set_change(request, atr: str):
 		raise ValueError("Username является обязательным полем")
 
 
-def get_achieve(request, achieve_name):
+def check_achieve(request):
 	about_user = AboutUser.objects.get(user=request.user)
-	if len(about_user.achievements.filter(name=achieve_name)) == 0:
-		achievement = Achievement.objects.filter(name=achieve_name)
-		if len(achievement) != 0:
-			about_user.achievements.add(achievement.first())
-			messages.success(request,
-							 f"вы заработали достижение '{achieve_name}'")
+	skills = json.dumps(about_user.skills)
+	achievements = list(Achievement.objects.all())
+	for i in achievements:
+		try:
+			if eval(i.condition):
+				give_achieve(request, about_user=about_user, achievement=i)
+		except Exception as e:
+			print(f"Error, can't give achievement '{i.name}': {e}")
+
+
+def give_achieve(request, **kwargs):
+	"""
+
+	:param request: просто реквест
+	:param kwargs: achieve_name or achievement
+	"""
+	about_user = kwargs.get('about_user') or AboutUser.objects.get(user=request.user)
+	achievement = kwargs.get('achievement') or Achievement.objects.get(name=kwargs.get('achieve_name'))
+	if not about_user.achievements.filter(achievement).exists():
+		about_user.achievements.add(achievement)
+		messages.success(request,
+						 f"вы заработали достижение '{achievement.name}'")
