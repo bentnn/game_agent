@@ -28,6 +28,7 @@ def get_basic_avatar(username):
 
 	return img
 
+
 def crop_center(pil_img, crop_width: int, crop_height: int) -> Image:
 	"""
 	Функция для обрезки изображения по центру.
@@ -42,4 +43,5 @@ def crop_center(pil_img, crop_width: int, crop_height: int) -> Image:
 
 
 def crop_max_square(pil_img):
-	return crop_center(pil_img, min(pil_img.size), min(pil_img.size))
+	crop_size = min(pil_img.size)
+	return crop_center(pil_img, crop_size, crop_size)

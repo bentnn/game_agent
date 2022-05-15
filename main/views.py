@@ -208,10 +208,10 @@ def set_item(request, id):
 	elif id == 200000:
 		about_request.active_back = None
 	else:
-		item = get_object_or_404(GameItems, id=id)
-		if len(about_request.inventory.filter(id=item.id)) == 0:
+		item = about_request.inventory.filter(id=id)
+		if not item.exists():
 			return error_404(request, None)
-
+		item = item.first()
 		if item.type == 'fr':
 			about_request.active_frame = item
 		elif item.type == 'bg':
@@ -297,6 +297,7 @@ def change_password(request):
 	return render(request, 'change_password.html', {'form': form})
 
 
+@login_required(login_url='login')
 def search_user(request):
 	res = None
 	if request.method == 'POST':

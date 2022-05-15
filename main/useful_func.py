@@ -16,16 +16,19 @@ def is_ascii(s):
 	return all(ord(c) < 128 for c in s)
 
 
-def get_needed_exp(level):
-	if level < 1 or not isinstance(level, int):
+def get_needed_exp(level: int):
+	"""
+
+	:param level: уровень, для которого рассчитывается нужный опыт
+	:return: необходимый для набора данного уровня опыт
+	"""
+	if not isinstance(level, int) or level < 1:
 		raise ValueError("Неверный формат уровня")
-	if level == 1:
-		return first_level
-	return round(first_level * 1.15**(level - 1))
+	return first_level if level == 1\
+		else round(first_level * 1.15**(level - 1))
 
 
 def email_is_valid(email: str):
-	# regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 	regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 	return re.fullmatch(regex, email)
 
