@@ -1,5 +1,6 @@
 from .const import first_level
 import re
+import json
 from PIL import Image
 from io import BytesIO
 import urllib
@@ -8,22 +9,27 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from django.contrib.auth.models import User
+from .models import AboutUser, Achievement
+from django.contrib import messages
 
 
 def is_ascii(s):
 	return all(ord(c) < 128 for c in s)
 
 
-def get_needed_exp(level):
-	if level < 1 or not isinstance(level, int):
+def get_needed_exp(level: int):
+	"""
+
+	:param level: уровень, для которого рассчитывается нужный опыт
+	:return: необходимый для набора данного уровня опыт
+	"""
+	if not isinstance(level, int) or level < 1:
 		raise ValueError("Неверный формат уровня")
-	if level == 1:
-		return first_level
-	return round(first_level * 1.15**(level - 1))
+	return first_level if level == 1\
+		else round(first_level * 1.15**(level - 1))
 
 
 def email_is_valid(email: str):
-	# regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 	regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 	return re.fullmatch(regex, email)
 
@@ -89,3 +95,29 @@ def set_change(request, atr: str):
 			raise ValueError(f"{atr} - {data}")
 	elif atr == 'username':
 		raise ValueError("Username является обязательным полем")
+
+
+def check_achieve(request):
+	about_user = AboutUser.objects.get(user=request.user)
+	skills = json.dumps(about_user.skills)
+	achievements = list(Achievement.objects.all())
+	for i in achievements:
+		try:
+			if eval(i.condition):
+				give_achieve(request, about_user=about_user, achievement=i)
+		except Exception as e:
+			print(f"Error, can't give achievement '{i.name}': {e}")
+
+
+def give_achieve(request, **kwargs):
+	"""
+
+	:param request: просто реквест
+	:param kwargs: achieve_name or achievement
+	"""
+	about_user = kwargs.get('about_user') or AboutUser.objects.get(user=request.user)
+	achievement = kwargs.get('achievement') or Achievement.objects.get(name=kwargs.get('achieve_name'))
+	if not about_user.achievements.filter(achievement).exists():
+		about_user.achievements.add(achievement)
+		messages.success(request,
+						 f"вы заработали достижение '{achievement.name}'")

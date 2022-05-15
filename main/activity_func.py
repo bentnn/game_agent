@@ -71,10 +71,6 @@ def show_activity(*args):
 
 	ax.legend(loc='upper left')
 	plt.grid()
-	# imgdata = StringIO()
-	# plt.savefig(imgdata, format='svg', transparent=True)
-	# imgdata.seek(0)
-	# return imgdata.getvalue()
 	return convert_fig_or_pil_to_img(plt.gcf())
 
 
