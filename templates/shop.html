@@ -8,15 +8,10 @@
 {% block main %}
 	{% include 'messages.html' %}
 
-
-
-	{% if er_msg %}
-		<p style="color: red">{{ er_msg }}</p>
-	{% endif %}
 	<div class="col-12">
 
 		<a href="{% url 'profile' request.user.username  %}" class="col-2 btn btn-dark" style="position: relative;top: 0em;">Назад</a>
-		<a href="/profile/babka18/inventory" class="col-2 btn btn-dark" style="position: relative;left: 42%;top: 0em;">Инвентарь</a>
+		<a href="{% url 'inventory' request.user.username %}" class="col-2 btn btn-dark" style="position: relative;left: 42%;top: 0em;">Инвентарь</a>
 		<p  class="col-2 btn btn-dark text-light" style="position: relative;left: 50%;top: 0.5em;">
 			<i class='bx bxs-credit-card'></i> Ваш баланс: <b>{{ about_user.money }}</b>
 		</p>

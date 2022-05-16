@@ -44,9 +44,9 @@
 
 				
 				<div class="row mb-4" style="width: 105%;margin: 0 auto;">
-					<a class="nav-link btn-dark col-3 m-1 text-center" href="/profile/babka18/inventory">Инвентарь</a>
-					<a class="nav-link btn-dark col-3 m-1 text-center" href="/game_shop">Магазин</a>
-					<a class="nav-link btn-dark col-5 m-1 text-center" href="/search_user">Поиск пользователей</a>
+					<a class="nav-link btn-dark col-3 m-1 text-center" href="{% url 'inventory' user.username %}">Инвентарь</a>
+					<a class="nav-link btn-dark col-3 m-1 text-center" href="{% url 'game_shop' %}">Магазин</a>
+					<a class="nav-link btn-dark col-5 m-1 text-center" href="{% url 'search_user' %}">Поиск пользователей</a>
 				</div>
 				
 				
