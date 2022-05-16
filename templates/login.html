@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    Авторизация
+{% endblock %}
+
+{% block main %}
+    {% include 'messages.html' %}
+    <section id="login_form" class="mx-auto card col-5 ">
+        <header class="row p-2 text-center">
+            <h4>
+                <b>Вход</b>
+            </h4><br>
+        </header>
+        <form method="post">
+            {% csrf_token %}
+            <p>{{ form|crispy }}</p>
+            <button type="submit" class="btn btn-dark">Войти</button>
+        </form>
+        <br>
+        <div class="d-flex">
+            <a class="nav-link" href="{% url 'check_in' %}">Регистрация</a>
+            <a class="nav-link" href="{% url 'password_reset' %}">Сбросить пароль</a>
+        </div>
+        
+    </section>
+{% endblock %}

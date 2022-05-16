@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+	Магазин
+{% endblock %}
+
+{% block main %}
+	{% include 'messages.html' %}
+
+	<div class="col-12">
+
+		<a href="{% url 'profile' request.user.username  %}" class="col-2 btn btn-dark" style="position: relative;top: 0em;">Назад</a>
+		<a href="{% url 'inventory' request.user.username %}" class="col-2 btn btn-dark" style="position: relative;left: 42%;top: 0em;">Инвентарь</a>
+		<p  class="col-2 btn btn-dark text-light" style="position: relative;left: 50%;top: 0.5em;">
+			<i class='bx bxs-credit-card'></i> Ваш баланс: <b>{{ about_user.money }}</b>
+		</p>
+		
+	</div>
+	
+
+	<h3>Frames</h3>
+
+	<div class="row p-2">
+		<div class="col-12">
+			<div class="row">
+				<div class="col-3 mb-4">
+					<div class="card bg-dark">
+						<div class="card-header">
+							<img 
+								src="{% static 'img/shop/ZqyQWfh.png' %}"
+								alt="Нахвание" 
+								class="img-fluid mx-auto d-block">
+						</div>
+						<div class="card-body">
+							<div class="container">
+								<h3 class="text-light">Professor</h3>
+								<p class="text-light"><b>0</b> Руб.</p>
+								<a href="#" class="col-6 btn btn-light">Купить</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<!-- {% for i in frames %}
+		<div style="border: 1px solid black">
+			<p>{{ i.name }}</p>
+			<img src="{{ i.image.url }}" style="width: 100px">
+			<p>Price: {{ i.price }}</p>
+			<a href="{% url 'buy_item' i.id %}">Buy</a>
+		</div>
+		<br>
+	{% endfor %}
+
+	<h3>Backs</h3>
+	{% for i in backs %}
+		<div style="border: 1px solid black">
+			<p>{{ i.name }}</p>
+			<img src="{{ i.image.url }}" style="width: 100px">
+			<p>Price: {{ i.price }}</p>
+			<a href="{% url 'buy_item' i.id %}">Buy</a>
+		</div>
+		<br>
+	{% endfor %}
+
+	<h3>In inventory</h3>
+	{% for i in inventory %}
+		<div style="border: 1px solid black">
+			<p>{{ i.name }}</p>
+			<img src="{{ i.image.url }}" style="width: 100px">
+		</div>
+		<br>
+	{% endfor %} -->
+{% endblock %}

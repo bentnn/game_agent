@@ -1,0 +1,104 @@
+{% load static %}
+
+
+<div id="window_settings_bot" class="window-bot  d-block">
+    <div id="window-dialog" class="w-100">
+        <div class="bot-container">
+            <div class="bot-container__chat" style="margin-bottom:6em;">
+                <p>
+                    Привет, я твой личный помошник в прохождении курсов. 
+                    Выбери как часто ты хочешь со мной общаться.
+                    <hr><p>{% url 'settings_bot' %}</p>
+                    На низком уровне <br>
+                    На среднем уровне <br>
+                    На высоком уровне <br>
+                </p>
+            </div>
+            <div class="bot-container__dialog">
+                <form id="fruits">
+                    {% csrf_token %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="Низкий" id="flexRadioDefault1">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            Низкий
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="Средний" id="flexRadioDefault2">
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            Средний
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" value="Высокий" id="flexRadioDefault3">
+                        <label class="form-check-label" for="flexRadioDefault3">
+                            Высокий
+                        </label>
+                      </div>
+                    <div class="mt-3"></div>
+                    <button type="button" id="settings_bot_click" class="btn btn-dark">Отправить</button>
+                </form>
+            </div>
+        </div>
+        <div class="bot-container" style="width: 29%!important;">
+            <img src="{% static 'img/photo_2022-05-05_14-03-37.jpg' %}" alt="bot">
+        </div>
+    </div>
+
+
+    <script 
+        src="https://code.jquery.com/jquery-3.4.1.min.js" 
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" 
+        crossorigin="anonymous"
+    ></script>
+
+    <script>
+        function open_windowSettings(){
+            $.ajax({
+                url: "{% url 'get_settings_bot' %}",
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                method: 'get',
+                // contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function(response){
+                    if (response.data == "Низкий" || response.data == "Средний" || response.data == "Высокий"){
+                        document.getElementById('window_settings_bot').classList.remove('d-block');
+                        document.getElementById('window_settings_bot').classList.add('d-none');
+                    }
+                }
+            });
+        }
+
+        open_windowSettings();
+
+        // Добавление настроек
+        function window_settings_bot(){
+            // забор данных по параметру checked
+            const selected = document.querySelector('input[name="flexRadioDefault"]:checked').value
+            var user_pk = '{{ request.user.pk }}'
+            var level = selected
+             // Запрос на сервер
+            jQuery.ajax({
+                url: "{% url 'settings_bot' %}",
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                method: 'post',
+                // contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: { 
+                    user_pk: user_pk,
+                    level: level
+                },
+                success: function(response){
+                    msg = response.message
+                    if (msg == 'Success'){
+                        document.getElementById('window_settings_bot').classList.remove('d-block');
+                        document.getElementById('window_settings_bot').classList.add('d-none');
+                    }
+                }
+            });
+        }
+
+        document.getElementById('settings_bot_click').onclick = function(){
+            window_settings_bot();
+        }
+    </script>
