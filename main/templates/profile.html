@@ -17,7 +17,6 @@
 
 <div style="background-image: url({{ about_user.active_back.image.url }});">
 	<h3>username - {{ user.username }}</h3>
-	{#<img src="{{ about_user.avatar.url }}" style="width: 250px">#}
 	<img src="data:image/png;base64,{{ avatar }}" alt="" style="width: 250px; height: 250px">
 	<h5>level: {{ about_user.level }}, to_next_level: {{ to_next_level }}%</h5>
 	<h5>money: {{ about_user.money }}</h5>
@@ -59,11 +58,9 @@
 {% endif %}
 
 <h4>Активность</h4>
-{#{{ activity|safe }}#}
 <img src="data:image/png;base64,{{ activity }}" alt="" style="max-width: 500px; max-height: 500px">
 
 <h4>Скилы</h4>
-{#{{ skills|safe }}#}
 <img src="data:image/png;base64,{{ skills }}" alt="" style="max-width: 500px; max-height: 500px">
 </body>
 </html>

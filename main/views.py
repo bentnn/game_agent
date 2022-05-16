@@ -155,14 +155,10 @@ def profile(request, username):
 	about_request = about_user if request.user == user else AboutUser.objects.get(user=request.user)
 
 	# рисуем активность
-	data = norm_activity(about_user.activity)
-	about_user.activity = json.dumps(data)
-	about_user.save()
+	data = get_activity(about_user)
 	activity_data = [data, user.username]
 	if user != request.user:
-		req_data = norm_activity(about_request.activity)
-		about_request.activity = json.dumps(req_data)
-		about_request.save()
+		req_data = get_activity(about_request)
 		activity_data = [req_data, request.user.username, *activity_data]
 	graph = show_activity(*activity_data)
 
