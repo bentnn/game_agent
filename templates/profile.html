@@ -43,10 +43,10 @@
 				</div>
 
 				
-				<div class="row mb-4">
-					<a class="nav-link btn-dark col-4" href="{% url 'inventory' user.username %}">Инвентарь</a>
-					<a class="nav-link btn-dark col-4" href="{% url 'game_shop' %}">Магазин</a>
-					<a class="nav-link btn-dark col-4" href="{% url 'search_user' %}">Поиск пользователей</a>
+				<div class="row mb-4" style="width: 105%;margin: 0 auto;">
+					<a class="nav-link btn-dark col-3 m-1 text-center" href="/profile/babka18/inventory">Инвентарь</a>
+					<a class="nav-link btn-dark col-3 m-1 text-center" href="/game_shop">Магазин</a>
+					<a class="nav-link btn-dark col-5 m-1 text-center" href="/search_user">Поиск пользователей</a>
 				</div>
 				
 				
@@ -96,6 +96,20 @@
 					</div>
 				</div>
 
+				<!-- Обновление настроек бота -->
+				<div class="card p-3 bg-dark text-light mx-auto">
+					<h4>Настройки бота:</h4>
+					<br>
+					<form>
+						<div class="mb-3">
+							<select id="settings_bot" class="form-select form-control mb-4" aria-label="Default select example">
+								<option value="{{my_settings_bot.level}}" selected>{{my_settings_bot.level}}</option>
+							</select>
+						</div>
+						<button type="button" onclick="update_settings()" class="btn btn-white">Изменить</button>
+					</form>
+				</div>
+
 			</div>
 			<div class="col-7">
 				<div class="container">
@@ -121,6 +135,10 @@
 	</div>
 
 	<!-- Смена цвета прогресс-бара, цвет меняет по соотношению баллов пользователя -->
+	<script src="https://code.jquery.com/jquery-3.6.0.js"
+		integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+		crossorigin="anonymous">
+	</script>
 	<script>
 		if ({{ to_next_level|safe }} < 30){
 			console.log(1)
@@ -134,6 +152,39 @@
 			console.log(3)
 			document.getElementById("progress").style.background = "#2ce53b";
 		} 
+
+		// Настройки бота
+		var el = '{{ my_settings_bot.level|safe}}';
+		if (el != "Высокий"){
+			document.getElementById('settings_bot').insertAdjacentHTML('beforeend', 
+			'<option value="Высокий">Высокий</option>');
+		}
+		if (el != "Средний"){
+			document.getElementById('settings_bot').insertAdjacentHTML('beforeend', 
+			'<option value="Средний">Средний</option>');
+		}
+		if (el != "Низкий"){
+			document.getElementById('settings_bot').insertAdjacentHTML('beforeend', 
+			'<option value="Низкий">Низкий</option>');
+		}
+
+		function update_settings(){
+			var data = document.getElementById('settings_bot').value;
+			$.ajax({
+				url: "{% url 'update_settings_bot' %}",
+				headers: {'X-CSRFToken': '{{ csrf_token }}'},
+				method: 'post',
+				// contentType: 'application/json; charset=utf-8',
+				dataType: 'json',
+				data: { 
+					data: data
+				},
+				success: function(response){
+					console.log(response)
+				}
+			});
+		}
+			
 	</script>
 	
 {% endblock %}

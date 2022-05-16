@@ -1,5 +1,6 @@
 import subprocess
 import os
+from platform import system
 
 class Executor:
     def runPython(testing_file):
@@ -42,9 +43,15 @@ class Manager:
         return '"' + resFile + '"'
 
     def pythonTestFileCreator(code):
-        includeFile = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\python\\include.py'
-        testFile = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\python\\test.py'
-        resFile = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\python\\testing\\test.py'
+        if system() == "Linux":
+            includeFile = 'tests/python/testing/test.py'
+            testFile = 'tests/python/test.py'
+            resFile = 'tests/python/testing/test.py'
+        else:
+            includeFile = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\python\\include.py'
+            testFile = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\python\\test.py'
+            resFile = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\python\\testing\\test.py'
+
         str = ''
         with open(includeFile, 'r', encoding='utf-8') as f:
             str += f.read()

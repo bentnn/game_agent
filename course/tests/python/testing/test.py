@@ -1,2 +1,3 @@
 import unittest
-raise 'Error'
+print ("1")
+

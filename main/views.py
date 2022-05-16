@@ -16,6 +16,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from .const import domain
 from .models import *
+from bot.models import SettingsBot
 from .useful_func import *
 from .avatars_func import *
 from .activity_func import *
@@ -174,7 +175,9 @@ def profile(request, username):
 			"achievements": list(about_user.achievements.all()),
 			"activity": graph,
 			"skills": show_skills(about_user.skills),
-			"avatar": frame_layering(about_user.avatar, about_user.active_frame)
+			"avatar": frame_layering(about_user.avatar, about_user.active_frame),
+			"my_settings_bot": SettingsBot.objects.get(user_id=request.user.pk),
+			"settings_bot_all": SettingsBot.objects.all()
 		}
 	)
 

@@ -21,7 +21,6 @@
         <link rel="stylesheet" href="{% static 'css/bot.css' %}">
         <!-- Scrollbar Custom CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
->
         <!-- Font Awesome JS -->
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
@@ -74,50 +73,52 @@
 
             <!-- Page Content Holder -->
             <div id="content">
-
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="container-fluid">
-                        {% if request.get_full_path != '/profile/'|add:user.username|add:'/inventory' and request.get_full_path != '/game_shop' and request.get_full_path != '/search_user' and request.get_full_path != '/settings/change_password' and request.get_full_path != '/settings' and request.get_full_path != '/course/tasks' and request.get_full_path != '/profile/'|add:user.username and request.get_full_path != '/home' and request.get_full_path != '/' and request.get_full_path != '/password_reset/done/' and request.get_full_path != '/login' and request.get_full_path != '/password_reset' and request.get_full_path != '/check_in' %}
-                            <button type="button" id="sidebarCollapse" class="btn btn-info">
-                                <i class="fas fa-align-left"></i>
-                                <span id="toggleMenu">Скрыть меню</span>
+                {% if request.get_full_path != '/game_shop' and request.get_full_path != '/profile/'|add:user.username|add:'/inventory' %}
+                    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+                        <div class="container-fluid">
+                            {% if request.get_full_path != '/profile/'|add:user.username|add:'/inventory' and request.get_full_path != '/game_shop' and request.get_full_path != '/search_user' and request.get_full_path != '/settings/change_password' and request.get_full_path != '/settings' and request.get_full_path != '/course/tasks' and request.get_full_path != '/profile/'|add:user.username and request.get_full_path != '/home' and request.get_full_path != '/' and request.get_full_path != '/password_reset/done/' and request.get_full_path != '/login' and request.get_full_path != '/password_reset' and request.get_full_path != '/check_in' %}
+                                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                                    <i class="fas fa-align-left"></i>
+                                    <span id="toggleMenu">Скрыть меню</span>
+                                </button>
+                            {% endif %}
+                            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <i class="fas fa-align-justify"></i>
                             </button>
-                        {% endif %}
-                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <i class="fas fa-align-justify"></i>
-                        </button>
-    
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="nav navbar-nav ml-auto">
-                                {% if request.user.is_authenticated %}
-                                    <li>
-                                        <a class="nav-link" href="{% url 'home' %}">Главная</a>
-                                    </li>
-                                    <li class="nav-item active">
-                                        <a class="nav-link" href="{% url 'course' %}">Курс</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'tasks' %}">Задания</a>
-                                    </li>
+        
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="nav navbar-nav ml-auto">
+                                    {% if request.user.is_authenticated %}
+                                        <li>
+                                            <a class="nav-link text-light" href="{% url 'home' %}">Главная</a>
+                                        </li>
+                                        <li class="nav-item active">
+                                            <a class="nav-link text-light" href="{% url 'course' %}">Курс</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-light" href="{% url 'tasks' %}">Задания</a>
+                                        </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'profile' request.user.username %}">Страница пользователя</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'logout' %}">Выход</a>
-                                    </li>
-                                {% else %}
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'check_in' %}">Регистрация</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'login'  %}">Войти</a>
-                                    </li>
-                                {% endif %}
-                            </ul>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-light" href="{% url 'profile' request.user.username %}">Страница пользователя</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-light" href="{% url 'logout' %}">Выход</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="nav-item">
+                                            <a class="nav-link text-light" href="{% url 'check_in' %}">Регистрация</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-light" href="{% url 'login'  %}">Войти</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </nav>
+                    </nav>
+                {% else %}
+                {% endif %}
                 <article id="main-text" class="article_text">
                     {% block main %}
                     {% endblock %}
@@ -135,14 +136,12 @@
          <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
          <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
          <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-<<<<<<< HEAD
-         <script type="text/javascript" src="{% static 'js/sidebar.js' %}"></script>
         
         <!-- Бот на низких уровнях - только чат -->
         <!-- Бот на средних уровнях, только чат и задачи -->
         <!-- Бот на максимальных настройках чаи, задачи, проверка -->
-        {% if request.get_full_path != '/profile/'|add:user.username|add:'/inventory' and request.get_full_path != '/game_shop' and request.get_full_path != '/search_user' and request.get_full_path != '/settings/change_password' and request.get_full_path != '/settings' and request.get_full_path != '/profile/'|add:user.username and request.get_full_path != '/home' and request.get_full_path != '/' and request.get_full_path != '/password_reset/done/' and request.get_full_path != '/login' and request.get_full_path != '/password_reset' and request.get_full_path != '/check_in' %}
-=======
+
+
          <script>
             $(document).ready(function () {
                 $('#sidebarCollapse').on('click', function () {
@@ -196,8 +195,6 @@
             });
          </script>
         {% if request.get_full_path != '/password_reset/done/' and request.get_full_path != '/login' and request.get_full_path != '/password_reset' and request.get_full_path != '/check_in' %}
-
->>>>>>> bebc73769ea743a672339e2f6c98450eab47daee
             {% include 'bot/index.html' %}
         {% endif %}
         

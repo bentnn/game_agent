@@ -47,3 +47,11 @@ def get_settings_bot(request):
         return HttpResponse(json.dumps({
             "data": str(SettingsBot.objects.get(user_id=request.user.pk))
         }), content_type='application/json')
+
+
+def update_settings_bot(request):
+    if request.method == "POST":
+        # Update settings
+        SettingsBot.objects.filter(user_id=request.user.pk).update(level=request.POST.get('data'))
+        # END
+        return HttpResponse(json.dumps({"message": "Success"}), content_type='application/json')

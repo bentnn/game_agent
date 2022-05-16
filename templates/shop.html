@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block title %}
 	Магазин
@@ -8,27 +8,49 @@
 {% block main %}
 	{% include 'messages.html' %}
 
-	<style>
-		#card_balance{
-			border-radius: 3em;
-			box-shadow: 2px 2px 7px #b7acac;
-			position: relative;
-			left: 80%;
-		}
-	</style>
+
 
 	{% if er_msg %}
 		<p style="color: red">{{ er_msg }}</p>
 	{% endif %}
+	<div class="col-12">
 
-	<div class="row">
-		<div id="card_balance" class="card col-2 mx-right p-3 text-center right">
-			<p class="mt-3"><i class='bx bxs-credit-card'></i> Ваш баланс: <b>{{ about_user.money }}</b></p>
-		</div>
+		<a href="{% url 'profile' request.user.username  %}" class="col-2 btn btn-dark" style="position: relative;top: 0em;">Назад</a>
+		<a href="/profile/babka18/inventory" class="col-2 btn btn-dark" style="position: relative;left: 42%;top: 0em;">Инвентарь</a>
+		<p  class="col-2 btn btn-dark text-light" style="position: relative;left: 50%;top: 0.5em;">
+			<i class='bx bxs-credit-card'></i> Ваш баланс: <b>{{ about_user.money }}</b>
+		</p>
+		
 	</div>
+	
 
 	<h3>Frames</h3>
-	{% for i in frames %}
+
+	<div class="row p-2">
+		<div class="col-12">
+			<div class="row">
+				<div class="col-3 mb-4">
+					<div class="card bg-dark">
+						<div class="card-header">
+							<img 
+								src="{% static 'img/shop/ZqyQWfh.png' %}"
+								alt="Нахвание" 
+								class="img-fluid mx-auto d-block">
+						</div>
+						<div class="card-body">
+							<div class="container">
+								<h3 class="text-light">Professor</h3>
+								<p class="text-light"><b>0</b> Руб.</p>
+								<a href="#" class="col-6 btn btn-light">Купить</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<!-- {% for i in frames %}
 		<div style="border: 1px solid black">
 			<p>{{ i.name }}</p>
 			<img src="{{ i.image.url }}" style="width: 100px">
@@ -56,5 +78,5 @@
 			<img src="{{ i.image.url }}" style="width: 100px">
 		</div>
 		<br>
-	{% endfor %}
+	{% endfor %} -->
 {% endblock %}

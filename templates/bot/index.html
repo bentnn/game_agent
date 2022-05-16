@@ -72,6 +72,21 @@
 </script>
   
 <script>
+    // Проверка настроек
+    $.ajax({
+        url: "{% url 'get_settings_bot' %}",
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        method: 'get',
+        // contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        success: function(response){
+            if (response.data == "Низкий" && response.data == "Средний" && response.data == "Высокий"){
+                document.getElementById('window').classList.remove('d-block');
+                document.getElementById('window').classList.add('d-none');
+            }
+        }
+    });
+
     // Если бот что то нашёл
     function window_dialog_request(param){
         $("#bot_message-text").append(param);
