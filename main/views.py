@@ -16,6 +16,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from .const import domain
 from .models import *
+from bot.models import SettingsBot
 from .useful_func import *
 from .avatars_func import *
 from .activity_func import *
@@ -161,20 +162,21 @@ def profile(request, username):
 		req_data = get_activity(about_request)
 		activity_data = [req_data, request.user.username, *activity_data]
 	graph = show_activity(*activity_data)
-
 	return render(
 		request, 'profile.html',
 		{
 			"user": user,
 			"about_user": about_user,
-			"to_next_level": round(about_user.exp_to_level / get_needed_exp(about_user.level + 1), 2),
+			"to_next_level": round(about_user.exp_to_level * 100 / get_needed_exp(about_user.level + 1), 2),
 			"subs": list(about_user.subs.all()),
 			"subs_to": list(user.subs_to.all()),
 			"req_subs": list(about_request.subs.all()),
 			"achievements": list(about_user.achievements.all()),
 			"activity": graph,
 			"skills": show_skills(about_user.skills),
-			"avatar": frame_layering(about_user.avatar, about_user.active_frame)
+			"avatar": frame_layering(about_user.avatar, about_user.active_frame),
+			"my_settings_bot": SettingsBot.objects.get(user_id=request.user.pk),
+			"settings_bot_all": SettingsBot.objects.all()
 		}
 	)
 
@@ -261,7 +263,7 @@ def change_profile(request):
 
 			data = request.FILES.get("avatar")
 			if data is not None:
-				about_user.avatar.delete(save=True)
+				about_user.avatar.delete(save=False)
 				filename = f"Avatars/{request.user.username}.png"
 				full_filename = str(settings.MEDIA_ROOT) + '/' + filename
 				with open(full_filename, 'wb') as f:

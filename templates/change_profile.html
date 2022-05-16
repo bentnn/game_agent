@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+	Настройки
+{% endblock %}
+
+{% block main %}
+	{% include 'messages.html' %}
+	<!-- <a class="nav-link" href="{% url 'profile' request.user.username %}">my profile</a> -->
+	<div class="col-12">
+		<form method="post" enctype='multipart/form-data'>
+			{% csrf_token %}
+			<div class="row">
+				<div class="col-6">
+					<div style="display: grid;">
+						<img src="{{ about_user.avatar.url }}" style="width: 200px; margin-bottom: 1em;">
+						<input type="file" name="avatar" accept=".jpg, .jpeg, .png">
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="mb-3 mt-5">
+						<label for="exampleFormControlInput1"  class="form-label">Логин</label>
+						<input name="username" class="form-control" id="exampleFormControlInput1" value="{{ request.user.username }}">
+					</div>
+					<div class="mb-3">
+						<label for="exampleFormControlInput1"  class="form-label">Имя</label>
+						<input name="first_name" class="form-control" id="exampleFormControlInput1" value="{{ request.user.first_name }}">
+					</div>
+					<div class="mb-3">
+						<label for="exampleFormControlInput1"  class="form-label">Фамилия</label>
+						<input name="last_name" class="form-control" id="exampleFormControlInput1" value="{{ request.user.last_name }}">
+					</div>
+					<div class="mb-3">
+						<label for="exampleFormControlInput1" class="form-label">Адрес электронной почты</label>
+						<input type="email" class="form-control" name="email" id="exampleFormControlInput1" value="{{ request.user.email }}">
+					</div>
+					<button type="submit" class="btn btn-dark">Внести изменения</button>
+				</div>
+			</div>
+			
+		</form>
+
+		<a class="nav-link btn btn-dark col-2" href="{% url 'change_password' %}">Сменить пароль</a>
+	</div>
+{% endblock %}
