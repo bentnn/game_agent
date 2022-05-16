@@ -13,7 +13,7 @@ def get_basic_avatar(username):
 
 	# получаем матрицу 12 на 12 сконкатенировав оригинальную и отраженную матрицу
 	need_color = np.concatenate((need_color, need_color[::-1]), axis=0)
-	avatar_size = 120
+	avatar_size = 1200
 	img_size = (avatar_size, avatar_size)
 	block_size = avatar_size // 12 # размер квадрата
 
@@ -27,6 +27,7 @@ def get_basic_avatar(username):
 				draw.point((x, y), main_color)
 
 	return img
+
 
 def crop_center(pil_img, crop_width: int, crop_height: int) -> Image:
 	"""
@@ -42,4 +43,5 @@ def crop_center(pil_img, crop_width: int, crop_height: int) -> Image:
 
 
 def crop_max_square(pil_img):
-	return crop_center(pil_img, min(pil_img.size), min(pil_img.size))
+	crop_size = min(pil_img.size)
+	return crop_center(pil_img, crop_size, crop_size)

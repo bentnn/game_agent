@@ -4,6 +4,7 @@ import re
 import base64
 import json
 import urllib
+from .models import AboutUser
 import datetime
 import json
 import numpy as np
@@ -19,7 +20,7 @@ def create_activity():
 	return data
 
 
-def norm_activity(data):
+def norm_activity(data: dict or str):
 	if isinstance(data, str):
 		data = json.loads(data)
 	today = datetime.date.today()
@@ -39,42 +40,35 @@ def add_activity(data: dict, activity):
 	return data
 
 
-# def show_activity(data, name, data2=None, name2=None):
+def get_activity(about_user: AboutUser):
+	data = norm_activity(about_user.activity)
+	about_user.activity = json.dumps(data)
+	about_user.save()
+	return data
+
+
 def show_activity(*args):
 	args_len = len(args)
 	if args_len < 2:
 		raise ValueError(f"Количество аргументов для графика активности "
 						 f"{args_len}, а должно быть 2 или 4")
 	data, name = args[0], args[1]
-	data2, name2 = None, None
-	if args_len == 4:
-		data2, name2 = args[2], args[3]
 	if isinstance(data, str):
 		data = json.loads(data)
 
-	x = []
-	y = []
 	fig, ax = plt.subplots()
-	for i in data.items():
-		x.append(str(i[0])[5:])
-		y.append(i[1])
+	x = [str(date)[5:] for date in data.keys()]
 
-	ax.plot(x, y, label=name)
+	ax.plot(x, data.values(), label=name)
 
-	if data2 is not None:
+	if args_len == 4:
+		data2, name2 = args[2], args[3]
 		if isinstance(data2, str):
 			data2 = json.loads(data2)
-		y2 = []
-		for i in data2.values():
-			y2.append(i)
-		ax.plot(x, y2, label=name2)
+		ax.plot(x, data2.values(), label=name2)
 
 	ax.legend(loc='upper left')
 	plt.grid()
-	# imgdata = StringIO()
-	# plt.savefig(imgdata, format='svg', transparent=True)
-	# imgdata.seek(0)
-	# return imgdata.getvalue()
 	return convert_fig_or_pil_to_img(plt.gcf())
 
 
@@ -82,7 +76,7 @@ def create_skills():
 	return dict.fromkeys(skills, 0)
 
 
-def show_skills(data):
+def show_skills(data: dict or str):
 	if isinstance(data, str):
 		data = json.loads(data)
 	categories = list(data.keys())
@@ -102,19 +96,4 @@ def show_skills(data):
 	plt.fill(color='b')
 	lines, labels = plt.thetagrids(np.degrees(label_loc), labels=categories)
 
-	# imgdata = BytesIO()
-	# plt.savefig(imgdata, format='svg', transparent=True)
-	# imgdata.seek(0)
-	# string = base64.b64encode(imgdata.read())
-	# uri = urllib.parse.quote(string)
-	# return uri
-
-	# fig = plt.gcf()
-	# #convert graph into dtring buffer and then we convert 64 bit code into image
-	# buf = BytesIO()
-	# fig.savefig(buf, format='png')
-	# buf.seek(0)
-	# string = base64.b64encode(buf.read())
-	# uri = urllib.parse.quote(string)
-	# return uri
 	return convert_fig_or_pil_to_img(plt.gcf())

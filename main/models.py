@@ -2,9 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from course.models import Articles
 
+
 class Achievement(models.Model):
 	name = models.CharField(max_length=70)
 	icon = models.ImageField(upload_to="Achievements")
+	info = models.TextField(max_length=200, default='')
+	money = models.SmallIntegerField(default=0)
+	condition = models.TextField(default='')
 
 	class Meta:
 		verbose_name = 'достижение'
@@ -25,7 +29,6 @@ class GameItems(models.Model):
 	price = models.SmallIntegerField(default=0)
 
 	class Meta:
-		# ordering = ('-date', )
 		verbose_name = 'Игровой товар'
 		verbose_name_plural = 'Игровые товары'
 
@@ -71,4 +74,3 @@ class Post(models.Model):
 
 	def __str__(self):
 		return self.title
-

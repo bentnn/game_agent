@@ -10,6 +10,7 @@ from course import course_manager, serializers
 from .testing_manager import CodeExecutor
 from django.http import JsonResponse
 
+
 class ArticleAPIView(APIView):
     serializer_class = ArticlesSerializer
 
@@ -20,12 +21,12 @@ class ArticleAPIView(APIView):
     def get(self, request):
         try:
             title = request.query_params["title"]
-            if (title is not None):
-                article = Articles.objects.get(title = title)
+            if title is not None:
+                article = Articles.objects.get(title=title)
                 article_data = ArticlesSerializer(article)
-        except:
+        except Exception:
             articles = self.get_queryset()
-            article_data = ArticlesSerializer(articles, many = True)
+            article_data = ArticlesSerializer(articles, many=True)
         
         return Response(article_data.data)
 
@@ -63,6 +64,7 @@ class RequiredCoursesAPIView(APIView):
         
         return Response(tasks_data.data)
 
+
 @login_required(login_url='login')
 def index(request, title = ''):
     print(title)
@@ -73,9 +75,12 @@ def index(request, title = ''):
         values.update({(category[1], category[2]): [(elem, course_manager.check_user(elem, request.user, request.user.is_superuser)) for elem in Articles.objects.filter(category = category[0])]})
     return render(request, 'course/index.html', {'categories': values, 'coursename': title})
 
+
+
 @login_required(login_url='login')
 def coursepage(request, name):
-    return render(request, 'course/content/pages/' + name + '.html')
+    return render(request, f'course/content/pages/{name}.html')
+
 
 @login_required(login_url='login')
 def tasks(request):
@@ -85,6 +90,7 @@ def tasks(request):
     themes = list(Articles.objects.all().order_by('title').values('title', 'name'))
     difficulty = Tasks.LEVEL
     return render(request, 'course/tasks/index.html', {'tasks': tasks, 'difficulties': difficulty, 'articles': themes})
+
 
 @login_required(login_url='login')
 def task(request, task_id = 0):
