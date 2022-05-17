@@ -162,12 +162,13 @@ def profile(request, username):
 		req_data = get_activity(about_request)
 		activity_data = [req_data, request.user.username, *activity_data]
 	graph = show_activity(*activity_data)
+	to_next_level_par = round(about_user.exp_to_level * 100 / get_needed_exp(about_user.level + 1), 2)
 	return render(
 		request, 'profile.html',
 		{
 			"user": user,
 			"about_user": about_user,
-			"to_next_level": round(about_user.exp_to_level * 100 / get_needed_exp(about_user.level + 1), 2),
+			"to_next_level": to_next_level_par,
 			"subs": list(about_user.subs.all()),
 			"subs_to": list(user.subs_to.all()),
 			"req_subs": list(about_request.subs.all()),
@@ -176,7 +177,8 @@ def profile(request, username):
 			"skills": show_skills(about_user.skills),
 			"avatar": frame_layering(about_user.avatar, about_user.active_frame),
 			"my_settings_bot": SettingsBot.objects.get(user_id=request.user.pk),
-			"settings_bot_all": SettingsBot.objects.all()
+			"settings_bot_all": SettingsBot.objects.all(),
+			"percent_par": round(to_next_level_par)
 		}
 	)
 

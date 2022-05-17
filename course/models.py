@@ -36,7 +36,7 @@ class Tasks(models.Model):
 		('4', 'Fourth'),
 		('5', 'Fifth')
     )
-    taskId = models.UUIDField(db_index = True, default = uuid.uuid4, editable = False)
+    taskId = models.UUIDField(db_index = True, unique=True, default = uuid.uuid4, editable = False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     difficulty = models.CharField(max_length=1, choices=LEVEL)
@@ -49,3 +49,30 @@ class Tasks(models.Model):
         verbose_name_plural = 'Задачи'
     def __str__(self):
         return self.title
+
+class JsTests(models.Model):
+    task = models.OneToOneField(Tasks, to_field='taskId',on_delete = models.CASCADE)
+    test = models.TextField('Test')
+    class Meta:
+        verbose_name = 'Js тест'
+        verbose_name_plural = 'Js тесты'
+    def __str__(self):
+        return str(self.id)
+
+class PythonTests(models.Model):
+    task = models.OneToOneField(Tasks, to_field='taskId',on_delete = models.CASCADE)
+    test = models.TextField('Test')
+    class Meta:
+        verbose_name = 'Python тест'
+        verbose_name_plural = 'Python тесты'
+    def __str__(self):
+        return str(self.id)
+
+class GoTests(models.Model):
+    task = models.OneToOneField(Tasks, to_field='taskId', on_delete = models.CASCADE)
+    test = models.TextField('Test')
+    class Meta:
+        verbose_name = 'Go тест'
+        verbose_name_plural = 'Go тесты'
+    def __str__(self):
+        return str(self.id)

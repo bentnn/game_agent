@@ -31,7 +31,8 @@ $(document).ready(function () {
       let code = codemirrorEditor.getValue();
       let obj = {
         code: code,
-        lang: lang
+        lang: lang,
+        task: $('#submit-code').attr('task')
       };
       console.log(JSON.stringify(obj));
       let url = `http://127.0.0.1:8000/course/api/testcode/`;

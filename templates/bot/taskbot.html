@@ -5,8 +5,8 @@
 </div>
 
 <div id="window" class="window-bot d-block">
-    <div class="bot-container__header">
-        <i id="close-chat" class='bx bxs-x-circle'></i>
+    <div id="close-chat" class="bot-container__header">
+        <i class='bx bxs-x-circle'></i>
     </div>
     <!--  -->
     <div id="window-dialog" class="w-100">
@@ -53,16 +53,36 @@
         dataType: 'json',
         success: function(response){
             if (response.data == "Низкий"){
-                document.getElementById('window').classList.remove('d-block');
-                document.getElementById('window').classList.add('d-none');
+                openWindow();
             }
         }
     });
     
+    function toggleWindow(){
+        if (document.getElementById('window').classList.contains('d-block')){
+            closeWindow();
+        }
+        else{
+            openWindow();
+        }
+    }
+
+    function openWindow(){
+        document.getElementById('window').classList.remove('d-none');
+        document.getElementById('window').classList.add('d-block');
+    }
+
+    function closeWindow(){
+        document.getElementById('window').classList.remove('d-block');
+        return document.getElementById('window').classList.add('d-none');
+    }
+
     function closer(){
         document.getElementById('close-chat').onclick = function(){
-            document.getElementById('window').classList.remove('d-block')
-            return document.getElementById('window').classList.add('d-none')
+            closeWindow();
+        }
+        document.getElementById('open-chat').onclick = function(){
+            toggleWindow();
         }
     }
     closer();

@@ -3,7 +3,7 @@ from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Articles, Categories, Tasks
+from .models import Articles, Categories, Tasks, JsTests, GoTests, PythonTests
 from main.models import AboutUser
 from .serializers import ArticlesSerializer, TasksSerializer, MenuArticlesSerializer
 from course import course_manager, serializers
@@ -43,6 +43,8 @@ class MenuArticleAPIView(APIView):
         return Response(article_data.data)
     
     def post(self, request, format = None):
+        if (request.user.is_superuser):
+            return JsonResponse({'success': 'success'})
         AboutUser.objects.get(user=request.user).passed_courses.add(Articles.objects.get(title=request.data.get("title")))
         return JsonResponse({'success': 'success'})
 
@@ -50,15 +52,24 @@ class TestingAPIView(APIView):
     def post(self, request, format = None):
         lang = request.data.get("lang")
         code = request.data.get("code")
-        print("test")
+        taskId = request.data.get("task")
         if (lang == "JavaScript"):
-            test_res = CodeExecutor.jsCodeExecute(code)
-            print({'output': test_res.stdout.decode("utf-8"), 'error': test_res.stderr.decode("utf-8")})
-            return JsonResponse({'output': test_res.stdout.decode("utf-8"), 'error': test_res.stderr.decode("utf-8")})
+            test = JsTests.objects.get(task=taskId)
+            print(test.test)
+            test_res = CodeExecutor.jsCodeExecute(code, test.test, taskId)
+            return JsonResponse(test_res)
         elif (lang == "Python"):
-            test_res = CodeExecutor.pythonCodeExecute(code)
-            print({'output': test_res.stdout.decode("ISO-8859-1"), 'error': test_res.stderr.decode("ISO-8859-1")})
-            return JsonResponse({'output': test_res.stdout.decode("ISO-8859-1"), 'error': test_res.stderr.decode("ISO-8859-1")})
+            test = PythonTests.objects.get(task=taskId)
+            print(test.test)
+            test_res = CodeExecutor.pythonCodeExecute(code, test.test, taskId)
+            print(test_res)
+            return JsonResponse(test_res)
+        elif (lang == "Go"):
+            test = GoTests.objects.get(task=taskId)
+            print(test.test)
+            test_res = CodeExecutor.goCodeExecute(code, test.test, taskId)
+            print(test_res)
+            return JsonResponse(test_res)
         else:
             return JsonResponse({'output': 'None', 'error': 'None'})
 
