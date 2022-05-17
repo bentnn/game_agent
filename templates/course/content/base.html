@@ -4,6 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Boxicons CSS -->
+	    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
 
         <title>{% block title %}{% endblock %}</title>
 
@@ -13,92 +15,103 @@
         {% load static %}
         <!-- <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}"> -->
         <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous"> -->
-        <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="{% static '/css/course/sidebar.css' %}">
-        <link rel="stylesheet" href="{% static '/css/course/page.css' %}">
-        <link rel="stylesheet" href="{% static '/css/bot.css' %}">
+        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+        <link rel="stylesheet" href="{% static 'css/page.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bot.css' %}">
         <!-- Scrollbar Custom CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
-
         <!-- Font Awesome JS -->
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    
     </head>
     <body>
+        
         <div class="wrapper">
             <!-- Sidebar Holder -->
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h3>Теоретические материалы</h3>
-                </div>
-                <hr/>
-                <ul class="list-unstyled components">
-                    <p>Курс</p>
-                    {% for key, category in categories.items %}
-                        {% if key.1 == "Нет категории" %}
-                                {% for elem in category %}
-                                    {% if elem.1 %}
-                                        <li><a id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
-                                    {% else %}
-                                        <li><a disabled id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
-                                    {% endif %}
-                                {% endfor %}
-                        {% else %}
-                        <li class="active">
-                            <a href="#{{key.0}}" data-toggle="collapse" aria-expanded="false">{{key.1}}</a>
-                            <ul class="collapse list-unstyled" id="{{key.0}}">
-                                {% for elem in category %}
-                                    {% if elem.1 %}
-                                        <li><a id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
-                                    {% else %}
-                                        <li><a disabled id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
+            {% if request.get_full_path != '/profile/'|add:user.username|add:'/inventory' and request.get_full_path != '/game_shop' and request.get_full_path != '/search_user' and request.get_full_path != '/settings/change_password' and request.get_full_path != '/settings' and request.get_full_path != '/course/tasks' and request.get_full_path != '/profile/'|add:user.username and request.get_full_path != '/home' and request.get_full_path != '/' and request.get_full_path != '/password_reset/done/' and request.get_full_path != '/login' and request.get_full_path != '/password_reset' and request.get_full_path != '/check_in' %}
+                <nav id="sidebar">
+                    <div class="sidebar-header">
+                        <h3>Теоретические материалы</h3>
+                    </div>
+                    <hr/>
+                    <ul class="list-unstyled components">
+                        <p>Курс</p>
+                        {% for category in categories %}
+                            <li class="active">
+                                <a href="#{{category.title}}" data-toggle="collapse" aria-expanded="false">{{category.name}}</a>
+                                <ul class="collapse list-unstyled" id="{{category.title}}">
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
 
-                <ul class="list-unstyled CTAs">
-                    <li><a href="https://algowiki-project.org/ru" class="download">Дополнительные материалы</a></li>
-                    <li><a href="https://www.python.org/" class="article">Документация Python</a></li>
-                </ul>
-            </nav>
+                    <ul class="list-unstyled CTAs">
+                        <li><a href="https://algowiki-project.org/ru" class="download">Дополнительные материалы</a></li>
+                        <li><a href="https://www.python.org/" class="article">Документация Python</a></li>
+                    </ul>
+                </nav>
+            {% endif %}
 
             <!-- Page Content Holder -->
             <div id="content">
+                {% if request.get_full_path != '/game_shop' and request.get_full_path != '/profile/'|add:user.username|add:'/inventory' %}
+                    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+                        <div class="container-fluid">
+                            {% if request.get_full_path != '/profile/'|add:user.username|add:'/inventory' and request.get_full_path != '/game_shop' and request.get_full_path != '/search_user' and request.get_full_path != '/settings/change_password' and request.get_full_path != '/settings' and request.get_full_path != '/course/tasks' and request.get_full_path != '/profile/'|add:user.username and request.get_full_path != '/home' and request.get_full_path != '/' and request.get_full_path != '/password_reset/done/' and request.get_full_path != '/login' and request.get_full_path != '/password_reset' and request.get_full_path != '/check_in' %}
+                                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                                    <i class="fas fa-align-left"></i>
+                                    <span id="toggleMenu">Скрыть меню</span>
+                                </button>
+                            {% endif %}
+                            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <i class="fas fa-align-justify"></i>
+                            </button>
+                            <span id="passed-span" class="badge badge-secondary p-2"><p class="h4">None</p></span>
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul class="nav navbar-nav ml-auto">
+                                    {% if request.user.is_authenticated %}
+                                        <li>
+                                            <a class="nav-link text-light" href="{% url 'home' %}">Главная</a>
+                                        </li>
+                                        <li class="nav-item active">
+                                            <a class="nav-link text-light" href="{% url 'course' %}">Курс</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-light" href="{% url 'tasks' %}">Задания</a>
+                                        </li>
 
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="container-fluid">
-    
-                        <button type="button" id="sidebarCollapse" class="btn btn-info">
-                            <i class="fas fa-align-left"></i>
-                            <span id="toggleMenu">Скрыть меню</span>
-                        </button>
-                        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <i class="fas fa-align-justify"></i>
-                        </button>
-    
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="nav navbar-nav ml-auto">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="{% url 'course' %}">Курс</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'tasks' %}">Задания</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'profile' request.user.username %}">Страница пользователя</a>
-                                </li>
-                            </ul>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-light" href="{% url 'profile' request.user.username %}">Страница пользователя</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-light" href="{% url 'logout' %}">Выход</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="nav-item">
+                                            <a class="nav-link text-light" href="{% url 'check_in' %}">Регистрация</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-light" href="{% url 'login'  %}">Войти</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </nav>
+                    </nav>
+                {% else %}
+                {% endif %}
                 <article id="main-text" class="article_text">
+                    {% block main %}
+                    {% endblock %}
                 </article>
+                <div class="text-center m-4">
+                    <button id="passed-button" type="button" class="btn btn-success">Пометить как выполненное</button>
+                 </div>
             </div>
         </div>
+
         <!-- jQuery CDN - Slim version (=without AJAX) -->
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <!-- Popper.JS -->
@@ -106,50 +119,148 @@
     <!-- Bootstrap JS -->
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script> -->
 
-         <script type="text/javascript" src="{% static '/js/jquery.min.js' %}"></script>
-         <script type="text/javascript" src="{% static '/js/popper.min.js' %}"></script>
-         <script type="text/javascript" src="{% static '/bootstrap/js/bootstrap.min.js' %}"></script>
+         <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+         <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+         <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+        
+        <!-- Бот на низких уровнях - только чат -->
+        <!-- Бот на средних уровнях, только чат и задачи -->
+        <!-- Бот на максимальных настройках чаи, задачи, проверка -->
+
+
          <script>
             $(document).ready(function () {
                 $('#sidebarCollapse').on('click', function () {
                     $('#sidebar').toggleClass('active');
                     let text = $('#toggleMenu').text();
                     if (text[0] == 'С'){
-                    $('#toggleMenu').text('Показать меню');
+                        $('#toggleMenu').text('Показать меню');
                     }
                     else{
-                    $('#toggleMenu').text('Скрыть меню');
+                        $('#toggleMenu').text('Скрыть меню');
                     }
                 });
 
-                let articlePage = document.getElementById('main-text');
-                
-                let pagesUrl = 'http://127.0.0.1:8000/course/api/pages/';
-                
-                fetch(pagesUrl).then(function(elem){
-                    return elem.json();
-                }).then(function(res){
-                    let themes = res.map(x => x.title);
-                    for (let theme of themes){
-                        $('#' + theme).on('click', function () {
-                            let prop = $('#' + theme).attr('disabled');
-                            if (prop === "disabled"){
-                                return;
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
                             }
-                            let url = `http://127.0.0.1:8000/course/api/pages/${'?title=' + theme}`;
-                            fetch(url).
-                            then(function(article){
-                                return article.json();
-                            }).then(function(json){
-                                articlePage.innerHTML = json.text;
-                                console.log(json);
-                            });
-                        });
+                        }
                     }
+                    return cookieValue;
+                };
+
+                $('#passed-button').on('click', function () {
+                    let url = `http://127.0.0.1:8000/course/api/content/`;
+                    obj = {
+                        'title': $('#passed-button').attr('name')
+                    };
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                        "X-CSRFToken": getCookie("csrftoken"),
+                        'Content-Type': 'application/json;charset=utf-8'
+                        },
+                        body: JSON.stringify(obj)
+                    }).then(res => {
+                        initialUpdate($('#passed-button').attr('name'));
+                    });
                 });
 
-                $('#' + {{ coursename|safe }}).click();
+                function updatePassedButton(flag){
+                    $("#passed-button").prop("disabled", flag);
+                    $("#passed-button").removeClass();
+                    if (flag){
+                        $("#passed-button").addClass('btn btn-secondary');
+                    }
+                    else{
+                        $("#passed-button").addClass('btn btn-success');
+                    }
+                }
+
+                function updatePassedSpan(flag){
+                    $("#passed-span").removeClass();
+                    if (flag){
+                        $("#passed-span p").html("Пройдено");
+                        $("#passed-span").addClass("badge badge-success m-1");
+                    }
+                    else{
+                        $("#passed-span p").html("В прогрессе");
+                        $("#passed-span").addClass("badge badge-primary m-1");
+                    }
+                }
+
+                function updateMenu(){
+                    let pagesUrl = 'http://127.0.0.1:8000/course/api/content/';
+                    
+                    fetch(pagesUrl).then(function(elem){
+                        return elem.json();
+                    }).then(function(res){
+                        for (let title of res.map(x => x.category.title)){
+                            $('#' + title).empty();
+                        }
+
+                        for (let el of res){
+                            $('#' + el.category.title).append(`<li><a id="${el.title}" href="#">${el.name}</a></li>`);
+                            $('#' + el.title).attr("disabled", !el.is_available);
+                        }
+
+                        let themes = res.map(x => x.title);
+                        for (let theme of themes){
+                            $('#' + theme).on('click', function () {
+                                let prop = $('#' + theme).attr('disabled');
+                                if (prop === "disabled"){
+                                    return;
+                                }
+                                else{
+                                    updateContent(theme);
+                                }
+                            });
+                        }
+                    });
+                }
+                
+                function updateContent(theme){
+                    let articlePage = document.getElementById('main-text');
+                    let url = `http://127.0.0.1:8000/course/api/pages/${'?title=' + theme}`;
+                    fetch(url).then(function(article){
+                        return article.json();
+                    }).then(function(json){
+                        articlePage.innerHTML = json.text;
+                        updatePassedButton(json.is_passed);
+                        updatePassedSpan(json.is_passed);
+                        $('#passed-button').attr('name', json.title);
+                        console.log(json);
+                    });
+                }
+
+                function initialUpdate(courseName){
+                    updateMenu();
+
+                    if (courseName != ''){
+                        updateContent(courseName);
+                    }
+                    else{
+                        updateContent('startpage');
+                    }
+                }
+
+                initialUpdate('{{ coursename|safe }}');
             });
          </script>
+        {% if request.get_full_path != '/password_reset/done/' and request.get_full_path != '/login' and request.get_full_path != '/password_reset' and request.get_full_path != '/check_in' %}
+            {% include 'bot/index.html' %}
+        {% endif %}
+        
+        {% if request.get_full_path == '/home' %}
+            {% include 'bot/settings_bot.html' %}
+        {% endif %}
     </body>
 </html>

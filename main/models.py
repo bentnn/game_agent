@@ -44,7 +44,7 @@ class AboutUser(models.Model):
 	avatar = models.ImageField(upload_to="Avatars", blank=True)
 	subs = models.ManyToManyField(User, default=[], related_name="subs_to", blank=True)
 	achievements = models.ManyToManyField(Achievement, default=[], related_name="achieve_owner", blank=True)
-	passed_courses = models.ManyToManyField(Articles, default=[], blank=True)
+	passed_courses = models.ManyToManyField(Articles, related_name="users_set", default=[], blank=True)
 	activity = models.TextField(default='{}')
 	skills = models.TextField(default='{}')
 	inventory = models.ManyToManyField(GameItems, default=[], related_name="item_owner", blank=True)

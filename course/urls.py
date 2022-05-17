@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from course.views import ArticleAPIView, TestingAPIView
+from course.views import ArticleAPIView, TestingAPIView, MenuArticleAPIView
 
 urlpatterns = [
     path('', views.index, name='course'),
@@ -10,5 +10,6 @@ urlpatterns = [
     path('api/pages/', views.ArticleAPIView.as_view(), name='pages'),
     path('api/testcode/', views.TestingAPIView.as_view(), name='test'),
     path('api/taskinfo/<str:task_id>', views.RequiredCoursesAPIView.as_view(), name='testinfo'),
-    path('api/taskinfo/', views.RequiredCoursesAPIView.as_view(), name='testinfo')
+    path('api/taskinfo/', views.RequiredCoursesAPIView.as_view(), name='testinfo'),
+    path('api/content/', views.MenuArticleAPIView.as_view(), name='menuinfo')
 ]

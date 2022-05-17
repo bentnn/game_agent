@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Articles, Categories, Tasks
 from main.models import AboutUser
-from .serializers import ArticlesSerializer, TasksSerializer
+from .serializers import ArticlesSerializer, TasksSerializer, MenuArticlesSerializer
 from course import course_manager, serializers
 from .testing_manager import CodeExecutor
 from django.http import JsonResponse
@@ -23,12 +23,28 @@ class ArticleAPIView(APIView):
             title = request.query_params["title"]
             if title is not None:
                 article = Articles.objects.get(title=title)
-                article_data = ArticlesSerializer(article)
+                article_data = ArticlesSerializer(article, context={'user': request.user})
         except Exception:
             articles = self.get_queryset()
-            article_data = ArticlesSerializer(articles, many=True)
+            article_data = ArticlesSerializer(articles, many=True, context={'user': request.user})
         
         return Response(article_data.data)
+
+class MenuArticleAPIView(APIView):
+    serializer_class = MenuArticlesSerializer
+
+    def get_queryset(self):
+        articles = Articles.objects.all()
+        return articles
+
+    def get(self, request):
+        articles = self.get_queryset()
+        article_data = MenuArticlesSerializer(articles, many=True, context={'user': request.user, 'is_superuser': request.user.is_superuser})
+        return Response(article_data.data)
+    
+    def post(self, request, format = None):
+        AboutUser.objects.get(user=request.user).passed_courses.add(Articles.objects.get(title=request.data.get("title")))
+        return JsonResponse({'success': 'success'})
 
 class TestingAPIView(APIView):
     def post(self, request, format = None):
@@ -68,18 +84,8 @@ class RequiredCoursesAPIView(APIView):
 @login_required(login_url='login')
 def index(request, title = ''):
     print(title)
-    categories = Categories.objects.all().order_by('priority').values_list()
-    values = {}
-    user = request.user
-    for category in categories:
-        values.update({(category[1], category[2]): [(elem, course_manager.check_user(elem, request.user, request.user.is_superuser)) for elem in Articles.objects.filter(category = category[0])]})
-    return render(request, 'course/index.html', {'categories': values, 'coursename': title})
-
-
-
-@login_required(login_url='login')
-def coursepage(request, name):
-    return render(request, f'course/content/pages/{name}.html')
+    categories = Categories.objects.all().order_by('priority').values()
+    return render(request, 'course/content/index.html', {'categories': categories, 'coursename': title})
 
 
 @login_required(login_url='login')
