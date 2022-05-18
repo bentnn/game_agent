@@ -19,59 +19,69 @@
 	</div>
 	
 
-	<h3>Frames</h3>
-
-	<div class="row p-2">
-		<div class="col-12">
-			<div class="row">
-				<div class="col-3 mb-4">
+	<h3>Предметы</h3>
+	<div class="p-2" style="overflow-y: scroll; overflow-x: hidden; height: calc(100vh - 200px);">
+		<h2>Frames:</h2>
+		{% for item_in_row in frames %}
+		<div class="row">
+			{% for item in item_in_row %}
+			<div class="col-sm mb-4 p-3 d-flex align-items-stretch">
+				<div class="card bg-dark m-3">
 					<div class="card bg-dark">
 						<div class="card-header">
 							<img 
-								src="{% static 'img/shop/ZqyQWfh.png' %}"
-								alt="Нахвание" 
-								class="img-fluid mx-auto d-block">
+								src="{% static item.image %}"
+								alt="{{ item.name }}"
+								class="img-fluid mx-auto d-block"
+								style="max-height: 25vh; max-width: 25vw; min-height: 25vh; min-width: 25vw;">
 						</div>
 						<div class="card-body">
 							<div class="container">
-								<h3 class="text-light">Professor</h3>
-								<p class="text-light"><b>0</b> Руб.</p>
-								<a href="#" class="col-6 btn btn-light">Купить</a>
+								<h3 class="text-light">{{ item.name }}</h3>
+								<p class="text-light"><b>{{ item.price }}</b> Руб.</p>
+									{% if item is None %}
+									<a href="{% url 'buy_item' 20000 %}" class="col-10 mx-auto btn btn-light">Использовать</a>
+									{% else %}
+									<a href="{% url 'buy_item' item.id %}" class="col-10 mx-auto btn btn-light">Использовать</a>
+									{% endif %}
 							</div>
 						</div>
 					</div>
 				</div>
-				
 			</div>
+			{% endfor %}
 		</div>
+		{% endfor %}
+		<h2>Backgrounds:</h2>
+		{% for item_in_row in backs %}
+		<div class="row">
+			{% for item in item_in_row %}
+			<div class="col-sm mb-4 p-3 d-flex align-items-stretch">
+				<div class="card bg-dark m-3">
+					<div class="card bg-dark">
+						<div class="card-header">
+							<img 
+								src="{% static item.image %}"
+								alt="{{ item.name }}"
+								class="img-fluid mx-auto d-block"
+								style="max-height: 25vh; max-width: 25vw; min-height: 25vh; min-width: 25vw;">
+						</div>
+						<div class="card-body">
+							<div class="container">
+								<h3 class="text-light">{{ item.name }}</h3>
+								<p class="text-light"><b>{{ item.price }}</b> Руб.</p>
+									{% if item is None %}
+									<a href="{% url 'buy_item' 10000 %}" class="col-10 mx-auto btn btn-light">Использовать</a>
+									{% else %}
+									<a href="{% url 'buy_item' item.id %}" class="col-10 mx-auto btn btn-light">Использовать</a>
+									{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		{% endfor %}
 	</div>
-	<!-- {% for i in frames %}
-		<div style="border: 1px solid black">
-			<p>{{ i.name }}</p>
-			<img src="{{ i.image.url }}" style="width: 100px">
-			<p>Price: {{ i.price }}</p>
-			<a href="{% url 'buy_item' i.id %}">Buy</a>
-		</div>
-		<br>
-	{% endfor %}
-
-	<h3>Backs</h3>
-	{% for i in backs %}
-		<div style="border: 1px solid black">
-			<p>{{ i.name }}</p>
-			<img src="{{ i.image.url }}" style="width: 100px">
-			<p>Price: {{ i.price }}</p>
-			<a href="{% url 'buy_item' i.id %}">Buy</a>
-		</div>
-		<br>
-	{% endfor %}
-
-	<h3>In inventory</h3>
-	{% for i in inventory %}
-		<div style="border: 1px solid black">
-			<p>{{ i.name }}</p>
-			<img src="{{ i.image.url }}" style="width: 100px">
-		</div>
-		<br>
-	{% endfor %} -->
 {% endblock %}

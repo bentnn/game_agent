@@ -1,9 +1,11 @@
+import json
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.contrib.auth.decorators import login_required
+from requests import Session
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Articles, Categories, Tasks, JsTests, GoTests, PythonTests
+from .models import Articles, Categories, Tasks, JsTests, GoTests, PythonTests, Sessions
 from main.models import AboutUser
 from .serializers import ArticlesSerializer, TasksSerializer, MenuArticlesSerializer
 from course import course_manager, serializers
@@ -55,20 +57,24 @@ class TestingAPIView(APIView):
         taskId = request.data.get("task")
         if (lang == "JavaScript"):
             test = JsTests.objects.get(task=taskId)
-            print(test.test)
             test_res = CodeExecutor.jsCodeExecute(code, test.test, taskId)
+            if (not request.user.is_superuser):
+                session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=taskId, user=AboutUser.objects.get(user=request.user))
+                session.save()
             return JsonResponse(test_res)
         elif (lang == "Python"):
             test = PythonTests.objects.get(task=taskId)
-            print(test.test)
             test_res = CodeExecutor.pythonCodeExecute(code, test.test, taskId)
-            print(test_res)
+            if (not request.user.is_superuser):
+                session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=taskId, user=AboutUser.objects.get(user=request.user))
+                session.save()
             return JsonResponse(test_res)
         elif (lang == "Go"):
             test = GoTests.objects.get(task=taskId)
-            print(test.test)
             test_res = CodeExecutor.goCodeExecute(code, test.test, taskId)
-            print(test_res)
+            if (not request.user.is_superuser):
+                session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=taskId, user=AboutUser.objects.get(user=request.user))
+                session.save()
             return JsonResponse(test_res)
         else:
             return JsonResponse({'output': 'None', 'error': 'None'})

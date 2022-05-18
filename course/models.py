@@ -50,6 +50,13 @@ class Tasks(models.Model):
     def __str__(self):
         return self.title
 
+class Sessions(models.Model):
+    task = models.ForeignKey(Tasks, to_field='taskId',on_delete = models.CASCADE)
+    user = models.ForeignKey('main.AboutUser', on_delete = models.CASCADE)
+    lang = models.CharField('lang', max_length = 20)
+    testResult = models.TextField('result')
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+
 class JsTests(models.Model):
     task = models.OneToOneField(Tasks, to_field='taskId',on_delete = models.CASCADE)
     test = models.TextField('Test')
