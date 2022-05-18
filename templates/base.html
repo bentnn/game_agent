@@ -27,7 +27,7 @@
     
     </head>
     <body>
-        
+	{% include 'messages.html' %}
         <div class="wrapper">
             <!-- Sidebar Holder -->
             {% if request.get_full_path != '/profile/'|add:user.username|add:'/inventory' and request.get_full_path != '/game_shop' and request.get_full_path != '/search_user' and request.get_full_path != '/settings/change_password' and request.get_full_path != '/settings' and request.get_full_path != '/course/tasks' and request.get_full_path != '/profile/'|add:user.username and request.get_full_path != '/home' and request.get_full_path != '/' and request.get_full_path != '/password_reset/done/' and request.get_full_path != '/login' and request.get_full_path != '/password_reset' and request.get_full_path != '/check_in' %}
