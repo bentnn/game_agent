@@ -29,6 +29,17 @@ def get_needed_exp(level: int):
 		else round(first_level * 1.15**(level - 1))
 
 
+def add_exp(about_user: AboutUser, exp: int, request=None):
+	about_user.exp_to_level += exp
+	needed_exp = get_needed_exp(about_user.level + 1)
+	if about_user.exp_to_level >= needed_exp:
+		about_user.exp_to_level -= needed_exp
+		about_user.level += 1
+		if request:
+			messages.success(request, f"Ого! Ты повысил уровень до {about_user.level}!")
+	about_user.save()
+
+
 def email_is_valid(email: str):
 	regex = r'^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 	return re.fullmatch(regex, email)

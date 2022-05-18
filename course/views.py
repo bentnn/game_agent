@@ -11,7 +11,9 @@ from .serializers import ArticlesSerializer, TasksSerializer, MenuArticlesSerial
 from course import course_manager, serializers
 from .testing_manager import CodeExecutor
 from django.http import JsonResponse
-
+from django.contrib import messages
+import json
+from main.activity_func import norm_activity, add_activity, give_reward
 
 class ArticleAPIView(APIView):
     serializer_class = ArticlesSerializer
@@ -43,12 +45,17 @@ class MenuArticleAPIView(APIView):
         articles = self.get_queryset()
         article_data = MenuArticlesSerializer(articles, many=True, context={'user': request.user, 'is_superuser': request.user.is_superuser})
         return Response(article_data.data)
-    
-    def post(self, request, format = None):
-        if (request.user.is_superuser):
-            return JsonResponse({'success': 'success'})
-        AboutUser.objects.get(user=request.user).passed_courses.add(Articles.objects.get(title=request.data.get("title")))
+
+    def post(self, request, format=None):
+        if not request.user.is_superuser:
+            about_user = AboutUser.objects.get(user=request.user)
+            article = Articles.objects.get(title=request.data.get("title"))
+            about_user.passed_courses.add(article)
+            give_reward(about_user, article, request)
+            # return JsonResponse({'success': 'success'})
+        # AboutUser.objects.get(user=request.user).passed_courses.add(Articles.objects.get(title=request.data.get("title")))
         return JsonResponse({'success': 'success'})
+
 
 class TestingAPIView(APIView):
     def post(self, request, format = None):
@@ -78,6 +85,7 @@ class TestingAPIView(APIView):
             return JsonResponse(test_res)
         else:
             return JsonResponse({'output': 'None', 'error': 'None'})
+
 
 class RequiredCoursesAPIView(APIView):
     serializer_class = TasksSerializer
