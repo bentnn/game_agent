@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block main %}
-	{% include 'messages.html' %}
 
 	<div class="col-12">
 
@@ -22,66 +21,45 @@
 	<h3>Предметы</h3>
 	<div class="p-2" style="overflow-y: scroll; overflow-x: hidden; height: calc(100vh - 200px);">
 		<h2>Frames:</h2>
-		{% for item_in_row in frames %}
-		<div class="row">
-			{% for item in item_in_row %}
-			<div class="col-sm mb-4 p-3 d-flex align-items-stretch">
-				<div class="card bg-dark m-3">
-					<div class="card bg-dark">
-						<div class="card-header">
-							<img 
-								src="{% static item.image %}"
-								alt="{{ item.name }}"
-								class="img-fluid mx-auto d-block"
-								style="max-height: 25vh; max-width: 25vw; min-height: 25vh; min-width: 25vw;">
-						</div>
+		{% if not frames|length %}
+			<div class="container">
+				<p class="text-center">Нет рамок</p>
+			</div>
+		{% endif %}
+		<div class="row row-cols-1 row-cols-md-2 g-2">
+			{% for i in frames %}
+				<div class="col">
+					<div class="card" style="width: 280px">
+						<img src="{{ i.image.url }}" class="card-img-top">
 						<div class="card-body">
-							<div class="container">
-								<h3 class="text-light">{{ item.name }}</h3>
-								<p class="text-light"><b>{{ item.price }}</b> Руб.</p>
-									{% if item is None %}
-									<a href="{% url 'buy_item' 20000 %}" class="col-10 mx-auto btn btn-light">Использовать</a>
-									{% else %}
-									<a href="{% url 'buy_item' item.id %}" class="col-10 mx-auto btn btn-light">Использовать</a>
-									{% endif %}
-							</div>
+							<h5 class="card-title">{{ i.name }}</h5>
+							<p class="card-text">Цена: {{ i.price }}</p>
+							<a href="{% url 'buy_item' i.id %}" class="btn btn-dark">Купить</a>
 						</div>
 					</div>
 				</div>
-			</div>
 			{% endfor %}
 		</div>
-		{% endfor %}
+
 		<h2>Backgrounds:</h2>
-		{% for item_in_row in backs %}
-		<div class="row">
-			{% for item in item_in_row %}
-			<div class="col-sm mb-4 p-3 d-flex align-items-stretch">
-				<div class="card bg-dark m-3">
-					<div class="card bg-dark">
-						<div class="card-header">
-							<img 
-								src="{% static item.image %}"
-								alt="{{ item.name }}"
-								class="img-fluid mx-auto d-block"
-								style="max-height: 25vh; max-width: 25vw; min-height: 25vh; min-width: 25vw;">
-						</div>
+		{% if not backs|length %}
+			<div class="container">
+				<p class="text-center">Нет фонов</p>
+			</div>
+		{% endif %}
+		<div class="row row-cols-1 row-cols-md-2 g-2">
+			{% for i in backs %}
+				<div class="col">
+					<div class="card" style="width: 280px">
+						<img src="{{ i.image.url }}" class="card-img-top">
 						<div class="card-body">
-							<div class="container">
-								<h3 class="text-light">{{ item.name }}</h3>
-								<p class="text-light"><b>{{ item.price }}</b> Руб.</p>
-									{% if item is None %}
-									<a href="{% url 'buy_item' 10000 %}" class="col-10 mx-auto btn btn-light">Использовать</a>
-									{% else %}
-									<a href="{% url 'buy_item' item.id %}" class="col-10 mx-auto btn btn-light">Использовать</a>
-									{% endif %}
-							</div>
+							<h5 class="card-title">{{ i.name }}</h5>
+							<p class="card-text">Цена: {{ i.price }}</p>
+							<a href="{% url 'buy_item' i.id %}" class="btn btn-dark">Купить</a>
 						</div>
 					</div>
 				</div>
-			</div>
 			{% endfor %}
 		</div>
-		{% endfor %}
 	</div>
 {% endblock %}

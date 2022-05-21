@@ -187,35 +187,8 @@ def profile(request, username):
 def inventory(request, username):
 	user = get_object_or_404(User, username=username)
 	about_user = AboutUser.objects.get(user=user)
-	frames = about_user.inventory.filter(type='fr').values()
-	backs = about_user.inventory.filter(type='bg').values()
-	framesSplittedInColumns = []
-	backsSplittedInColumns = []
-	for i in range(0, len(frames), 3):
-		row = []
-		row.append(frames[i])
-		if ((i + 1) >= len(frames)):
-			row.append(None)
-		else:
-			row.append(frames[i + 1])
-		if ((i + 2) >= len(frames)):
-			row.append(None)
-		else:
-			row.append(frames[i + 2])
-		framesSplittedInColumns.append(row)
-	
-	for i in range(0, len(backs), 3):
-		row = []
-		row.append(backs[i])
-		if ((i + 1) >= len(backs)):
-			row.append(None)
-		else:
-			row.append(backs[i + 1])
-		if ((i + 2) >= len(backs)):
-			row.append(None)
-		else:
-			row.append(backs[i + 2])
-		backsSplittedInColumns.append(row)
+	# frames = about_user.inventory.filter(type='fr').values()
+	# backs = about_user.inventory.filter(type='bg').values()
 
 	return render(
 		request, "inventory.html",
@@ -223,9 +196,7 @@ def inventory(request, username):
 			"about_user": about_user,
 			"frames": about_user.inventory.filter(type='fr'),
 			"backs": about_user.inventory.filter(type='bg'),
-			"avatar": frame_layering(about_user.avatar, about_user.active_frame),
-			"frames": framesSplittedInColumns,
-			"backs": backsSplittedInColumns
+			"avatar": frame_layering(about_user.avatar, about_user.active_frame)
 		}
 	)
 
@@ -258,45 +229,15 @@ def set_item(request, id):
 def game_shop(request):
 	about_request = AboutUser.objects.get(user=request.user)
 	invent = list(map(lambda x: x.id, about_request.inventory.all()))
-	frames = GameItems.objects.filter(type='fr').exclude(id__in = invent).values()
-	backs = GameItems.objects.filter(type='bg').exclude(id__in = invent).values()
-	framesSplittedInColumns = []
-	backsSplittedInColumns = []
-	for i in range(0, len(frames), 3):
-		row = []
-		row.append(frames[i])
-		if ((i + 1) >= len(frames)):
-			row.append(None)
-		else:
-			row.append(frames[i + 1])
-		if ((i + 2) >= len(frames)):
-			row.append(None)
-		else:
-			row.append(frames[i + 2])
-		framesSplittedInColumns.append(row)
-	
-	for i in range(0, len(backs), 3):
-		row = []
-		row.append(backs[i])
-		if ((i + 1) >= len(backs)):
-			row.append(None)
-		else:
-			row.append(backs[i + 1])
-		if ((i + 2) >= len(backs)):
-			row.append(None)
-		else:
-			row.append(backs[i + 2])
-		backsSplittedInColumns.append(row)
+	frames = GameItems.objects.filter(type='fr').exclude(id__in=invent)
+	backs = GameItems.objects.filter(type='bg').exclude(id__in=invent)
 
 	return render(
 		request, 'shop.html',
 		{
 			'about_user': about_request,
-			'inventory': invent,
 			'frames': frames,
 			'backs': backs,
-			"frames": framesSplittedInColumns,
-			"backs": backsSplittedInColumns
 		}
 	)
 
@@ -313,7 +254,7 @@ def buy_item(request, id):
 		about_request.money -= item.price
 		about_request.inventory.add(item)
 		about_request.save()
-	return game_shop(request)
+	return redirect('game_shop')
 
 
 @login_required(login_url='login')
