@@ -36,8 +36,8 @@ def home(request):
 
 
 @login_required(login_url='login')
-def post_view(request, id):
-	post = get_object_or_404(Post, id=id)
+def post_view(request, post_id):
+	post = get_object_or_404(Post, id=post_id)
 	return render(request, 'post_page.html', {'post': post})
 
 
@@ -187,35 +187,8 @@ def profile(request, username):
 def inventory(request, username):
 	user = get_object_or_404(User, username=username)
 	about_user = AboutUser.objects.get(user=user)
-	frames = about_user.inventory.filter(type='fr').values()
-	backs = about_user.inventory.filter(type='bg').values()
-	framesSplittedInColumns = []
-	backsSplittedInColumns = []
-	for i in range(0, len(frames), 3):
-		row = []
-		row.append(frames[i])
-		if ((i + 1) >= len(frames)):
-			row.append(None)
-		else:
-			row.append(frames[i + 1])
-		if ((i + 2) >= len(frames)):
-			row.append(None)
-		else:
-			row.append(frames[i + 2])
-		framesSplittedInColumns.append(row)
-	
-	for i in range(0, len(backs), 3):
-		row = []
-		row.append(backs[i])
-		if ((i + 1) >= len(backs)):
-			row.append(None)
-		else:
-			row.append(backs[i + 1])
-		if ((i + 2) >= len(backs)):
-			row.append(None)
-		else:
-			row.append(backs[i + 2])
-		backsSplittedInColumns.append(row)
+	# frames = about_user.inventory.filter(type='fr').values()
+	# backs = about_user.inventory.filter(type='bg').values()
 
 	return render(
 		request, "inventory.html",
@@ -223,25 +196,24 @@ def inventory(request, username):
 			"about_user": about_user,
 			"frames": about_user.inventory.filter(type='fr'),
 			"backs": about_user.inventory.filter(type='bg'),
-			"avatar": frame_layering(about_user.avatar, about_user.active_frame),
-			"frames": framesSplittedInColumns,
-			"backs": backsSplittedInColumns
+			"avatar": frame_layering(about_user.avatar, about_user.active_frame)
 		}
 	)
 
 
 @login_required(login_url='login')
-def set_item(request, id):
+def set_item(request, item_id):
 	"""
-	:param id: 100000 -> null frame, 200000 - null back
+	:param request:
+	:param item_id: 100000 -> null frame, 200000 - null back
 	"""
 	about_request = AboutUser.objects.get(user=request.user)
-	if id == 100000:
+	if item_id == 100000:
 		about_request.active_frame = None
-	elif id == 200000:
+	elif item_id == 200000:
 		about_request.active_back = None
 	else:
-		item = about_request.inventory.filter(id=id)
+		item = about_request.inventory.filter(id=item_id)
 		if not item.exists():
 			return error_404(request, None)
 		item = item.first()
@@ -258,53 +230,23 @@ def set_item(request, id):
 def game_shop(request):
 	about_request = AboutUser.objects.get(user=request.user)
 	invent = list(map(lambda x: x.id, about_request.inventory.all()))
-	frames = GameItems.objects.filter(type='fr').exclude(id__in = invent).values()
-	backs = GameItems.objects.filter(type='bg').exclude(id__in = invent).values()
-	framesSplittedInColumns = []
-	backsSplittedInColumns = []
-	for i in range(0, len(frames), 3):
-		row = []
-		row.append(frames[i])
-		if ((i + 1) >= len(frames)):
-			row.append(None)
-		else:
-			row.append(frames[i + 1])
-		if ((i + 2) >= len(frames)):
-			row.append(None)
-		else:
-			row.append(frames[i + 2])
-		framesSplittedInColumns.append(row)
-	
-	for i in range(0, len(backs), 3):
-		row = []
-		row.append(backs[i])
-		if ((i + 1) >= len(backs)):
-			row.append(None)
-		else:
-			row.append(backs[i + 1])
-		if ((i + 2) >= len(backs)):
-			row.append(None)
-		else:
-			row.append(backs[i + 2])
-		backsSplittedInColumns.append(row)
+	frames = GameItems.objects.filter(type='fr').exclude(id__in=invent)
+	backs = GameItems.objects.filter(type='bg').exclude(id__in=invent)
 
 	return render(
 		request, 'shop.html',
 		{
 			'about_user': about_request,
-			'inventory': invent,
 			'frames': frames,
 			'backs': backs,
-			"frames": framesSplittedInColumns,
-			"backs": backsSplittedInColumns
 		}
 	)
 
 
 @login_required(login_url='login')
-def buy_item(request, id):
+def buy_item(request, item_id):
 	about_request = AboutUser.objects.get(user=request.user)
-	item = get_object_or_404(GameItems, id=id)
+	item = get_object_or_404(GameItems, id=item_id)
 	if len(about_request.inventory.filter(id=item.id)) != 0:
 		messages.error(request, "У вас уже есть данный айтем")
 	elif item.price > about_request.money:
@@ -313,7 +255,7 @@ def buy_item(request, id):
 		about_request.money -= item.price
 		about_request.inventory.add(item)
 		about_request.save()
-	return game_shop(request)
+	return redirect('game_shop')
 
 
 @login_required(login_url='login')
