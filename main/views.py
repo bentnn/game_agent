@@ -36,8 +36,8 @@ def home(request):
 
 
 @login_required(login_url='login')
-def post_view(request, id):
-	post = get_object_or_404(Post, id=id)
+def post_view(request, post_id):
+	post = get_object_or_404(Post, id=post_id)
 	return render(request, 'post_page.html', {'post': post})
 
 
@@ -202,17 +202,18 @@ def inventory(request, username):
 
 
 @login_required(login_url='login')
-def set_item(request, id):
+def set_item(request, item_id):
 	"""
-	:param id: 100000 -> null frame, 200000 - null back
+	:param request:
+	:param item_id: 100000 -> null frame, 200000 - null back
 	"""
 	about_request = AboutUser.objects.get(user=request.user)
-	if id == 100000:
+	if item_id == 100000:
 		about_request.active_frame = None
-	elif id == 200000:
+	elif item_id == 200000:
 		about_request.active_back = None
 	else:
-		item = about_request.inventory.filter(id=id)
+		item = about_request.inventory.filter(id=item_id)
 		if not item.exists():
 			return error_404(request, None)
 		item = item.first()
@@ -243,9 +244,9 @@ def game_shop(request):
 
 
 @login_required(login_url='login')
-def buy_item(request, id):
+def buy_item(request, item_id):
 	about_request = AboutUser.objects.get(user=request.user)
-	item = get_object_or_404(GameItems, id=id)
+	item = get_object_or_404(GameItems, id=item_id)
 	if len(about_request.inventory.filter(id=item.id)) != 0:
 		messages.error(request, "У вас уже есть данный айтем")
 	elif item.price > about_request.money:

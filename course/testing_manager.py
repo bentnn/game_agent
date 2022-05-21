@@ -3,6 +3,7 @@ import os
 import shutil
 from platform import system
 
+
 class Executor:
     def runPython(testing_file):
     # create a pipe to a child process
@@ -28,6 +29,7 @@ class Executor:
         s = subprocess.run("node {0}".format(testing_file), capture_output = True)
         # decode s to a normal string
         return s
+
 
 class Manager:
     def jsTestFileCreator(code, test, dirname):
@@ -68,6 +70,7 @@ class Manager:
             f.write(code)
         # shutil.rmtree(testingDir)
         return '"' + testFile + '"'
+
 
 class CodeExecutor:
     def jsCodeExecute(code, test, dirname):
