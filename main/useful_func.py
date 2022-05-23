@@ -10,6 +10,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from django.contrib.auth.models import User
 from .models import AboutUser, Achievement
+from course.models import Articles
 from django.contrib import messages
 
 
@@ -110,25 +111,40 @@ def set_change(request, atr: str):
 
 def check_achieve(request):
 	about_user = AboutUser.objects.get(user=request.user)
+	activity = json.loads(about_user.activity)
 	skills = json.dumps(about_user.skills)
 	achievements = list(Achievement.objects.all())
 	for i in achievements:
 		try:
 			if eval(i.condition):
-				give_achieve(request, about_user=about_user, achievement=i)
+				give_achieve(request, about_user=about_user, achieve_name=i.name)
 		except Exception as e:
 			print(f"Error, can't give achievement '{i.name}': {e}")
 
 
-def give_achieve(request, **kwargs):
+def give_achieve(request=None, **kwargs):
 	"""
 
 	:param request: просто реквест
 	:param kwargs: achieve_name or achievement
 	"""
-	about_user = kwargs.get('about_user') or AboutUser.objects.get(user=request.user)
-	achievement = kwargs.get('achievement') or Achievement.objects.get(name=kwargs.get('achieve_name'))
-	if not about_user.achievements.filter(achievement).exists():
+	about_user = kwargs.get('about_user') or \
+					AboutUser.objects.get(user=request.user if request is not None else kwargs.get('user'))
+	try:
+		achievement = Achievement.objects.get(name=kwargs.get('achieve_name'))
+	except Achievement.DoesNotExist:
+		print(f"Достижения '{kwargs.get('achieve_name')}' нет в базе")
+		return
+	if not about_user.achievements.filter(id=achievement.id).exists():
 		about_user.achievements.add(achievement)
-		messages.success(request,
-						 f"вы заработали достижение '{achievement.name}'")
+		about_user.money += achievement.money
+		about_user.save()
+		if request:
+			messages.success(request,
+								f"Вы заработали достижение '{achievement.name}' "
+								f"за действие: {achievement.info}")
+			messages.success(request,
+								f"За достижение {achievement.name} "
+								f"вы получили монеты: {achievement.money}")
+		if not about_user.achievements.filter(name='first money').exists():
+			give_achieve(about_user=about_user, achieve_name='first money')
