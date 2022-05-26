@@ -1,1 +1,3 @@
-console.log('25')
+import os
+
+print(os.dirname)
