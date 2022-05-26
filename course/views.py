@@ -13,7 +13,9 @@ from .testing_manager import CodeExecutor
 from django.http import JsonResponse
 from django.contrib import messages
 import json
-from main.activity_func import norm_activity, add_activity, give_reward
+from main.activity_func import give_reward
+from main.useful_func import check_achieve
+
 
 class ArticleAPIView(APIView):
     serializer_class = ArticlesSerializer
@@ -34,6 +36,7 @@ class ArticleAPIView(APIView):
         
         return Response(article_data.data)
 
+
 class MenuArticleAPIView(APIView):
     serializer_class = MenuArticlesSerializer
 
@@ -52,35 +55,35 @@ class MenuArticleAPIView(APIView):
             article = Articles.objects.get(title=request.data.get("title"))
             about_user.passed_courses.add(article)
             give_reward(about_user, article, request)
-            # return JsonResponse({'success': 'success'})
-        # AboutUser.objects.get(user=request.user).passed_courses.add(Articles.objects.get(title=request.data.get("title")))
+            check_achieve(request)
         return JsonResponse({'success': 'success'})
 
 
 class TestingAPIView(APIView):
-    def post(self, request, format = None):
+
+    def post(self, request, format=None):
         lang = request.data.get("lang")
         code = request.data.get("code")
-        taskId = request.data.get("task")
-        if (lang == "JavaScript"):
-            test = JsTests.objects.get(task=taskId)
-            test_res = CodeExecutor.jsCodeExecute(code, test.test, taskId)
-            if (not request.user.is_superuser):
-                session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=taskId, user=AboutUser.objects.get(user=request.user))
+        task_id = request.data.get("task")
+        if lang == "JavaScript":
+            test = JsTests.objects.get(task=task_id)
+            test_res = CodeExecutor.jsCodeExecute(code, test.test, task_id)
+            if not request.user.is_superuser:
+                session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=task_id, user=AboutUser.objects.get(user=request.user))
                 session.save()
             return JsonResponse(test_res)
-        elif (lang == "Python"):
-            test = PythonTests.objects.get(task=taskId)
-            test_res = CodeExecutor.pythonCodeExecute(code, test.test, taskId)
-            if (not request.user.is_superuser):
-                session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=taskId, user=AboutUser.objects.get(user=request.user))
+        elif lang == "Python":
+            test = PythonTests.objects.get(task=task_id)
+            test_res = CodeExecutor.pythonCodeExecute(code, test.test, task_id)
+            if not request.user.is_superuser:
+                session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=task_id, user=AboutUser.objects.get(user=request.user))
                 session.save()
             return JsonResponse(test_res)
-        elif (lang == "Go"):
-            test = GoTests.objects.get(task=taskId)
-            test_res = CodeExecutor.goCodeExecute(code, test.test, taskId)
-            if (not request.user.is_superuser):
-                session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=taskId, user=AboutUser.objects.get(user=request.user))
+        elif lang == "Go":
+            test = GoTests.objects.get(task=task_id)
+            test_res = CodeExecutor.goCodeExecute(code, test.test, task_id)
+            if not request.user.is_superuser:
+                session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=task_id, user=AboutUser.objects.get(user=request.user))
                 session.save()
             return JsonResponse(test_res)
         else:
@@ -94,20 +97,20 @@ class RequiredCoursesAPIView(APIView):
         tasks = Tasks.objects.all()
         return tasks
 
-    def get(self, request, task_id = ''):
+    def get(self, request, task_id=''):
         try:
-            if (task_id is not None):
-                task = Tasks.objects.get(taskId = task_id)
+            if task_id is not None:
+                task = Tasks.objects.get(taskId=task_id)
                 tasks_data = TasksSerializer(task)
-        except:
+        except Exception:
             tasks = self.get_queryset()
-            tasks_data = TasksSerializer(tasks, many = True)
+            tasks_data = TasksSerializer(tasks, many=True)
         
         return Response(tasks_data.data)
 
 
 @login_required(login_url='login')
-def index(request, title = ''):
+def index(request, title=''):
     print(title)
     categories = Categories.objects.all().order_by('priority').values()
     return render(request, 'course/content/index.html', {'categories': categories, 'coursename': title})
@@ -117,13 +120,13 @@ def index(request, title = ''):
 def tasks(request):
     tasks = list(Tasks.objects.all().order_by('created_at').values())
     for elem in tasks:
-        elem['neededThemes'] = list(Tasks.objects.get(id = elem['id']).neededThemes.all().values('name'))
+        elem['neededThemes'] = list(Tasks.objects.get(id=elem['id']).neededThemes.all().values('name'))
     themes = list(Articles.objects.all().order_by('title').values('title', 'name'))
     difficulty = Tasks.LEVEL
     return render(request, 'course/tasks/index.html', {'tasks': tasks, 'difficulties': difficulty, 'articles': themes})
 
 
 @login_required(login_url='login')
-def task(request, task_id = 0):
-    task = Tasks.objects.get(id = task_id)
+def task(request, task_id=0):
+    task = Tasks.objects.get(id=task_id)
     return render(request, 'course/tasks/taskpage.html', {'task': task})

@@ -10,4 +10,3 @@ def check_user(article, user, is_superuser):
     userCoursesSet = set([elem for elem in userInfo.passed_courses.all()])
     neededCourses = set([elem for elem in article.required.all()])
     return neededCourses.issubset(userCoursesSet)
-
