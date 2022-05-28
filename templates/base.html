@@ -24,9 +24,19 @@
         <!-- Font Awesome JS -->
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-    
+        <!-- Bootstrap Icons -->
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css"> -->
     </head>
     <body>
+        <style>
+            @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css");
+            .bi-x-lg{
+                float: right;
+                cursor: pointer;
+                font-weight: bold;
+            }
+        </style>
+
 	{% include 'messages.html' %}
         <div class="wrapper">
             <!-- Sidebar Holder -->
@@ -120,6 +130,8 @@
                 {% else %}
                 {% endif %}
                 <article id="main-text" class="article_text">
+                    <div id="mess"></div>
+                    
                     {% block main %}
                     {% endblock %}
                 </article>

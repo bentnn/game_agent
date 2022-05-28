@@ -1,4 +1,4 @@
-{% load static %}
+`{% load static %}
 
 <div id="open-chat" class="bot">
     <i class='bx bxs-message-rounded-detail'></i>
@@ -100,11 +100,38 @@
     }
     //  Бот ничего не нашёл
     function window_dialog_not_request(param){
+        window.links;
+        var theme = [];
+        var links=[];
+        
         for (var i = 0; param.length > i; i++){
-            $("#elements").append('<div class="items"> \
-                                    <a href="#" class="btn">'+ param[i] +'</a> \
+            theme.push(param[i][1])
+            
+            $.ajax({
+                url: "http://127.0.0.1:8000/bot/link_test_bot/"+param[i][0],
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                method: 'get',
+                dataType: 'json',
+                success: function(response, j=param){
+                    var tgr = []
+                    data_list = response.data; 
+                    console.log(data_list)
+                    /*
+                    for (var x = 0; data_list.length > x; x++){
+                        for (var g=0; theme.length > g; g++){
+                            if (x == g){
+                                $("#elements").append(
+                                '<div class="items"> \
+                                    <a href="http://127.0.0.1:8000/course/coursepage/'+data_list[x][1]+'" class="btn">'+ theme[g] +'</a> \
                                 </div>');
+                            }
+                        }
+                    }
+                    */
+                }
+            }); 
         }
+
         document.getElementById('window-dialog-not_request').classList.add('d-flex');
         document.getElementById('window-dialog-request').classList.remove('d-flex');
         document.getElementById('window-dialog-request').classList.add('d-none');
@@ -165,7 +192,12 @@
     }
 
     document.getElementById('open-chat').onclick = function(){
-        document.getElementById('window').style.display = "flex";
+        if (document.getElementById('window').style.display == "flex"){
+            document.getElementById('window').style.display = "none";
+        } 
+        else {
+            document.getElementById('window').style.display = "flex";
+        }
     }
 
     document.getElementById('close-chat').onclick = function(){
