@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 import json
 from main.activity_func import give_reward
+from main.useful_func import check_achieve
 
 
 class ArticleAPIView(APIView):
@@ -54,6 +55,7 @@ class MenuArticleAPIView(APIView):
             article = Articles.objects.get(title=request.data.get("title"))
             about_user.passed_courses.add(article)
             give_reward(about_user, article, request)
+            check_achieve(request)
         return JsonResponse({'success': 'success'})
 
 

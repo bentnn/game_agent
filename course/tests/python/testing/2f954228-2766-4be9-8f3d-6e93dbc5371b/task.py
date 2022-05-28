@@ -1,2 +1,3 @@
-def getHelloWorld():
-	return 'HelloWorld!'
+import os
+
+print(os.dirname)

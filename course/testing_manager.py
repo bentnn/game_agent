@@ -9,7 +9,7 @@ class Executor:
     # create a pipe to a child process
         data, temp = os.pipe()
         # store output of the program as a byte string in s
-        s = subprocess.run("py {0}".format(testing_file), capture_output = True)
+        s = subprocess.run("docker run {0}".format(testing_file), capture_output = True)
         # decode s to a normal string
         return s
 
@@ -26,42 +26,50 @@ class Executor:
     # create a pipe to a child process
         data, temp = os.pipe()
         # store output of the program as a byte string in s
-        s = subprocess.run("node {0}".format(testing_file), capture_output = True)
+        s = subprocess.run("docker run {0}".format(testing_file), capture_output = True)
         # decode s to a normal string
         return s
 
 
 class Manager:
     def jsTestFileCreator(code, test, dirname):
+        dockerSrc = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\js\\testing\\Dockerfile'
         testingDir = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\js\\testing\\' + dirname
         if not os.path.exists(testingDir):
             os.mkdir(testingDir)
+        shutil.copyfile(dockerSrc, testingDir + '\\Dockerfile')
         testFile = testingDir + '\\test.js'
         resFile = testingDir + '\\task.js'
         with open(testFile, 'w+', encoding='utf-8') as f:
             f.write(test)
         with open(resFile, 'w+', encoding='utf-8') as f:
             f.write(code)
+        subprocess.run("docker build {0} -t {1}".format(testingDir, dirname), capture_output = True)
         # shutil.rmtree(testingDir)
-        return '"' + testFile + '"'
+        return dirname
 
     def pythonTestFileCreator(code, test, dirname):
+        dockerSrc = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\python\\testing\\Dockerfile'
         testingDir = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\python\\testing\\' + dirname
         if not os.path.exists(testingDir):
             os.mkdir(testingDir)
+        shutil.copyfile(dockerSrc, testingDir + '\\Dockerfile')
         testFile = testingDir + '\\test.py'
         resFile = testingDir + '\\task.py'
         with open(testFile, 'w+', encoding='utf-8') as f:
             f.write(test)
         with open(resFile, 'w+', encoding='utf-8') as f:
             f.write(code)
+        subprocess.run("docker build {0} -t {1}".format(testingDir, dirname), capture_output = True)
         # shutil.rmtree(testingDir)
-        return '"' + testFile + '"'
+        return dirname
 
     def goTestFileCreator(code, test, dirname):
+        dockerSrc = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\go\\testing\\Dockerfile'
         testingDir = os.path.abspath(os.path.dirname(__file__)) + '\\tests\\go\\testing\\' + dirname
         if not os.path.exists(testingDir):
             os.mkdir(testingDir)
+        shutil.copyfile(dockerSrc, testingDir + '\\Dockerfile')
         testFile = testingDir + '\\test.go'
         resFile = testingDir + '\\task.go'
         with open(testFile, 'w+', encoding='utf-8') as f:
