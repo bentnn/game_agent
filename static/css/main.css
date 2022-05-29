@@ -3,6 +3,13 @@
     font-weight: bold;
 }
 
+.carousel-card{
+  min-width: 25vw;
+  max-width: 25vw;
+  min-height: 50vh;
+  max-height: 50vh;
+}
+
 .header-link {
     transition: 0.4s;
     text-decoration: none;

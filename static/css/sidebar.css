@@ -9,6 +9,13 @@ body {
     overflow-y: hidden;
 }
 
+/* .carousel-card{
+    min-width: 25vw;
+    max-width: 25vw;
+    min-height: 50vh;
+    max-height: 50vh;
+  } */
+
 p {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1em;

@@ -32,7 +32,9 @@ def about_us(request):
 
 @login_required(login_url='login')
 def home(request):
-	return render(request, 'home.html', {"posts": Post.objects.all()[:5]})
+	posts = Post.objects.all()[:9]
+	paginatedPosts = [enumerate(posts[0:3]), enumerate(posts[3:6]), enumerate(posts[6:9])]
+	return render(request, 'home.html', {"posts": enumerate(paginatedPosts)})
 
 
 @login_required(login_url='login')

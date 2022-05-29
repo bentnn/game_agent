@@ -10,90 +10,30 @@
 	<h1>Новостная лента</h1>
 	<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
 		<div class="carousel-inner">
-		  <div class="carousel-item active">
-			<div class="cards-wrapper">
-			<div class="card">
-			  <img src="https://fuzeservers.ru/wp-content/uploads/f/3/6/f36b929bb635e3502b1a87211d5a74fd.jpeg" class="card-img-top" alt="...">
-			  <div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				<a href="#" class="btn btn-primary">Go somewhere</a>
-			  </div>
-			</div>
-			<div class="card d-none d-md-block">
-			  <img src="https://fuzeservers.ru/wp-content/uploads/f/3/6/f36b929bb635e3502b1a87211d5a74fd.jpeg" class="card-img-top" alt="...">
-			  <div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				<a href="#" class="btn btn-primary">Go somewhere</a>
-			  </div>
-			</div>
-			<div class="card d-none d-md-block">
-			  <img src="https://fuzeservers.ru/wp-content/uploads/f/3/6/f36b929bb635e3502b1a87211d5a74fd.jpeg" class="card-img-top" alt="...">
-			  <div class="card-body">
-				<h5 class="card-title">Card title</h5>
-				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				<a href="#" class="btn btn-primary">Go somewhere</a>
-			  </div>
-			</div>
-		  </div>
-		  </div>
-		  <div class="carousel-item">
-			<div class="cards-wrapper">
-			  <div class="card">
-				<img src="https://fuzeservers.ru/wp-content/uploads/f/3/6/f36b929bb635e3502b1a87211d5a74fd.jpeg" class="card-img-top" alt="...">
-				<div class="card-body">
-				  <h5 class="card-title">Card title</h5>
-				  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				  <a href="#" class="btn btn-primary">Go somewhere</a>
+			{% for i, posts in posts %}
+					{% if i == 0 %}
+						<div class="carousel-item active">
+					{% else %}
+						<div class="carousel-item">
+					{% endif %}
+					<div class="cards-wrapper">
+					{% for i, post in posts %}
+						{% if i == 0 %}
+							<div class="card carousel-card">
+						{% else %}
+							<div class="card d-none d-md-block carousel-card">
+						{% endif %}
+							<img src="https://fuzeservers.ru/wp-content/uploads/f/3/6/f36b929bb635e3502b1a87211d5a74fd.jpeg" class="card-img-top" alt="..." style="min-height: 30vh; max-height: 30vh;">
+							<div class="card-body">
+							<h5 class="card-title">{{ post.title }}</h5>
+							<p class="card-text">{{ post.text|truncatechars:200 }}</p>
+							<a href="{{ post.ref }}" class="btn btn-primary">Читать</a>
+							</div>
+						</div>
+					{% endfor %}
+					</div>
 				</div>
-			  </div>
-			  <div class="card d-none d-md-block">
-				<img src="https://fuzeservers.ru/wp-content/uploads/f/3/6/f36b929bb635e3502b1a87211d5a74fd.jpeg" class="card-img-top" alt="...">
-				<div class="card-body">
-				  <h5 class="card-title">Card title</h5>
-				  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				  <a href="#" class="btn btn-primary">Go somewhere</a>
-				</div>
-			  </div>
-			  <div class="card d-none d-md-block">
-				<img src="https://rapidapi.com/chrisdel101/api/placepuppy1" class="card-img-top" alt="...">
-				<div class="card-body">
-				  <h5 class="card-title">Card title</h5>
-				  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				  <a href="#" class="btn btn-primary">Go somewhere</a>
-				</div>
-			  </div>
-			</div>
-		  </div>
-		  <div class="carousel-item">
-			<div class="cards-wrapper">
-			  <div class="card">
-				<img src="https://rapidapi.com/chrisdel101/api/placepuppy1" class="card-img-top" alt="...">
-				<div class="card-body">
-				  <h5 class="card-title">Card title</h5>
-				  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				  <a href="#" class="btn btn-primary">Go somewhere</a>
-				</div>
-			  </div>
-			  <div class="card d-none d-md-block">
-				<img src="https://rapidapi.com/chrisdel101/api/placepuppy1" class="card-img-top" alt="...">
-				<div class="card-body">
-				  <h5 class="card-title">Card title</h5>
-				  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				  <a href="#" class="btn btn-primary">Go somewhere</a>
-				</div>
-			  </div>
-			  <div class="card d-none d-md-block">
-				<img src="https://rapidapi.com/chrisdel101/api/placepuppy1" class="card-img-top" alt="...">
-				<div class="card-body">
-				  <h5 class="card-title">Card title</h5>
-				  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-				  <a href="#" class="btn btn-primary">Go somewhere</a>
-				</div>
-			  </div>
-			</div>
-		  </div>
+			{% endfor %}
 		</div>
 		<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
 		  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
