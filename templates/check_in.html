@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block main %}
+	{% include 'messages.html' %}
 
     <section id="login_form" class="mx-auto card col-lg-8 col-12 ">
         <header class="row p-2 text-center">
@@ -15,15 +16,12 @@
             </h4><br>
         </header>
 
-        {% include 'messages.html' %}
-
         <form method="post">
             {% csrf_token %}
             <p>{{ form|crispy }}</p>
             <br>
             <button type="submit" class="btn btn-dark">Зарегистрироваться</button>
         </form>
-
-        <a class="nav-link" href="{% url 'login' %}">Вернуться к авторизации</a>
-    </section>
+		<br>
+	</section>
 {% endblock %}

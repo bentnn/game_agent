@@ -13,6 +13,7 @@
     pip install pillow
     pip install djangorestframework
     pip install fuzzywuzzy
+    pip install requests
     
 Или можно проще:
 
