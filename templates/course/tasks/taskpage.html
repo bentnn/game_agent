@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Задача</title>
     {% load static %}
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static '/css/course/card.css' %}">
     <link rel="stylesheet" href="{% static '/css/bot.css' %}">
+    <link rel="stylesheet" href="{% static '/css/course/media.css' %}">
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
@@ -18,8 +19,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.min.css">
     <script src= "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/mode/javascript/javascript.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/theme/base16-dark.css">
-</head>
-<body>
+  </head>
+  <style>
+    body{
+      overflow: inherit;
+    }
+</style>
+<body >
 	{% include 'messages.html' %}
     <!-- Page Content Holder -->
     <div id="content">
@@ -45,9 +51,9 @@
           </div>
       </nav>
   </div>
-  <div class="light">
+  <div class="light container-fluid">
     <div class="row">
-      <div class="col-sm-4 left-block">
+      <div class="col-sm-4 col-lg-4 col-md-4 col-12 left-block">
         <div class="side-menu">
           <div class="container">
             <h3>{{task.title}}</h3>
@@ -61,7 +67,7 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-8 nopadding">
+      <div class="col-sm-8 col-lg-8 col-md-8 сol-12 nopadding">
         <div class="container m-2">
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
             <div class="row align-items-center w-100">

@@ -51,18 +51,23 @@
     padding: 0.6em;
 }
 .bot{
-    width: 4.7%;
-/* height: 30%; */
-background: #4ca1e9;
-text-align: center;
-padding: 1em;
-border-radius: 2em;
-cursor: pointer;
-position: fixed;
-top: calc(100vh - 100px);
-left: 94%;
+    width: 4.2em;
+    background: #4ca1e9;
+    text-align: center;
+    padding: 1em;
+    border-radius: 2em;
+    cursor: pointer;
+    position: fixed;
+    top: calc(100vh - 100px);
+    left: 94%;
+}
+@media(max-width: 480px) {
+    .bot{
+        left: 78%;
+    }
 }
 .bot i.bx{
+    display: block;
     font-size: 2em;
     color: #222;
     z-index: 5;
