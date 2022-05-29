@@ -3,6 +3,7 @@
     text-decoration: none;
 }
 .window-bot{
+    z-index: 10;
     display: flex;
     position: fixed;
     top: 10%;
@@ -59,7 +60,7 @@
     cursor: pointer;
     position: fixed;
     top: calc(100vh - 100px);
-    left: 94%;
+    left: calc(100vw - 100px);;
 }
 @media(max-width: 480px) {
     .bot{

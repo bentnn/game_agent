@@ -106,9 +106,10 @@
         
         for (var i = 0; param.length > i; i++){
             theme.push(param[i][1])
-            
+            let parameter = param[i][0];
+            console.log(window.location.origin + "/bot/link_test_bot/" + parameter);
             $.ajax({
-                url: "http://127.0.0.1:8000/bot/link_test_bot/"+param[i][0],
+                url: window.location.origin + "/bot/link_test_bot/" + parameter,
                 headers: {'X-CSRFToken': '{{ csrf_token }}'},
                 method: 'get',
                 dataType: 'json',
@@ -166,6 +167,7 @@
                 message: text
             },
             success: function(response){
+                console.log(response);
                 if ('is_data' in response){
                     return window_dialog_request(response['is_data']);
                 } else {

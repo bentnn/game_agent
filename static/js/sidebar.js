@@ -2,7 +2,7 @@ $(document).ready(function () {
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
         let text = $('#toggleMenu').text();
-        if (text[0] == 'С'){
+        if (text == 'Скрыть меню'){
            $('#toggleMenu').text('Показать меню');
         }
         else{
@@ -11,8 +11,6 @@ $(document).ready(function () {
     });
 
     let articlePage = document.getElementById('main-text');
-    
-    let pagesUrl = 'http://127.0.0.1:8000/course/api/pages/';
     
     fetch(pagesUrl).then(function(elem){
         return elem.json();
@@ -24,7 +22,7 @@ $(document).ready(function () {
                 if (prop === "disabled"){
                     return;
                 }
-                let url = `http://127.0.0.1:8000/course/api/pages/${'?title=' + theme}`;
+                let url = $('#' + theme).val();
                 fetch(url).
                 then(function(article){
                     return article.json();

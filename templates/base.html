@@ -52,9 +52,9 @@
                             {% if key.1 == "Нет категории" %}
                                     {% for elem in category %}
                                         {% if elem.1 %}
-                                            <li><a id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
+                                            <li><a id="{{elem.0.title}}" href="#" value="{% url 'coursepage' elem.0.title %}">{{elem.0.name}}</a></li>
                                         {% else %}
-                                            <li><a disabled id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
+                                            <li><a disabled id="{{elem.0.title}}" href="#" value="{% url 'coursepage' elem.0.title %}">{{elem.0.name}}</a></li>
                                         {% endif %}
                                     {% endfor %}
                             {% else %}
@@ -63,9 +63,9 @@
                                 <ul class="collapse list-unstyled" id="{{key.0}}">
                                     {% for elem in category %}
                                         {% if elem.1 %}
-                                            <li><a id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
+                                            <li><a id="{{elem.0.title}}" href="#" value="{% url 'coursepage' elem.0.title %}">{{elem.0.name}}</a></li>
                                         {% else %}
-                                            <li><a disabled id="{{elem.0.title}}" href="#">{{elem.0.name}}</a></li>
+                                            <li><a disabled id="{{elem.0.title}}" href="#" value="{% url 'coursepage' elem.0.title %}">{{elem.0.name}}</a></li>
                                         {% endif %}
                                     {% endfor %}
                                 </ul>
