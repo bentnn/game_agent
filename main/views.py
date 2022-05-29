@@ -119,7 +119,7 @@ def password_reset_request(request):
 					
 					http://{domain}/reset/{urlsafe_base64_encode(force_bytes(user.pk))}/{default_token_generator.make_token(user)}/
 					"""
-					send_mail(data, text)
+					print(send_mail(data, text))
 					return redirect("/password_reset/done/")
 			else:
 				messages.error(request, "Мы не нашли подходящего пользователя")

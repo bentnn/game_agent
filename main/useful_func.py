@@ -9,7 +9,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from django.contrib.auth.models import User
-from .models import AboutUser, Achievement
+from .models import *
 from course.models import Articles
 from django.contrib import messages
 from .const import mail_pswrd
@@ -111,17 +111,19 @@ def set_change(request, atr: str):
 
 
 def check_achieve(request):
+	# invent = list(map(lambda x: x.id, about_request.inventory.all()))
+
 	about_user = AboutUser.objects.get(user=request.user)
 	activity = json.loads(about_user.activity)
 	skills = json.dumps(about_user.skills)
-	achievements = list(Achievement.objects.all())
+	achievements = list(Achievement.objects.all().exclude(id__in=list(map(lambda x: x.id, about_user.achievements.all()))))
 	for i in achievements:
 		try:
 			if eval(i.condition):
 				give_achieve(request, about_user=about_user, achieve_name=i.name)
 		except Exception as e:
-			# print(f"Error, can't give achievement '{i.name}': {e}")
-			pass
+			print(f"Error, can't give achievement '{i.name}': {e}")
+			# pass
 
 
 def give_achieve(request=None, **kwargs):

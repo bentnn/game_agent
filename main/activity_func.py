@@ -77,7 +77,9 @@ def show_activity(*args):
 	else:
 		plt.ylim(-0.5)
 	plt.grid()
-	return convert_fig_or_pil_to_img(plt.gcf())
+	res = convert_fig_or_pil_to_img(plt.gcf())
+	plt.close(fig)
+	return res
 
 
 def create_skills():
@@ -126,5 +128,5 @@ def give_reward(about_user: AboutUser, article: Articles, request=None):
 	about_user.save()
 
 	if request:
-		messages.success(request, f"Здорово! Ты заработал очки опыта: {reward}")
+		messages.success(request, f"Здорово! Ты заработал очки опыта: " + ", ".join(f'{name} - {exp}' for name, exp in reward.items()))
 	add_exp(about_user, exp_sum, request)
