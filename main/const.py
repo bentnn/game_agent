@@ -1,6 +1,10 @@
+from os import environ
+
 first_level = 100
 
-domain = '127.0.0.1:8000'
+domain = environ.get('DOMAIN')
 
 skills = ['Basics', 'Algorithms', 'OOP', 'Data types',
           'Collections', 'Python', 'GO', 'JS']
+
+mail_pswrd = environ.get("MAIL_PSWRD")

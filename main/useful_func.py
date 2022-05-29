@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from .models import AboutUser, Achievement
 from course.models import Articles
 from django.contrib import messages
+from .const import mail_pswrd
 
 
 def is_ascii(s):
@@ -48,7 +49,7 @@ def email_is_valid(email: str):
 
 def send_mail(mail, text):
 	addr_from = "programming.agent@yandex.ru"
-	password = "ecovachexwuyiiij"
+	password = mail_pswrd
 
 	msg = MIMEMultipart()
 	msg['From'] = addr_from
@@ -119,7 +120,8 @@ def check_achieve(request):
 			if eval(i.condition):
 				give_achieve(request, about_user=about_user, achieve_name=i.name)
 		except Exception as e:
-			print(f"Error, can't give achievement '{i.name}': {e}")
+			# print(f"Error, can't give achievement '{i.name}': {e}")
+			pass
 
 
 def give_achieve(request=None, **kwargs):
@@ -133,7 +135,7 @@ def give_achieve(request=None, **kwargs):
 	try:
 		achievement = Achievement.objects.get(name=kwargs.get('achieve_name'))
 	except Achievement.DoesNotExist:
-		print(f"Достижения '{kwargs.get('achieve_name')}' нет в базе")
+		# print(f"Достижения '{kwargs.get('achieve_name')}' нет в базе")
 		return
 	if not about_user.achievements.filter(id=achievement.id).exists():
 		about_user.achievements.add(achievement)

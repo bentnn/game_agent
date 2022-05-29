@@ -42,6 +42,9 @@ def post_view(request, post_id):
 
 
 def login_view(request):
+	if request.user.is_authenticated:
+		return redirect('home')
+
 	if request.method == 'POST':
 		form = AuthenticationForm(data=request.POST)
 		if form.is_valid():
@@ -61,6 +64,9 @@ def login_view(request):
 
 
 def check_in_view(request):
+	if request.user.is_authenticated:
+		return redirect('home')
+
 	if request.method == 'POST':
 		form = UserCreationForm(data=request.POST)
 		if form.is_valid():
@@ -96,6 +102,9 @@ def check_in_view(request):
 
 
 def password_reset_request(request):
+	if request.user.is_authenticated:
+		return redirect('home')
+
 	if request.method == "POST":
 		password_reset_form = PasswordResetForm(request.POST)
 		if password_reset_form.is_valid():
@@ -104,6 +113,10 @@ def password_reset_request(request):
 			if associated_users.exists():
 				for user in associated_users:
 					text = f"""
+					Привет, {user.username}!
+					Была произведена попытка сброса твоего пароля. Если это был ты, то ниже есть ссылка для сброса.
+					Но если все же не ты, то никому ее не показывай!
+					
 					http://{domain}/reset/{urlsafe_base64_encode(force_bytes(user.pk))}/{default_token_generator.make_token(user)}/
 					"""
 					send_mail(data, text)
@@ -202,18 +215,18 @@ def inventory(request, username):
 
 
 @login_required(login_url='login')
-def set_item(request, item_id):
+def set_item(request, id):
 	"""
 	:param request:
-	:param item_id: 100000 -> null frame, 200000 - null back
+	:param id: 100000 -> null frame, 200000 - null back
 	"""
 	about_request = AboutUser.objects.get(user=request.user)
-	if item_id == 100000:
+	if id == 100000:
 		about_request.active_frame = None
-	elif item_id == 200000:
+	elif id == 200000:
 		about_request.active_back = None
 	else:
-		item = about_request.inventory.filter(id=item_id)
+		item = about_request.inventory.filter(id=id)
 		if not item.exists():
 			return error_404(request, None)
 		item = item.first()
@@ -244,9 +257,9 @@ def game_shop(request):
 
 
 @login_required(login_url='login')
-def buy_item(request, item_id):
+def buy_item(request, id):
 	about_request = AboutUser.objects.get(user=request.user)
-	item = get_object_or_404(GameItems, id=item_id)
+	item = get_object_or_404(GameItems, id=id)
 	if len(about_request.inventory.filter(id=item.id)) != 0:
 		messages.error(request, "У вас уже есть данный айтем")
 	elif item.price > about_request.money:
@@ -268,7 +281,7 @@ def change_profile(request):
 
 			data = request.FILES.get("avatar")
 			if data is not None:
-				about_user.avatar.delete(save=False)
+				# about_user.avatar.delete(save=False)
 				filename = f"Avatars/{request.user.username}.png"
 				full_filename = str(settings.MEDIA_ROOT) + '/' + filename
 				with open(full_filename, 'wb') as f:
