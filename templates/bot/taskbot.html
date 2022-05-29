@@ -36,9 +36,8 @@
         // contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         success: function(response){
-            console.log(response);
             for (let x of response.neededThemes){
-                let link = 'http://127.0.0.1:8000/course/coursepage/' + x.title;
+                let link = window.location.origin + "/course/coursepage/" + x.title;
                 document.getElementById('bot-content').insertAdjacentHTML('afterend', `<a class="btn btn-dark col-lg-4 col-6 mb-2 text-light" href="${link}">` + x.name + '</a><br>');
             }
         }
