@@ -1,11 +1,12 @@
 import json
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.contrib import messages
 from fuzzywuzzy import fuzz
 
-from .models import Questions, Keywords, SettingsBot
+from .models import Questions, Keywords, SettingsBot, Themes
 
 
 def bot(request):
@@ -25,9 +26,19 @@ def bot(request):
             text_fuzz = fuzz.token_sort_ratio(user_text, i.keyword)
             if text_fuzz >= 33:
                 if fuzz.WRatio(i.keyword, user_text):
-                    lists.append(i.keyword)
+                    print(i)
+                    lists.append([i.theme, i.keyword])
         
         return HttpResponse(json.dumps({"not_data": lists}), content_type='application/json')
+
+
+def link_test_bot(request, ids=None):
+    data =list()
+
+    for i in Themes.objects.filter(ids=ids):
+        data.append([i.ids, i.theme.title])
+
+    return HttpResponse(json.dumps({"data": data}), content_type='application/json')
 
 
 def settings_bot(request):
@@ -39,6 +50,7 @@ def settings_bot(request):
         query.level=request.POST.get('level')
         query.save()
         
+        # messages.success(request, 'Настройки успешно установленны! ')
         return HttpResponse(json.dumps({"message": 'Success'}), content_type='application/json')
 
 

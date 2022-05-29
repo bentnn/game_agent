@@ -2,6 +2,25 @@ from operator import mod
 from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.models import User
+from main.models import Articles
+
+
+class Themes(models.Model):
+    ids = models.IntegerField(
+                verbose_name='IDS', 
+                name='ids')
+    theme = models.ForeignKey(
+                to=Articles,
+                on_delete=models.CASCADE, 
+                name='theme',  
+                verbose_name='Тема')
+
+    def __str__(self):
+        return f'{self.ids} - {self.theme}'
+
+    class Meta:
+        verbose_name = 'Тема'
+        verbose_name_plural = 'Темы'
 
 
 class Questions(models.Model):

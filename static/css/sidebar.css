@@ -192,6 +192,68 @@ a.article:hover {
 a[disabled]{
   color: #bebebe;
 }
+@media(max-width: 480px) {
+    .navbar{
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999999;
+        right: 0;
+    }
+    article#main-text{
+        margin-top: 25%;
+    }
+    .progress b p{
+        width: 20.2em!important;
+        text-align: center;
+    }
+    #link-category{
+        width: 100%;
+        margin: 0 auto;
+        position: relative;
+        left: -1%;
+    }
+    #right-item{
+        margin-top: 10%;
+    }
+
+    /* Bot */
+    .window-bot {
+        top: 13%!important;
+        left: 3%!important;
+        width: 95%!important;
+        padding: 0.5em!important;
+    }
+    .bot-container {
+        width: 100%;
+    }
+    .bot-container img{
+        margin-left: -34%;
+        margin-top: 10%;
+    }
+    .bot-container__chat{
+        width: 88%;
+        top: 2em;
+        margin-bottom: 3em!important;
+        font-size: 0.8em;
+    }
+    .bot-container__dialog{
+        margin-top: 5em;
+    }
+    .bot-container__chat{
+        margin-bottom: 5em!important;
+    }
+    .window-bot form textarea {
+        width: 85%;
+    }
+    #sidebar.active {
+        margin-top: 5em;
+    }
+    .light{
+        padding: 0!important;
+    }
+}
+
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */

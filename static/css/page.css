@@ -60,3 +60,11 @@
     border: none;
     color: #222;
 }
+/* min */
+.textinput, .emailinput{
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    width: 100%;
+  }
+
+  
