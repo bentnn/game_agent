@@ -48,6 +48,8 @@ $(document).ready(function () {
         let str = 'Вывод: ' + val.output + '\n\n';
         let err = 'Ошибка: ' + val.error;
         $('#output-text').val(str + err);
+      }).catch(err=>{
+        $('#output-text').val(str + err);
       });
   });
 });
