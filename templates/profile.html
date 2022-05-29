@@ -17,9 +17,9 @@
 	
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-5">
+			<div class="col-lg-5 col-md-6 col-12">
 				
-				<div class="col-6">
+				<div class="col-lg-6 col-md-6 col-12">
 					<!-- {#<img src="{{ about_user.avatar.url }}"  class="img-fluid" alt="{{ user.username }}">#} -->
 					<img src="data:image/png;base64,{{ avatar }}" class="img-fluid" alt="{{ user.username }}">
 				</div>
@@ -43,15 +43,15 @@
 				</div>
 
 				
-				<div class="row mb-4" style="width: 105%;margin: 0 auto;">
-					<a class="nav-link btn-dark col-3 m-1 text-center" href="{% url 'inventory' user.username %}">Инвентарь</a>
-					<a class="nav-link btn-dark col-3 m-1 text-center" href="{% url 'game_shop' %}">Магазин</a>
-					<a class="nav-link btn-dark col-5 m-1 text-center" href="{% url 'search_user' %}">Поиск пользователей</a>
+				<div class="row mb-4" id="link-category" style="width: 105%;margin: 0 auto;">
+					<a class="nav-link btn-dark col-lg-3 col-md-3 col-12 m-1 text-center" href="{% url 'inventory' user.username %}">Инвентарь</a>
+					<a class="nav-link btn-dark col-lg-3 col-md-3 col-12 m-1 text-center" href="{% url 'game_shop' %}">Магазин</a>
+					<a class="nav-link btn-dark col-lg-3 col-md-3 col-12 m-1 text-center" href="{% url 'search_user' %}">Поиск пользователей</a>
 				</div>
 				
 				
 				<div style="background-image: url({{ about_user.active_back.image.url }});">
-					<div class="col-6 mb-5">
+					<div class="col-lg-6 col-md-8 col-10 mb-5">
 						{% if user == request.user %}
 							<a class="nav-link btn btn-dark" href="{% url 'change_profile' %}">Изменить данные</a>
 						{% elif user in req_subs %}
@@ -111,7 +111,7 @@
 				</div>
 
 			</div>
-			<div class="col-7">
+			<div id="right-item" class="col-lg-7 col-md-6 col-12">
 				<div class="container">
 					<div class="row">
 						<div class="col">

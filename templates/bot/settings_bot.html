@@ -4,11 +4,12 @@
 <div id="window_settings_bot" class="window-bot  d-block">
     <div id="window-dialog" class="w-100">
         <div class="bot-container">
+            
             <div class="bot-container__chat" style="margin-bottom:6em;">
                 <p>
                     Привет, я твой личный помошник в прохождении курсов. 
                     Выбери как часто ты хочешь со мной общаться.
-                    <hr><p>{% url 'settings_bot' %}</p>
+                    <hr>
                     На низком уровне <br>
                     На среднем уровне <br>
                     На высоком уровне <br>
@@ -93,6 +94,16 @@
                     if (msg == 'Success'){
                         document.getElementById('window_settings_bot').classList.remove('d-block');
                         document.getElementById('window_settings_bot').classList.add('d-none');
+                        document.getElementById('mess').innerHTML = `
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            Настройки успешно установленны!
+
+                            <i id="close_mess" class="bi bi-x-lg" data-bs-dismiss="alert" aria-label="Close"></i>
+                        </div>
+                        `
+                        document.getElementById('close_mess').onclick = function(){
+                            document.getElementById('mess').innerHTML = '';
+                        }
                     }
                 }
             });

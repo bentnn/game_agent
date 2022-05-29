@@ -1,0 +1,46 @@
+@media(max-width: 480px) {
+    .postcard .postcard__text {
+        padding: 0.5rem;
+        font-size: 1.1em;
+    }
+    .side-menu{
+        margin: 0;
+        padding: 5%;
+    }
+    .test-window {
+        min-height: 15em;
+    }
+    
+    /* Bot */
+    .window-bot {
+        top: 13%!important;
+        left: 3%!important;
+        width: 95%!important;
+        padding: 0.5em!important;
+    }
+    .bot-container {
+        width: 100%;
+    }
+    .bot-container img{
+        margin-left: -34%;
+        margin-top: 10%;
+    }
+    .bot-container__chat{
+        width: 88%;
+        top: 2em;
+        margin-bottom: 3em!important;
+        font-size: 0.8em;
+    }
+    .bot-container__dialog{
+        margin-top: 5em;
+    }
+    .bot-container__chat{
+        margin-bottom: 5em!important;
+    }
+    .window-bot form textarea {
+        width: 85%;
+    }
+    .light{
+        padding: 0!important;
+    }
+}
