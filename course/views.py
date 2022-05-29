@@ -111,7 +111,6 @@ class RequiredCoursesAPIView(APIView):
 
 @login_required(login_url='login')
 def index(request, title=''):
-    print(title)
     categories = Categories.objects.all().order_by('priority').values()
     return render(request, 'course/content/index.html', {'categories': categories, 'coursename': title})
 

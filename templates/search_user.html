@@ -21,7 +21,9 @@
 	</div>
 	<br>
 
+	<div class="col-10 mx-auto p-3">
 	{% for user in users %}
-		<a href="{% url 'profile' user.username %}">{{ user.username }}</a>
+		<p><a href="{% url 'profile' user.username %}">{{ user.username }}</a></p>
 	{% endfor %}
+	</div>
 {% endblock %}
