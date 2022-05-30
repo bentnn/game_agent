@@ -3,4 +3,3 @@ venv
 .idea/*
 main/__pycache__
 main/__pycache__/*
-db.sqlite3
