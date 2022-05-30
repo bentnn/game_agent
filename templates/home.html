@@ -23,7 +23,7 @@
 						{% else %}
 							<div class="card d-none d-md-block carousel-card">
 						{% endif %}
-							<img src="https://fuzeservers.ru/wp-content/uploads/f/3/6/f36b929bb635e3502b1a87211d5a74fd.jpeg" class="card-img-top" alt="..." style="min-height: 30vh; max-height: 30vh;">
+							<img src="{{ post.image.url }}" class="card-img-top" alt="..." style="min-height: 30vh; max-height: 30vh;">
 							<div class="card-body">
 							<h5 class="card-title">{{ post.title }}</h5>
 							<p class="card-text">{{ post.text|truncatechars:200 }}</p>
