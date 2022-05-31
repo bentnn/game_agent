@@ -3,13 +3,38 @@
 <head>
 	<meta charset="UTF-8">
 	<title>About us</title>
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/aboutus.css' %}">
 </head>
 <body>
-{% include 'messages.html' %}
-
-<p>Место для слогана</p>
-<a class="nav-link" href="{% url 'check_in' %}">Регистрация</a>
-<a class="nav-link" href="{% url 'login' %}">login</a>
-
-</body>
+	<div class="container">
+	  <div class="row">
+		<div class="col-lg-10 col-xl-9 mx-auto">
+		  <div class="card card-signin flex-row my-5">
+			<div class="card-img-left d-none d-md-flex">
+			   <!-- Background image for card set in CSS! -->
+			</div>
+			<div class="card-body">
+			  <h5 class="card-title text-center">Виртуальный педагогический агент для изучения программирования</h5>
+			  <form class="form-signin">
+				<div class="text-center">
+					<p>Данное веб-приложение содержит в себе элементы геймификации и адаптивного обучения, которое позволит вам развить навыки программирования, а также повысить знания в таких областях как информатика и алгоритмы.</p>
+					<hr>
+				</div>
+  
+				<a href="{% url 'check_in' %}" class="m-1"><button class="btn btn-lg btn-primary btn-block text-uppercase" type="button">Регистрация</button></a>
+				<a href="{% url 'login' %}" class="m-1"><button class="btn btn-lg btn-secondary btn-block text-uppercase" type="button">Авторизация</button></a>
+				
+				<hr class="my-4">
+				<a href="https://github.com/bentnn/game_agent" class="m-1"><button class="btn btn-lg btn-google btn-block text-uppercase" type="button"><i class="fab fa-google mr-2"></i>GitHub проекта</button></a>
+				<a href="https://wiki.miem.hse.ru/" class="m-1"><button class="btn btn-lg btn-facebook btn-block text-uppercase" type="button"><i class="fab fa-facebook-f mr-2"></i>MIEM wiki</button></a>
+				
+			  </form>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+  </body>  
 </html>
