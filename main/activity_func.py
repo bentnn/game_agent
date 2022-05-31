@@ -5,7 +5,7 @@ import base64
 import json
 import urllib
 from .models import AboutUser
-from course.models import Articles
+from course.models import Articles, Tasks
 import datetime
 import json
 import numpy as np
@@ -109,24 +109,40 @@ def show_skills(data: dict or str):
 	return convert_fig_or_pil_to_img(plt.gcf())
 
 
-def give_reward(about_user: AboutUser, article: Articles, request=None):
-	if not article.reward:
-		return
-	reward = json.loads(article.reward)
-	skills = json.loads(about_user.skills)
-	activity = norm_activity(about_user.activity)
-	exp_sum = 0
+def save_reward(reward: dict, about_user, request=None):
+	user_skills = json.loads(about_user.skills)
 
 	for theme, exp in reward.items():
-		if theme in skills:
-			skills[theme] += exp
-			exp_sum += exp
+		if theme in user_skills:
+			user_skills[theme] += exp
 
+	exp_sum = sum(reward.values())
+	activity = norm_activity(about_user.activity)
 	activity = add_activity(activity, exp_sum)
-	about_user.skills = json.dumps(skills)
+	about_user.skills = json.dumps(user_skills)
 	about_user.activity = json.dumps(activity)
 	about_user.save()
 
 	if request:
 		messages.success(request, f"Здорово! Ты заработал очки опыта: " + ", ".join(f'{name} - {exp}' for name, exp in reward.items()))
 	add_exp(about_user, exp_sum, request)
+
+
+def give_reward(about_user: AboutUser, article: Articles, request=None):
+	if not article.reward:
+		return
+	reward = json.loads(article.reward)
+
+	save_reward(reward, about_user, request)
+
+
+def give_tasks_reward(about_user: AboutUser, task: Tasks, lang=None, request=None):
+	skills_sum = {}
+	for i in list(task.neededThemes.all()):
+		for name, exp in json.loads(i.reward).items():
+			skills_sum[name] = exp + skills_sum.get(name, 0)
+
+	if lang:
+		skills_sum[lang] = int(task.difficulty) * 10 + skills_sum.get(lang, 0)
+
+	save_reward(skills_sum, about_user, request)
