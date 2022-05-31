@@ -9,7 +9,7 @@ class Executor:
     # create a pipe to a child process
         data, temp = os.pipe()
         # store output of the program as a byte string in s
-        s = subprocess.run("docker run {0}".format(container_name), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        s = subprocess.run("docker run {0}".format(container_name).split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # decode s to a normal string
         return s
 
@@ -17,7 +17,7 @@ class Executor:
     # create a pipe to a child process
         data, temp = os.pipe()
         # store output of the program as a byte string in s
-        s = subprocess.run("docker run {0}".format(container_name), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        s = subprocess.run("docker run {0}".format(container_name).split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # decode s to a normal string
         return s
 
@@ -25,7 +25,7 @@ class Executor:
     # create a pipe to a child process
         data, temp = os.pipe()
         # store output of the program as a byte string in s
-        s = subprocess.run("docker run {0}".format(container_name), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        s = subprocess.run("docker run {0}".format(container_name).split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # decode s to a normal string
         return s
 
@@ -43,7 +43,7 @@ class Manager:
             f.write(test)
         with open(resFile, 'w+', encoding='utf-8') as f:
             f.write(code)
-        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir))
+        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir).split(' '))
         shutil.rmtree(testingDir)
         return dirname
 
@@ -59,7 +59,7 @@ class Manager:
             f.write(test)
         with open(resFile, 'w+', encoding='utf-8') as f:
             f.write(code)
-        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir))
+        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir).split(' '))
         shutil.rmtree(testingDir)
         return dirname
 
@@ -75,7 +75,7 @@ class Manager:
             f.write(test)
         with open(resFile, 'w+', encoding='utf-8') as f:
             f.write(code)
-        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir))
+        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir).split(' '))
         shutil.rmtree(testingDir)
         return dirname
 
@@ -84,20 +84,20 @@ class CodeExecutor:
     def jsCodeExecute(code, test, dirname):
         val = Manager.jsTestFileCreator(code, test, dirname)
         res = Executor.runJavaScript(val)
-        subprocess.run('''docker rm $(docker ps -a -f ancestor="{0}")'''.format(dirname))
-        subprocess.run('''docker rmi {0} --force'''.format(dirname))
+        subprocess.run('''docker rm $(docker ps -a -f ancestor="{0}")'''.format(dirname).split(' '))
+        subprocess.run('''docker rmi {0} --force'''.format(dirname).split(' '))
         return {'output': res.stdout.decode("utf-8"), 'error': res.stderr.decode("utf-8")}
 
     def pythonCodeExecute(code, test, dirname):
         val = Manager.pythonTestFileCreator(code, test, dirname)
         res = Executor.runPython(val)
-        subprocess.run('''docker rm $(docker ps -a -f ancestor="{0}")'''.format(dirname))
-        subprocess.run('''docker rmi {0} --force'''.format(dirname))
+        subprocess.run('''docker rm $(docker ps -a -f ancestor="{0}")'''.format(dirname).split(' '))
+        subprocess.run('''docker rmi {0} --force'''.format(dirname).split(' '))
         return {'output': res.stdout.decode("ISO-8859-1"), 'error': res.stderr.decode("ISO-8859-1")}
 
     def goCodeExecute(code, test, dirname):
         val = Manager.goTestFileCreator(code, test, dirname)
         res = Executor.runGolang(val)
-        subprocess.run('''docker rm $(docker ps -a -f ancestor="{0}")'''.format(dirname))
-        subprocess.run('''docker rmi {0} --force'''.format(dirname))
+        subprocess.run('''docker rm $(docker ps -a -f ancestor="{0}")'''.format(dirname).split(' '))
+        subprocess.run('''docker rmi {0} --force'''.format(dirname).split(' '))
         return {'output': res.stdout.decode("ISO-8859-1"), 'error': res.stderr.decode("ISO-8859-1")}
