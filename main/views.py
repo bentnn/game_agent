@@ -150,7 +150,13 @@ def users_action(request, username, action=None):
 		if action == "sub":
 			about_request.subs.add(user)
 			about_request.save()
-			give_achieve(request, achieve_name='socialization')
+			for i in ['socialization', 'super socialization']:
+				try:
+					ach = Achievement.objects.get(name=i)
+					if eval(ach.condition):
+						give_achieve(request, about_user=about_request, achieve_name=i)
+				except Exception:
+					pass
 			if len(user.subs_to.all()) >= 10:
 				give_achieve(user=user, achieve_name='popular')
 		elif action == "unsub":
@@ -316,7 +322,7 @@ def change_password(request):
 
 @login_required(login_url='login')
 def search_user(request):
-	res = list()
+	res = []
 	if request.method == 'POST':
 		username = request.POST.get('username')
 		for i in User.objects.all().filter(is_superuser=False):

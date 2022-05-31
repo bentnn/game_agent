@@ -68,7 +68,9 @@
 						{% if achievements|length != 0 %}
 							{% for i in achievements %}
 								<img src="{{ i.icon.url }}" style="width: 100px">
-								<p style="color: darkgreen">{{ i.name }}</p>
+								<p class="font-weight-bold" style="color: darkgreen">{{ i.name }}</p>
+								<p style="color: darkgray; font-style: italic">{{ i.info }}</p>
+								<br>
 							{% endfor %}
 						{% else %}
 							<p>Пусто</p>
