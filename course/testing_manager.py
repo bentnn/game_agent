@@ -43,7 +43,7 @@ class Manager:
             f.write(test)
         with open(resFile, 'w+', encoding='utf-8') as f:
             f.write(code)
-        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir), capture_output = True)
+        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir))
         shutil.rmtree(testingDir)
         return dirname
 
@@ -59,7 +59,7 @@ class Manager:
             f.write(test)
         with open(resFile, 'w+', encoding='utf-8') as f:
             f.write(code)
-        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir), capture_output = True)
+        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir))
         shutil.rmtree(testingDir)
         return dirname
 
@@ -75,7 +75,7 @@ class Manager:
             f.write(test)
         with open(resFile, 'w+', encoding='utf-8') as f:
             f.write(code)
-        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir), capture_output = True)
+        subprocess.run("docker build -t {0} {1}".format(dirname, testingDir))
         shutil.rmtree(testingDir)
         return dirname
 
