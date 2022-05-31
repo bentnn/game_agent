@@ -15,7 +15,8 @@ from django.contrib import messages
 import json
 from main.activity_func import give_reward
 from main.useful_func import check_achieve
-
+from main.activity_func import give_tasks_reward
+import uuid
 
 class ArticleAPIView(APIView):
     serializer_class = ArticlesSerializer
@@ -65,23 +66,34 @@ class TestingAPIView(APIView):
         lang = request.data.get("lang")
         code = request.data.get("code")
         task_id = request.data.get("task")
+        about_user = AboutUser.objects.get(user=request.user)
+        task = Tasks.objects.get(taskId=task_id)
         if lang == "JavaScript":
             test = JsTests.objects.get(task=task_id)
-            test_res = CodeExecutor.jsCodeExecute(code, test.test, task_id)
+            test_res = CodeExecutor.jsCodeExecute(code, test.test, uuid.uuid4().hex)
+            if (test_res['error'] == ''):
+                give_tasks_reward(about_user, task, 'JS', request)
+                check_achieve(request)
             if not request.user.is_superuser:
                 session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=task_id, user=AboutUser.objects.get(user=request.user))
                 session.save()
             return JsonResponse(test_res)
         elif lang == "Python":
             test = PythonTests.objects.get(task=task_id)
-            test_res = CodeExecutor.pythonCodeExecute(code, test.test, task_id)
+            test_res = CodeExecutor.pythonCodeExecute(code, test.test, uuid.uuid4().hex)
+            if (test_res['error'] == ''):
+                give_tasks_reward(about_user, task, 'Python', request)
+                check_achieve(request)
             if not request.user.is_superuser:
                 session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=task_id, user=AboutUser.objects.get(user=request.user))
                 session.save()
             return JsonResponse(test_res)
         elif lang == "Go":
             test = GoTests.objects.get(task=task_id)
-            test_res = CodeExecutor.goCodeExecute(code, test.test, task_id)
+            test_res = CodeExecutor.goCodeExecute(code, test.test, uuid.uuid4().hex)
+            if (test_res['error'] == ''):
+                give_tasks_reward(about_user, task, 'GO', request)
+                check_achieve(request)
             if not request.user.is_superuser:
                 session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=task_id, user=AboutUser.objects.get(user=request.user))
                 session.save()

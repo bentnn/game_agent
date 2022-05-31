@@ -1,7 +1,7 @@
-FROM python
+FROM golang:1.16.0-alpine3.13
 
 WORKDIR /workdir/app
 
-COPY test.py task.py ./
+COPY test.go task.go ./
 
-CMD ["python3", "./task.py"]
+CMD ["go", "run", "./test.go"]
