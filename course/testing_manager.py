@@ -9,7 +9,7 @@ class Executor:
     # create a pipe to a child process
         data, temp = os.pipe()
         # store output of the program as a byte string in s
-        s = subprocess.run("docker run {0}".format(container_name), capture_output = True)
+        s = subprocess.run("docker run {0}".format(container_name), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # decode s to a normal string
         return s
 
@@ -17,7 +17,7 @@ class Executor:
     # create a pipe to a child process
         data, temp = os.pipe()
         # store output of the program as a byte string in s
-        s = subprocess.run("docker run {0}".format(container_name), capture_output = True)
+        s = subprocess.run("docker run {0}".format(container_name), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # decode s to a normal string
         return s
 
@@ -25,7 +25,7 @@ class Executor:
     # create a pipe to a child process
         data, temp = os.pipe()
         # store output of the program as a byte string in s
-        s = subprocess.run("docker run {0}".format(container_name), capture_output = True)
+        s = subprocess.run("docker run {0}".format(container_name), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # decode s to a normal string
         return s
 
