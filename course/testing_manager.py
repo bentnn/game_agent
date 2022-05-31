@@ -2,7 +2,7 @@ import subprocess
 import os
 import shutil
 from platform import system
-
+import tempfile
 
 class Executor:
     def runPython(container_name):
@@ -33,7 +33,7 @@ class Executor:
 class Manager:
     def jsTestFileCreator(code, test, dirname):
         dockerSrc = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'tests', 'js', 'testing', 'Dockerfile')
-        testingDir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'tests', 'js', 'testing', dirname)
+        testingDir = tempfile.mkdtemp()
         if not os.path.exists(testingDir):
             os.mkdir(testingDir)
         shutil.copyfile(dockerSrc, os.path.join(testingDir, 'Dockerfile'))
@@ -49,7 +49,7 @@ class Manager:
 
     def pythonTestFileCreator(code, test, dirname):
         dockerSrc = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'tests', 'python', 'testing', 'Dockerfile')
-        testingDir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'tests', 'python', 'testing', dirname)
+        testingDir = tempfile.mkdtemp()
         if not os.path.exists(testingDir):
             os.mkdir(testingDir)
         shutil.copyfile(dockerSrc, os.path.join(testingDir, 'Dockerfile'))
@@ -65,7 +65,7 @@ class Manager:
 
     def goTestFileCreator(code, test, dirname):
         dockerSrc = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'tests', 'go', 'testing', 'Dockerfile')
-        testingDir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'tests', 'go', 'testing', dirname)
+        testingDir = tempfile.mkdtemp()
         if not os.path.exists(testingDir):
             os.mkdir(testingDir)
         shutil.copyfile(dockerSrc, os.path.join(testingDir, 'Dockerfile'))
