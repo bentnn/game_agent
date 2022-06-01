@@ -71,9 +71,11 @@ class TestingAPIView(APIView):
         if lang == "JavaScript":
             test = JsTests.objects.get(task=task_id)
             test_res = CodeExecutor.jsCodeExecute(code, test.test, uuid.uuid4().hex)
-            if (test_res['error'] == ''):
+            isSuccess = test_res['error'] == ''
+            if (isSuccess):
                 give_tasks_reward(about_user, task, 'JS', request)
                 check_achieve(request)
+            test_res['success'] = isSuccess
             if not request.user.is_superuser:
                 session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=task_id, user=AboutUser.objects.get(user=request.user))
                 session.save()
@@ -81,9 +83,11 @@ class TestingAPIView(APIView):
         elif lang == "Python":
             test = PythonTests.objects.get(task=task_id)
             test_res = CodeExecutor.pythonCodeExecute(code, test.test, uuid.uuid4().hex)
-            if (test_res['error'] == ''):
+            isSuccess = test_res['error'][-3:] == 'OK\n'
+            if (isSuccess):
                 give_tasks_reward(about_user, task, 'Python', request)
                 check_achieve(request)
+            test_res['success'] = isSuccess
             if not request.user.is_superuser:
                 session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=task_id, user=AboutUser.objects.get(user=request.user))
                 session.save()
@@ -91,9 +95,11 @@ class TestingAPIView(APIView):
         elif lang == "Go":
             test = GoTests.objects.get(task=task_id)
             test_res = CodeExecutor.goCodeExecute(code, test.test, uuid.uuid4().hex)
-            if (test_res['error'] == ''):
+            isSuccess = test_res['error'] == ''
+            if (isSuccess):
                 give_tasks_reward(about_user, task, 'GO', request)
                 check_achieve(request)
+            test_res['success'] = isSuccess
             if not request.user.is_superuser:
                 session = Sessions.objects.create(lang=lang, testResult=json.dumps(test_res), task_id=task_id, user=AboutUser.objects.get(user=request.user))
                 session.save()

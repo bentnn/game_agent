@@ -140,10 +140,14 @@
         }).then(res => {
           return res.json();
         }).then(val => {
-          $('#submit-code').attr('disabled', false);
-          let str = 'Вывод: ' + val.output + '\n\n';
-          let err = 'Ошибка: ' + val.error;
-          $('#output-text').val(str + err);
+          if (val.success){
+            $('#output-text').val('Тесты пройдены! Поздравляю с решенной задачей');
+          }
+          else{
+            let str = 'Вывод: ' + val.output + '\n\n';
+            let err = 'Ошибка: ' + val.error;
+            $('#output-text').val(str + err);
+          }
         }).catch(err=>{
           $('#submit-code').attr('disabled', false);
           $('#output-text').val('Произошла ошибка при отправке решения, повторите ввод');

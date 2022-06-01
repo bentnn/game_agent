@@ -4,4 +4,4 @@ WORKDIR /workdir/app
 
 COPY test.js task.js ./
 
-CMD ["node", "./task.js"]
+CMD ["timeout", "10", "node", "./test.js"]

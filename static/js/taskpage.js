@@ -45,9 +45,15 @@ $(document).ready(function () {
       }).then(res => {
         return res.json();
       }).then(val => {
-        let str = 'Вывод: ' + val.output + '\n\n';
-        let err = 'Ошибка: ' + val.error;
-        $('#output-text').val(str + err);
+        console.log(val);
+        if (val.success){
+          $('#output-text').val('Тесты пройдены! Поздравляю с решенной задачей');
+        }
+        else{
+          let str = 'Вывод: ' + val.output + '\n\n';
+          let err = 'Ошибка: ' + val.error;
+          $('#output-text').val(str + err);
+        }
       }).catch(err=>{
         $('#output-text').val(str + err);
       });
