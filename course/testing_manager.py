@@ -9,7 +9,7 @@ class Executor:
     # create a pipe to a child process
         data, temp = os.pipe()
         # store output of the program as a byte string in s
-        s = subprocess.run("docker run {0}".format(container_name), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        s = subprocess.run("docker run {0}".format(container_name).split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print(s)
         # decode s to a normal string
         return s

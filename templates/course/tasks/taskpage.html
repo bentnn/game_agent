@@ -148,6 +148,7 @@
             let err = 'Ошибка: ' + val.error;
             $('#output-text').val(str + err);
           }
+          $('#submit-code').attr('disabled', false);
         }).catch(err=>{
           $('#submit-code').attr('disabled', false);
           $('#output-text').val('Произошла ошибка при отправке решения, повторите ввод');
